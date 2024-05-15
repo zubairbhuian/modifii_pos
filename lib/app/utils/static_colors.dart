@@ -6,4 +6,6 @@ class StaticColors {
   static const Color greenColor = Color(0xff118A00);
   static const Color greenLightColor = Color.fromARGB(255, 146, 255, 132);
   static const Color yellowColor = Color(0xfff8912b);
+  static const Color orangeColor = Color(0xfff65b1c);
+  static const Color pinkColor = Color(0xffec4c79);
 }

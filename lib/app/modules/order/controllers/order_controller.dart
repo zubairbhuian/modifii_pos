@@ -80,14 +80,19 @@ class OrderController extends GetxController {
     }
   }
 
-
-
-  
   //** find product categoryId**
   findProductsByCategoryId(String categoryId) {
-  productList.assignAll( mainProductList.where((product) =>
-      product.categoryIds.expand((category) => [category.id]).contains(categoryId)).toList());
-}
+    productList.assignAll(mainProductList
+        .where((product) => product.categoryIds
+            .expand((category) => [category.id])
+            .contains(categoryId))
+        .toList());
+  }
+
+  RxInt selectedTableIndex = (-1).obs;
+  void updateSelectedTableIndex(int value) {
+    selectedTableIndex.value = value;
+  }
 
   @override
   void onInit() {

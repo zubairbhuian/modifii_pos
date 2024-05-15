@@ -1,183 +1,189 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/modules/order/widgets/cart_item.dart';
-import 'package:flutter_base/app/modules/order/widgets/category_body.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
-import 'package:flutter_base/app/widgets/custom_textfield.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import '../../../widgets/my_custom_text.dart';
 import '../controllers/order_controller.dart';
 
 class TablesOption extends GetView<OrderController> {
   const TablesOption({super.key});
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          const Expanded(
-            flex: 3,
-            child: CategoryBody(),
-          ),
-          const SizedBox(width: 24),
+          const TableAvailabilityHeader(),
+          const SizedBox(height: 12.0),
           Expanded(
-            flex: 2,
-            child: Obx(
-              () => controller.isShowCart.value
-                  ? _cartArea(theme)
-                  : const SizedBox(),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Expanded(
+                  flex: 3,
+                  child: TableBody(),
+                ),
+                const SizedBox(width: 110),
+                Expanded(
+                  flex: 2,
+                  child: Obx(
+                    () => controller.selectedTableIndex.value != -1
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MyCustomText(
+                                'Table ${controller.selectedTableIndex.value + 1}',
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              const SizedBox(height: 18),
+                              Row(
+                                children: [
+                                  PrimaryBtn(
+                                    onPressed: () {},
+                                    width: 150,
+                                    text: 'Start Order',
+                                    textColor: Colors.white,
+                                    color: StaticColors.orangeColor,
+                                  ),
+                                  const SizedBox(width: 30),
+                                  PrimaryBtn(
+                                    onPressed: () {},
+                                    width: 150,
+                                    text: 'Hold Table',
+                                    textColor: Colors.white,
+                                    color: StaticColors.pinkColor,
+                                  ),
+                                ],
+                              )
+                            ],
+                          )
+                        : const SizedBox(),
+                  ),
+                ),
+                // cart area
+              ],
             ),
           ),
-          // cart area
         ],
       ),
     );
   }
+}
 
-  //** cart **
-  Widget _cartArea(ThemeData theme) {
-    return Container(
-      // height: double.infinity,
-      color: theme.cardColor,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // add customer
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                          child: CustomDropdownTextField(
-                              hint: const Text('Search Customer'),
-                              data: const ["demo"],
-                              onChanged: (value) {})),
-                      const SizedBox(width: 16),
-                      PrimaryBtn(
-                        onPressed: () {},
-                        height: 48,
-                        width: 48,
-                        color: StaticColors.blueColor,
-                        text: '+',
-                        textColor: Colors.white,
-                        textMaxSize: 30,
-                        textMinSize: 18,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: PrimaryBtn(
-                      onPressed: () {},
-                      color: StaticColors.blueColor,
-                      textColor: Colors.white,
-                      textMaxSize: 24,
-                      textMinSize: 16,
-                      text: 'Take Out',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // ****  Cart Items ****
-            Container(
-              // color: const Color(0xfD9D9D9f),
-              color: Colors.grey.shade300,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              width: double.infinity,
-              child: Text(
-                "Cart Items",
-                style: theme.textTheme.titleLarge,
-              ),
-            ),
-            Column(
-              children: List.generate(
-                3,
-                (index) => CartItem(
-                  title: 'Ralph Edwards',
-                  description: 'Add avocado',
-                  amount: 89,
-                  quantity: 1,
-                  onDecrement: () {},
-                  onIncrement: () {},
-                  onRemove: () {},
-                ),
-              ),
-            ),
-            // Expanded(
-            //     child: SingleChildScrollView(
-            //   child: Column(
-            //     children: List.generate(
-            //         12,
-            //         (index) => CartItem(
-            //               title: "Chana samosa ",
-            //               description: "Add avocado",
-            //               amount: 89,
-            //               quantity: 1,
-            //               onDecrement: () {},
-            //               onIncrement: () {},
-            //               onRemove: () {},
-            //             )),
-            //   ),
-            // )),
-            // amount
-            const Divider(),
-            _row(theme, title: "Subtotal :", value: "\$00"),
-            _row(theme, title: "GST 5% :", value: "\$00"),
-            const Divider(),
-            _row(theme, title: "Total: :", value: "\$00", fontSize: 20),
-            // order btn
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: PrimaryBtn(
-                      onPressed: () {},
-                      color: StaticColors.greenColor,
-                      textColor: Colors.white,
-                      text: 'Place Order',
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: PrimaryBtn(
-                      onPressed: () {},
-                      color: theme.colorScheme.error,
-                      textColor: Colors.white,
-                      text: 'Cancel',
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+class TableBody extends GetView<OrderController> {
+  const TableBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return _body(theme);
   }
 
-  // row
-  Widget _row(ThemeData theme,
-      {double? fontSize, required String title, required String value}) {
+  //** Body **
+  Widget _body(ThemeData theme) {
+    return SingleChildScrollView(
+      child: Obx(() {
+        return StaggeredGrid.count(
+          crossAxisCount: 7,
+          mainAxisSpacing: 2,
+          crossAxisSpacing: 2,
+          children: List.generate(
+            38,
+            (index) => Container(
+              padding: const EdgeInsets.all(4.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.0),
+                color: controller.selectedTableIndex.value == index
+                    ? StaticColors.yellowColor
+                    : Colors.transparent,
+              ),
+              child: PrimaryBtn(
+                onPressed: () {
+                  controller.updateSelectedTableIndex(index);
+                },
+                height: 75,
+                width: 75,
+                color: StaticColors.greenColor,
+                style:
+                    theme.textTheme.titleLarge?.copyWith(color: Colors.white),
+                text: 'T ${index + 1}',
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class TableAvailabilityHeader extends StatelessWidget {
+  const TableAvailabilityHeader({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      children: [
+        MyCustomText(
+          ' Table Availability',
+          fontWeight: FontWeight.w500,
+        ),
+        SizedBox(width: 10.0),
+        ColorTextRow(
+          color: StaticColors.greenColor,
+          text: 'Available',
+        ),
+        ColorTextRow(
+          color: StaticColors.yellowColor,
+          text: 'Walk-In Booking',
+        ),
+        ColorTextRow(
+          color: StaticColors.orangeColor,
+          text: 'Cooking/Serving',
+        ),
+        ColorTextRow(
+          color: StaticColors.blueColor,
+          text: 'Online Booking',
+        ),
+        ColorTextRow(
+          color: StaticColors.purpleColor,
+          text: 'Combined Tables',
+        ),
+        ColorTextRow(
+          color: StaticColors.pinkColor,
+          text: 'Hold Tables',
+        ),
+      ],
+    );
+  }
+}
+
+class ColorTextRow extends StatelessWidget {
+  const ColorTextRow({
+    super.key,
+    required this.color,
+    required this.text,
+  });
+
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         children: [
-          Expanded(
-              child: Text(
-            title,
-            style: theme.textTheme.titleSmall?.copyWith(
-                fontSize: fontSize ?? 16, fontWeight: FontWeight.w700),
-          )),
-          Text(
-            value,
-            style: theme.textTheme.titleSmall?.copyWith(
-                fontSize: fontSize ?? 16, fontWeight: FontWeight.w700),
+          CircleAvatar(
+            radius: 8,
+            backgroundColor: color,
+          ),
+          const SizedBox(width: 3.0),
+          MyCustomText(
+            text,
+            fontWeight: FontWeight.w500,
           ),
         ],
       ),
