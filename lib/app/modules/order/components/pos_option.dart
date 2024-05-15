@@ -28,13 +28,7 @@ class PosOption extends GetView<OrderController> {
             ),
           ),
           const SizedBox(width: 24),
-          Expanded(
-            child: Obx(
-              () => controller.isShowCart.value
-                  ? _cartArea(theme)
-                  : const SizedBox(),
-            ),
-          ),
+          Expanded(child: _cartArea(theme)),
           // cart area
         ],
       ),
@@ -46,123 +40,124 @@ class PosOption extends GetView<OrderController> {
     return Container(
       // height: double.infinity,
       color: theme.cardColor,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // add customer
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                          child: CustomDropdownTextField(
-                              hint: const Text('Search Customer'),
-                              data: const ["demo"],
-                              onChanged: (value) {})),
-                      const SizedBox(width: 16),
-                      PrimaryBtn(
-                        onPressed: () {},
-                        height: 48,
-                        width: 48,
-                        color: StaticColors.blueColor,
-                        text: '+',
-                        textColor: Colors.white,
-                        textMaxSize: 30,
-                        textMinSize: 18,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: PrimaryBtn(
+      child: Column(
+        children: [
+          // add customer
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        child: CustomDropdownTextField(
+                            hint: const Text('Search Customer'),
+                            data: const ["demo"],
+                            onChanged: (value) {})),
+                    const SizedBox(width: 16),
+                    PrimaryBtn(
                       onPressed: () {},
+                      height: 48,
+                      width: 48,
                       color: StaticColors.blueColor,
+                      text: '+',
                       textColor: Colors.white,
-                      textMaxSize: 24,
-                      textMinSize: 16,
-                      text: 'Take Out',
+                      textMaxSize: 30,
+                      textMinSize: 18,
                     ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    color: StaticColors.blueColor,
+                    textColor: Colors.white,
+                    textMaxSize: 24,
+                    textMinSize: 16,
+                    text: 'Take Out',
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // ****  Cart Items ****
-            Container(
-              // color: const Color(0xfD9D9D9f),
-              color: Colors.grey.shade300,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              width: double.infinity,
-              child: Text(
-                "Cart Items",
-                style: theme.textTheme.titleLarge,
-              ),
+          ),
+          // ****  Cart Items ****
+          Container(
+            // color: const Color(0xfD9D9D9f),
+            color: Colors.grey.shade300,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            width: double.infinity,
+            child: Text(
+              "Cart Items",
+              style: theme.textTheme.titleLarge,
             ),
-            Column(
-              children: List.generate(
-                3,
-                (index) => CartItem(
-                  title: 'Ralph Edwards',
-                  description: 'Add avocado',
-                  amount: 89,
-                  quantity: 1,
-                  onDecrement: () {},
-                  onIncrement: () {},
-                  onRemove: () {},
+          ),
+          // Column(
+          //   children: List.generate(
+          //     3,
+          //     (index) => CartItem(
+          //       title: 'Ralph Edwards',
+          //       description: 'Add avocado',
+          //       amount: 89,
+          //       quantity: 1,
+          //       onDecrement: () {},
+          //       onIncrement: () {},
+          //       onRemove: () {},
+          //     ),
+          //   ),
+          // ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                  12,
+                  (index) => CartItem(
+                    title: "Chana samosa ",
+                    description: "Add avocado",
+                    amount: 89,
+                    quantity: 1,
+                    onDecrement: () {},
+                    onIncrement: () {},
+                    onRemove: () {},
+                  ),
                 ),
               ),
             ),
-            // Expanded(
-            //     child: SingleChildScrollView(
-            //   child: Column(
-            //     children: List.generate(
-            //         12,
-            //         (index) => CartItem(
-            //               title: "Chana samosa ",
-            //               description: "Add avocado",
-            //               amount: 89,
-            //               quantity: 1,
-            //               onDecrement: () {},
-            //               onIncrement: () {},
-            //               onRemove: () {},
-            //             )),
-            //   ),
-            // )),
-            // amount
-            const Divider(),
-            _row(theme, title: "Subtotal :", value: "\$00"),
-            _row(theme, title: "GST 5% :", value: "\$00"),
-            const Divider(),
-            _row(theme, title: "Total :", value: "\$00", fontSize: 20),
-            // order btn
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: PrimaryBtn(
-                      onPressed: () {},
-                      color: StaticColors.greenColor,
-                      textColor: Colors.white,
-                      text: 'Place Order',
-                    ),
+          ),
+          // amount
+          const Divider(),
+          _row(theme, title: "Subtotal :", value: "\$00"),
+          _row(theme, title: "GST 5% :", value: "\$00"),
+          const Divider(),
+          _row(theme, title: "Total :", value: "\$00", fontSize: 20),
+          // order btn
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    color: StaticColors.greenColor,
+                    textColor: Colors.white,
+                    text: 'Place Order',
                   ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: PrimaryBtn(
-                      onPressed: () {},
-                      color: theme.colorScheme.error,
-                      textColor: Colors.white,
-                      text: 'Cancel',
-                    ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    color: theme.colorScheme.error,
+                    textColor: Colors.white,
+                    text: 'Cancel',
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

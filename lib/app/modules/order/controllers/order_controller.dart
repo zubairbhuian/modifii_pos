@@ -59,7 +59,7 @@ class OrderController extends GetxController {
     Map<String, dynamic>? queryParameters = {
       "product_type": type,
       "offset": offset,
-      "limit": limit ?? 200,
+      "limit": limit ?? 800,
       "category_ids": categoryIds
     };
     try {
@@ -93,7 +93,7 @@ class OrderController extends GetxController {
         .toList());
   }
 
-  RxInt selectedTableIndex = (-1).obs;
+  RxInt selectedTableIndex = 0.obs;
   void updateSelectedTableIndex(int value) {
     selectedTableIndex.value = value;
   }
@@ -104,7 +104,7 @@ class OrderController extends GetxController {
       bool isBooked = Random().nextBool();
       tablesList.add(
         TableModel(
-          tableNo: 'Table ${i + 1}',
+          tableNo: 'Table $i',
           isBooked: isBooked,
         ),
       );

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -12,6 +14,7 @@ class TablesOption extends GetView<OrderController> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const TableAvailabilityHeader(),
           const SizedBox(height: 12.0),
@@ -27,16 +30,12 @@ class TablesOption extends GetView<OrderController> {
                 Expanded(
                   flex: 2,
                   child: Obx(() => Visibility(
-                        visible: controller.selectedTableIndex.value != -1,
-                        replacement: const SizedBox(),
-                        child: Visibility(
-                          visible: controller
-                              .tablesList[controller.selectedTableIndex.value]
-                              .isBooked,
-                          replacement:
-                              AvailableTableOption(controller: controller),
-                          child: BookedTableOption(controller: controller),
-                        ),
+                        visible: controller
+                            .tablesList[controller.selectedTableIndex.value]
+                            .isBooked,
+                        replacement:
+                            AvailableTableOption(controller: controller),
+                        child: BookedTableOption(controller: controller),
                       )),
                 ),
                 // cart area
@@ -116,76 +115,77 @@ class BookedTableOption extends StatelessWidget {
         border: Border.all(color: StaticColors.greenColor),
         borderRadius: BorderRadius.circular(4.0),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _columnText('Order', '#10004A'),
-              _columnText('Server', 'UserName'),
-              _columnText('Guests', '3'),
-              _columnText('Status', 'Confimed'),
-              _columnText('Customer', 'Walk-In\nCustomer'),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {},
-                  text: 'Go to Order',
-                  textColor: Colors.white,
-                  color: StaticColors.greenColor,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _columnText('Order', '#10004A'),
+                _columnText('Server', 'UserName'),
+                _columnText('Guests', '3'),
+                _columnText('Status', 'Confimed'),
+                _columnText('Customer', 'Walk-In\nCustomer'),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    text: 'Go to Order',
+                    textColor: Colors.white,
+                    color: StaticColors.greenColor,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 18),
-              Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {},
-                  text: 'Add Items',
-                  textColor: Colors.white,
-                  color: StaticColors.orangeColor,
+                const SizedBox(width: 18),
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    text: 'Add Items',
+                    textColor: Colors.white,
+                    color: StaticColors.orangeColor,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 18),
-              Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {},
-                  text: 'Print Check',
-                  textColor: Colors.white,
-                  color: StaticColors.blueLightColor,
+                const SizedBox(width: 18),
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    text: 'Print Check',
+                    textColor: Colors.white,
+                    color: StaticColors.blueLightColor,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 18),
-              Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {},
-                  text: 'Split Order',
-                  textColor: Colors.white,
-                  color: StaticColors.purpleColor,
+                const SizedBox(width: 18),
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    text: 'Split Order',
+                    textColor: Colors.white,
+                    color: StaticColors.purpleColor,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 22),
-          const Divider(),
-          const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(flex: 1, child: MyCustomText('SL.')),
-              Expanded(flex: 3, child: MyCustomText('Items')),
-              Expanded(flex: 1, child: MyCustomText('Qty')),
-              Expanded(flex: 1, child: MyCustomText('Price')),
-            ],
-          ),
-          const Divider(),
-          const SizedBox(height: 8),
-          Expanded(
-            child: Column(
+              ],
+            ),
+            const SizedBox(height: 22),
+            const Divider(),
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 1, child: MyCustomText('SL.')),
+                Expanded(flex: 3, child: MyCustomText('Items')),
+                Expanded(flex: 1, child: MyCustomText('Qty')),
+                Expanded(flex: 1, child: MyCustomText('Price')),
+              ],
+            ),
+            const Divider(),
+            const SizedBox(height: 8),
+            Column(
               children: List.generate(
-                7,
+                3,
                 (index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
@@ -201,7 +201,7 @@ class BookedTableOption extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                               ),
                               MyCustomText(
-                                ' (Heat: Medium)',
+                                ' (Medium)',
                                 fontStyle: FontStyle.italic,
                               ),
                             ],
@@ -213,21 +213,21 @@ class BookedTableOption extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          const Divider(),
-          _row(theme, title: "Subtotal :", value: "\$00"),
-          _row(theme, title: "GST 5% :", value: "\$00"),
-          const Divider(),
-          _row(theme, title: "Total :", value: "\$00", fontSize: 20),
-          const SizedBox(height: 12),
-          PrimaryBtn(
-            onPressed: () {},
-            text: 'Pay',
-            width: double.infinity,
-            textColor: Colors.white,
-            color: StaticColors.greenColor,
-          ),
-        ],
+            const Divider(),
+            _row(theme, title: "Subtotal :", value: "\$00"),
+            _row(theme, title: "GST 5% :", value: "\$00"),
+            const Divider(),
+            _row(theme, title: "Total :", value: "\$00", fontSize: 20),
+            const SizedBox(height: 12),
+            PrimaryBtn(
+              onPressed: () {},
+              text: 'Pay',
+              width: double.infinity,
+              textColor: Colors.white,
+              color: StaticColors.greenColor,
+            ),
+          ],
+        ),
       ),
     );
   }
