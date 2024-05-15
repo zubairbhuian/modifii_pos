@@ -1,9 +1,12 @@
+import 'package:flutter_base/app/modules/order/bindings/bar_binding.dart';
+import 'package:flutter_base/app/modules/order/bindings/tables_binding.dart';
 import 'package:get/get.dart';
 
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/entryPoint/bindings/entry_point_binding.dart';
 import '../modules/entryPoint/views/entry_point_view.dart';
+import '../modules/order/bindings/order_base_binding.dart';
 import '../modules/order/bindings/order_binding.dart';
 import '../modules/order/views/order_view.dart';
 
@@ -30,7 +33,12 @@ class AppPages {
     GetPage(
       name: _Paths.ORDER,
       page: () => const OrderView(),
-      binding: OrderBinding(),
+      bindings: [
+        OrderBaseBinding(),
+        OrderBinding(),
+        TablesBinding(),
+        BarBinding(),
+      ],
     ),
   ];
 }

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/modules/order/components/pos_option.dart';
-import 'package:flutter_base/app/modules/order/components/tables_option.dart';
+import 'package:flutter_base/app/modules/order/widgets/header_options.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
-import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import '../../../widgets/custom_loading.dart';
+import '../controllers/order_base_controller.dart';
 import '../controllers/order_controller.dart';
 
-class OrderView extends GetView<OrderController> {
+class OrderView extends GetView<OrderBaseController> {
   const OrderView({super.key});
   @override
   Widget build(BuildContext context) {
@@ -19,19 +18,13 @@ class OrderView extends GetView<OrderController> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Obx(
-          () => controller.isLoadingCategory.value
+          () => OrderController.to.isLoadingCategory.value
               ? const CustomLoading()
               : Column(
                   children: [
-                    _header(theme),
+                    const HeaderOptions(),
                     const SizedBox(height: 16),
-                    Obx(
-                      () => Visibility(
-                        visible: controller.isShowOrders.value,
-                        replacement: const TablesOption(),
-                        child: const PosOption(),
-                      ),
-                    ),
+                    Obx(() => controller.getSelectedOption()),
                   ],
                 ),
         ),
@@ -77,94 +70,6 @@ class OrderView extends GetView<OrderController> {
         ),
         const SizedBox(width: 24),
       ],
-    );
-  }
-
-  //** Header **
-  Widget _header(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: theme.dividerColor))),
-      // height: 115,
-      width: double.infinity,
-      child: Row(
-        children: [
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'foods');
-              controller.isShowOrders.value = true;
-            },
-            color: StaticColors.greenColor,
-            textColor: Colors.white,
-            text: 'POS',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.yellowColor,
-            textColor: Colors.white,
-            text: 'ORDERS',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.yellowColor,
-            textColor: Colors.white,
-            text: 'TABLE\nORDERS',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-              controller.isShowOrders.value = false;
-            },
-            color: StaticColors.purpleColor,
-            textColor: Colors.white,
-            text: 'TABLES',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.purpleColor,
-            textColor: Colors.white,
-            text: 'BAR',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.blueColor,
-            textColor: Colors.white,
-            text: 'TAKEOUT',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.blueColor,
-            textColor: Colors.white,
-            text: 'Check\nSummery',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.greenColor,
-            textColor: Colors.white,
-            text: 'Cash\nOut',
-          ),
-        ],
-      ),
     );
   }
 }
