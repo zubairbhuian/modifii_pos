@@ -13,6 +13,7 @@ class CategoryBody extends GetView<OrderController> {
     ThemeData theme = Theme.of(context);
     return _body(theme);
   }
+
   //** Body **
   Widget _body(ThemeData theme) {
     return SingleChildScrollView(
@@ -47,12 +48,11 @@ class CategoryBody extends GetView<OrderController> {
         itemCount: data.length,
         itemBuilder: (context, index) => PrimaryBtn(
           onPressed: () {
-            controller.findProductsByCategoryId(
-                data[index].id.toString());
+            controller.findProductsByCategoryId(data[index].id.toString());
           },
           color: MyFunc.productColor(data[index].type),
           style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),
-          text: controller.categoryList[index].name,
+          text: data[index].name,
         ).marginOnly(bottom: 20),
       ));
 }

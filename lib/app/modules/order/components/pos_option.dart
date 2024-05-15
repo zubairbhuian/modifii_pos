@@ -135,7 +135,7 @@ class PosOption extends GetView<OrderController> {
             _row(theme, title: "Subtotal :", value: "\$00"),
             _row(theme, title: "GST 5% :", value: "\$00"),
             const Divider(),
-            _row(theme, title: "Total: :", value: "\$00", fontSize: 20),
+            _row(theme, title: "Total :", value: "\$00", fontSize: 20),
             // order btn
             Padding(
               padding: const EdgeInsets.all(20),
