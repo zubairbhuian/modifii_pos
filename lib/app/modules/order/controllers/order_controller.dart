@@ -1,9 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:math';
+
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+
 import 'package:flutter_base/app/modules/order/models/category_model.dart';
 import 'package:flutter_base/app/modules/order/models/product_model.dart';
 import 'package:flutter_base/app/utils/logger.dart';
 import 'package:flutter_base/app/utils/urls.dart';
-import 'package:get/get.dart';
 
 class OrderController extends GetxController {
   RxBool isShowOrders = true.obs;
@@ -94,10 +98,33 @@ class OrderController extends GetxController {
     selectedTableIndex.value = value;
   }
 
+  List<TableModel> tablesList = [];
+  void getTables() {
+    for (int i = 1; i <= 40; i++) {
+      bool isBooked = Random().nextBool();
+      tablesList.add(
+        TableModel(
+          tableNo: 'Table ${i + 1}',
+          isBooked: isBooked,
+        ),
+      );
+    }
+  }
+
   @override
   void onInit() {
     getCategory();
     getProduct();
+    getTables();
     super.onInit();
   }
+}
+
+class TableModel {
+  String tableNo;
+  bool isBooked;
+  TableModel({
+    required this.tableNo,
+    required this.isBooked,
+  });
 }
