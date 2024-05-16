@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/modules/pos/models/category_model.dart';
 import 'package:flutter_base/app/utils/my_func.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:get/get.dart';
 
 class CategoryBody extends GetView<PosController> {
+
   const CategoryBody({super.key});
 
   @override
@@ -34,6 +36,7 @@ class CategoryBody extends GetView<PosController> {
             const SizedBox(width: 12),
             _categoryBtn(theme, nonVeg),
             const SizedBox(width: 12),
+            const SizedBox(width: 12),
             _categoryBtn(theme, drinks),
           ],
         );
@@ -54,5 +57,7 @@ class CategoryBody extends GetView<PosController> {
           style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),
           text: data[index].name,
         ).marginOnly(bottom: 12),
-      ));
+
+        ).marginOnly(bottom: 20),
+      );
 }

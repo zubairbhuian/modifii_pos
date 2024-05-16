@@ -9,7 +9,6 @@ import 'package:flutter_base/config/light_theme.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 // import 'app/services/base/api_service.dart';
 import 'app/services/base/api_service.dart';
 import 'app/services/base/dio_interceptor.dart';
@@ -18,15 +17,13 @@ import 'app/services/bindings/base_binding.dart';
 import 'app/routes/app_pages.dart';
 import 'package:window_manager/window_manager.dart';
 
-
 Future<void> main() async {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   // Must add this line.
   await windowManager.ensureInitialized();
   //hive init
-    // init hive and adapters
-
+  // init hive and adapters
 
   WindowOptions windowOptions = const WindowOptions(
     size: Size(1250, 673),
@@ -89,7 +86,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       initialBinding: BaseBinding(apiService: apiService),
       initialRoute: AppPages.INITIAL,
-      // initialRoute: Routes.TABLES,
+
       getPages: AppPages.routes,
     );
   }

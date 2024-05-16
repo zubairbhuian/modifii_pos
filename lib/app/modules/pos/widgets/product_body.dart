@@ -1,12 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-
-import '../../../widgets/error_view.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 class ProductBody extends GetView<PosController> {
+
   const ProductBody({super.key});
 
   @override
@@ -96,6 +97,7 @@ class ProductBody extends GetView<PosController> {
             ),
           ),
         );
+
     }));
   }
 }
