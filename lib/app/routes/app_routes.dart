@@ -7,12 +7,14 @@ abstract class Routes {
   Routes._();
   static const AUTH = _Paths.AUTH;
   static const ENTRY_POINT = _Paths.ENTRY_POINT;
-  static const ORDER = _Paths.ORDER;
+  static const POS = _Paths.POS;
+  static const TABLES = _Paths.TABLES;
 }
 
 abstract class _Paths {
   _Paths._();
   static const AUTH = '/auth';
   static const ENTRY_POINT = '/entry-point';
-  static const ORDER = '/order';
+  static const POS = '/pos';
+  static const TABLES = '/tables';
 }

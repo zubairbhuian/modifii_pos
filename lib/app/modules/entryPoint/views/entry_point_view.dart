@@ -3,6 +3,7 @@ import 'package:flutter_base/app/modules/entryPoint/widgets/my_time.dart';
 import 'package:flutter_base/app/routes/app_pages.dart';
 import 'package:flutter_base/app/widgets/appbar.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../controllers/entry_point_controller.dart';
 
@@ -12,7 +13,7 @@ class EntryPointView extends GetView<EntryPointController> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: _appbar(),
       body: Column(
         children: [
           Expanded(
@@ -39,30 +40,30 @@ class EntryPointView extends GetView<EntryPointController> {
   }
 
   // **** appbar
-  // PreferredSizeWidget _appbar() {
-  //   return AppBar(
-  //     title:
-  //         SvgPicture.asset(width: 200, 'assets/images/splash/logo_light.svg'),
-  //     actions: [
-  //       InkWell(
-  //         onTap: () {},
-  //         splashFactory: NoSplash.splashFactory,
-  //         child: const Icon(
-  //           Icons.menu,
-  //           size: 40,
-  //         ),
-  //       ),
-  //       const SizedBox(width: 24),
-  //     ],
-  //   );
-  // }
+  PreferredSizeWidget _appbar() {
+    return AppBar(
+      title:
+          SvgPicture.asset(width: 200, 'assets/images/splash/logo_light.svg'),
+      actions: [
+        InkWell(
+          onTap: () {},
+          splashFactory: NoSplash.splashFactory,
+          child: const Icon(
+            Icons.menu,
+            size: 40,
+          ),
+        ),
+        const SizedBox(width: 24),
+      ],
+    );
+  }
 
   // ***** Dine-in
   Widget _dineInBTN(ThemeData theme) {
     return Expanded(
       child: PrimaryBtn(
         onPressed: () {
-          Get.toNamed(Routes.ORDER);
+          Get.toNamed(Routes.POS);
         },
         height: 220,
         style: theme.textTheme.displayLarge?.copyWith(color: Colors.white),
@@ -77,7 +78,7 @@ class EntryPointView extends GetView<EntryPointController> {
     return Expanded(
       child: PrimaryBtn(
         onPressed: () {
-          Get.toNamed(Routes.ORDER);
+          Get.toNamed(Routes.POS);
         },
         height: 220,
         style: theme.textTheme.displayLarge?.copyWith(color: Colors.white),
@@ -93,7 +94,7 @@ class EntryPointView extends GetView<EntryPointController> {
     return Expanded(
       child: PrimaryBtn(
         onPressed: () {
-          Get.toNamed(Routes.ORDER);
+          Get.toNamed(Routes.POS);
         },
         height: 220,
         style: theme.textTheme.displayLarge?.copyWith(color: Colors.white),

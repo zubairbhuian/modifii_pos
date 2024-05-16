@@ -29,8 +29,8 @@ Future<void> main() async {
 
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(1250, 668),
-    minimumSize: Size(1250, 668),
+    size: Size(1250, 673),
+    minimumSize: Size(1250, 673),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       initialBinding: BaseBinding(apiService: apiService),
       initialRoute: AppPages.INITIAL,
-      // initialRoute: Routes.SIGN_IN,
+      // initialRoute: Routes.TABLES,
       getPages: AppPages.routes,
     );
   }

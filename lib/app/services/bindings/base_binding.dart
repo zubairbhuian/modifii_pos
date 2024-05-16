@@ -1,4 +1,4 @@
-import 'package:flutter_base/app/modules/order/controllers/order_controller.dart';
+import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/services/base/api_service.dart';
 import 'package:flutter_base/app/services/controller/base_controller.dart';
 import 'package:flutter_base/app/services/controller/config_controller.dart';
@@ -17,6 +17,6 @@ class BaseBinding extends Bindings {
       BaseController(apiService: apiService),
     );
     Get.put(ConfigController());
-    Get.put(OrderController());
+    Get.put(PosController());
   }
 }
