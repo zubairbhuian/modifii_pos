@@ -1,6 +1,3 @@
-
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/models/category_model.dart';
@@ -11,7 +8,16 @@ import 'package:get/get.dart';
 
 class PosController extends GetxController {
   static PosController get to => Get.find();
+
+  //** change page **
   PageController pageController = PageController();
+  onchangePage(int index) {
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
+  }
 
   RxBool isShowOrders = true.obs;
   int? categoryId;
@@ -25,10 +31,6 @@ class PosController extends GetxController {
   RxList<ProductModel> productList = <ProductModel>[].obs;
   RxList<ProductModel> mainProductList = <ProductModel>[].obs;
   RxBool isProductPage = false.obs;
-  RxBool isShowCart = false.obs;
-  void toggleShowCart() {
-    isShowCart.value = true;
-  }
 
   RxBool isLoadingCategory = false.obs;
   getCategory({String? type, int? offset, int? limit}) async {
@@ -96,38 +98,38 @@ class PosController extends GetxController {
         .toList());
   }
 
-  RxInt selectedTableIndex = 0.obs;
-  void updateSelectedTableIndex(int value) {
-    selectedTableIndex.value = value;
+  List<String> orderTypes = ['TO GO', "DON'T MAKE", 'RUSH'];
+  int? selectedOrderTypesIndex;
+  void setSelectedOrderTypesIndex(int index) {
+    selectedOrderTypesIndex = index;
+    update();
   }
 
-  List<TableModel> tablesList = [];
-  void getTables() {
-    for (int i = 1; i <= 40; i++) {
-      bool isBooked = Random().nextBool();
-      tablesList.add(
-        TableModel(
-          tableNo: 'Table $i',
-          isBooked: isBooked,
-        ),
-      );
+  List<String> orderModifiers = ['MILD', "MEDIUM", 'HOT', 'EXTRA HOT'];
+  int? selectedOrderModifiersIndex;
+  void setSelectedOrderModifiersIndex(int index) {
+    selectedOrderModifiersIndex = index;
+    update();
+  }
+
+  int orderQuantity = 1;
+  double orderTotalPrice = 0;
+  void updateOrderQuantity(bool isIncrease, double price) {
+    if (isIncrease && orderQuantity < 10) {
+      orderQuantity++;
+      orderTotalPrice += price;
+      update();
+    } else if (!isIncrease && orderQuantity > 1) {
+      orderQuantity--;
+      orderTotalPrice -= price;
+      update();
     }
-  }
-
-  //** change page **
-  onchangePage(int index) {
-    pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.ease,
-    );
   }
 
   @override
   void onInit() {
     getCategory();
     getProduct();
-    getTables();
     super.onInit();
   }
 }
@@ -140,95 +142,95 @@ class TableModel {
     required this.isBooked,
   });
 }
-class OrderController extends GetxController {
-  static OrderController get to => Get.find();
-  int? categoryId;
 
-  RxList<CategoryModel> categoryList = <CategoryModel>[].obs;
-  RxInt selectedCategoryIndex = (-1).obs;
-  void updateSelectedCategoryIndex(int value) {
-    selectedCategoryIndex.value = value;
-  }
+// class OrderController extends GetxController {
+//   static OrderController get to => Get.find();
+//   int? categoryId;
 
-  RxList<ProductModel> productList = <ProductModel>[].obs;
-  RxList<ProductModel> mainProductList = <ProductModel>[].obs;
-  RxBool isProductPage = false.obs;
-  RxBool isShowCart = false.obs;
-  void toggleShowCart() {
-    isShowCart.value = true;
-  }
+//   RxList<CategoryModel> categoryList = <CategoryModel>[].obs;
+//   RxInt selectedCategoryIndex = (-1).obs;
+//   void updateSelectedCategoryIndex(int value) {
+//     selectedCategoryIndex.value = value;
+//   }
 
-  RxBool isLoadingCategory = false.obs;
-  getCategory({String? type, int? offset, int? limit}) async {
-    isLoadingCategory.value = true;
-    Map<String, dynamic>? queryParameters = {
-      "type": type,
-      "offset": offset,
-      "limit": limit
-    };
-    try {
-      var res =
-          await Dio().get(URLS.categories, queryParameters: queryParameters);
-      if (res.statusCode == 200) {
-        categoryList.assignAll((res.data["data"] as List)
-            .map((e) => CategoryModel.fromJson(e))
-            .toList());
-      }
-      isLoadingCategory.value = false;
+//   RxList<ProductModel> productList = <ProductModel>[].obs;
+//   RxList<ProductModel> mainProductList = <ProductModel>[].obs;
+//   RxBool isProductPage = false.obs;
+//   RxBool isShowCart = false.obs;
+//   void toggleShowCart() {
+//     isShowCart.value = true;
+//   }
 
-      // kLogger.e(categoryList.length);
-    } catch (e) {
-      kLogger.e('Error from %%%% get categori %%%% => $e');
-    }
-  }
+//   RxBool isLoadingCategory = false.obs;
+//   getCategory({String? type, int? offset, int? limit}) async {
+//     isLoadingCategory.value = true;
+//     Map<String, dynamic>? queryParameters = {
+//       "type": type,
+//       "offset": offset,
+//       "limit": limit
+//     };
+//     try {
+//       var res =
+//           await Dio().get(URLS.categories, queryParameters: queryParameters);
+//       if (res.statusCode == 200) {
+//         categoryList.assignAll((res.data["data"] as List)
+//             .map((e) => CategoryModel.fromJson(e))
+//             .toList());
+//       }
+//       isLoadingCategory.value = false;
 
-  RxBool isLoadingProduct = false.obs;
-  getProduct({String? type, int? offset, int? limit, int? categoryIds}) async {
-    isLoadingProduct.value = true;
-    productList.clear();
-    categoryId = categoryIds;
-    Map<String, dynamic>? queryParameters = {
-      "product_type": type,
-      "offset": offset,
-      "limit": limit ?? 800,
-      "category_ids": categoryIds
-    };
-    try {
-      var res =
-          await Dio().get(URLS.products, queryParameters: queryParameters);
-      if (res.statusCode == 200) {
-        productList.assignAll((res.data["products"] as List)
-            .map((e) => ProductModel.fromJson(e))
-            .toList());
-        mainProductList.assignAll((res.data["products"] as List)
-            .map((e) => ProductModel.fromJson(e))
-            .toList());
+//       // kLogger.e(categoryList.length);
+//     } catch (e) {
+//       kLogger.e('Error from %%%% get categori %%%% => $e');
+//     }
+//   }
 
-        /// Save fetched posts to Hive for future use
-        // await MyHive.saveAllProducts(productList);
+//   RxBool isLoadingProduct = false.obs;
+//   getProduct({String? type, int? offset, int? limit, int? categoryIds}) async {
+//     isLoadingProduct.value = true;
+//     productList.clear();
+//     categoryId = categoryIds;
+//     Map<String, dynamic>? queryParameters = {
+//       "product_type": type,
+//       "offset": offset,
+//       "limit": limit ?? 800,
+//       "category_ids": categoryIds
+//     };
+//     try {
+//       var res =
+//           await Dio().get(URLS.products, queryParameters: queryParameters);
+//       if (res.statusCode == 200) {
+//         productList.assignAll((res.data["products"] as List)
+//             .map((e) => ProductModel.fromJson(e))
+//             .toList());
+//         mainProductList.assignAll((res.data["products"] as List)
+//             .map((e) => ProductModel.fromJson(e))
+//             .toList());
 
-        isLoadingProduct.value = false;
-      }
-      // kLogger.e(productList.length);
-    } catch (e) {
-      kLogger.e('Error from %%%% get categori %%%% => $e');
-    }
-  }
+//         /// Save fetched posts to Hive for future use
+//         // await MyHive.saveAllProducts(productList);
 
-  //** find product categoryId**
-  findProductsByCategoryId(String categoryId) {
-    productList.assignAll(mainProductList
-        .where((product) => product.categoryIds
-            .expand((category) => [category.id])
-            .contains(categoryId))
-        .toList());
-  }
+//         isLoadingProduct.value = false;
+//       }
+//       // kLogger.e(productList.length);
+//     } catch (e) {
+//       kLogger.e('Error from %%%% get categori %%%% => $e');
+//     }
+//   }
 
-  @override
-  void onInit() {
-    getCategory();
-    getProduct();
-    super.onInit();
-  }
-}
+//   //** find product categoryId**
+//   findProductsByCategoryId(String categoryId) {
+//     productList.assignAll(mainProductList
+//         .where((product) => product.categoryIds
+//             .expand((category) => [category.id])
+//             .contains(categoryId))
+//         .toList());
+//   }
 
+//   @override
+//   void onInit() {
+//     getCategory();
+//     getProduct();
+//     super.onInit();
+//   }
+// }

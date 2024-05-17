@@ -8,34 +8,37 @@ import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_base/app/widgets/custom_textfield.dart';
 import 'package:get/get.dart';
 
+import '../../../../widgets/custom_loading.dart';
+
 class PosPage extends GetView<PosController> {
   const PosPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // item 1 (Category)
-            const Expanded(flex: 3, child: CategoryBody()),
-            const SizedBox(width: 24),
-            // item 2 (Product)
-            const Expanded(
-              flex: 4,
-              child: ProductBody(),
-            ),
-            const SizedBox(width: 24),
-             // item 3 (Cart)
-            Expanded(flex: 3, child: _cartArea(theme)),
-            // cart area
-          ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // item 1 (Category)
+        const Expanded(flex: 3, child: CategoryBody()),
+        const SizedBox(width: 24),
+        // item 2 (Product)
+        Expanded(
+          flex: 4,
+          child: Obx(
+            () => controller.isLoadingProduct.value
+                ? const CustomLoading()
+                : const ProductBody(),
+          ),
         ),
-      );
+        const SizedBox(width: 24),
+        // item 3 (Cart)
+        Expanded(flex: 3, child: _cartArea(theme)),
+        // cart area
+      ],
+    );
   }
-  
+
   //** cart **
   Widget _cartArea(ThemeData theme) {
     return Container(
@@ -45,16 +48,18 @@ class PosPage extends GetView<PosController> {
         children: [
           // add customer
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Column(
               children: [
                 Row(
                   children: [
                     Expanded(
-                        child: CustomDropdownTextField(
-                            hint: const Text('Search Customer'),
-                            data: const ["demo"],
-                            onChanged: (value) {})),
+                      child: CustomDropdownTextField(
+                        hint: const Text('Search Customer'),
+                        data: const ["demo"],
+                        onChanged: (value) {},
+                      ),
+                    ),
                     const SizedBox(width: 16),
                     PrimaryBtn(
                       onPressed: () {},
@@ -68,11 +73,12 @@ class PosPage extends GetView<PosController> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
                 SizedBox(
                   width: double.infinity,
                   child: PrimaryBtn(
                     onPressed: () {},
+                    height: 48,
                     color: StaticColors.blueColor,
                     textColor: Colors.white,
                     textMaxSize: 24,
@@ -87,27 +93,13 @@ class PosPage extends GetView<PosController> {
           Container(
             // color: const Color(0xfD9D9D9f),
             color: Colors.grey.shade300,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
             width: double.infinity,
             child: Text(
               "Cart Items",
               style: theme.textTheme.titleLarge,
             ),
           ),
-          // Column(
-          //   children: List.generate(
-          //     3,
-          //     (index) => CartItem(
-          //       title: 'Ralph Edwards',
-          //       description: 'Add avocado',
-          //       amount: 89,
-          //       quantity: 1,
-          //       onDecrement: () {},
-          //       onIncrement: () {},
-          //       onRemove: () {},
-          //     ),
-          //   ),
-          // ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -135,12 +127,13 @@ class PosPage extends GetView<PosController> {
           _row(theme, title: "Total :", value: "\$00", fontSize: 20),
           // order btn
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Row(
               children: [
                 Expanded(
                   child: PrimaryBtn(
                     onPressed: () {},
+                    height: 48,
                     color: StaticColors.greenColor,
                     textColor: Colors.white,
                     text: 'Place Order',
@@ -150,6 +143,7 @@ class PosPage extends GetView<PosController> {
                 Expanded(
                   child: PrimaryBtn(
                     onPressed: () {},
+                    height: 48,
                     color: theme.colorScheme.error,
                     textColor: Colors.white,
                     text: 'Cancel',
@@ -167,7 +161,7 @@ class PosPage extends GetView<PosController> {
   Widget _row(ThemeData theme,
       {double? fontSize, required String title, required String value}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
       child: Row(
         children: [
           Expanded(

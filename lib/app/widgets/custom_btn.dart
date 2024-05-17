@@ -41,7 +41,7 @@ class PrimaryBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return SizedBox(
-      height: height ?? 60,
+      height: height ?? 48,
       width: width ?? 120,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -153,6 +153,90 @@ class OutLineBtn extends StatelessWidget {
             ),
       ),
       child: child,
+    );
+  }
+}
+
+class PrimaryBtnWithChild extends StatelessWidget {
+  final Widget child;
+  final Color? color;
+  final Color? textColor;
+  final Function()? onPressed;
+  final double? borderRadius;
+  final double? height;
+  final double? width;
+  final double? elevation;
+  final TextStyle? style;
+  final EdgeInsetsGeometry? padding;
+  final BorderSide? side;
+  final bool isOutline;
+
+  const PrimaryBtnWithChild({
+    super.key,
+    required this.child,
+    this.color,
+    this.textColor,
+    required this.onPressed,
+    this.borderRadius,
+    this.style,
+    this.height,
+    this.width,
+    this.elevation,
+    this.padding,
+    this.side,
+    this.isOutline = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return SizedBox(
+      height: height ?? 48,
+      width: width ?? 120,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: !isOutline
+            ? ElevatedButton.styleFrom(
+                elevation: elevation ?? 1,
+                // textStyle: style ?? theme.textTheme.labelLarge,
+                // disabledBackgroundColor: kDisabledColor,
+                // disabledForegroundColor: kDisabledTextColor,
+                backgroundColor: color ?? theme.primaryColor,
+                foregroundColor: textColor ?? Colors.white,
+                padding: padding ??
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                ),
+                // ****** Border color *******
+                side: side
+                // const BorderSide(
+                //   color: kPrimaryColor,
+                //   width: 0,
+                // ),
+                )
+            : ElevatedButton.styleFrom(
+                elevation: 0,
+                // textStyle: style ?? theme.textTheme.labelLarge,
+                // disabledBackgroundColor: kDisabledColor,
+                // disabledForegroundColor: kDisabledTextColor,
+                backgroundColor: color ?? Colors.white,
+                foregroundColor: StaticColors.greenLightColor,
+                // splashFactory: NoSplash.splashFactory,
+                padding: padding ??
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                ),
+                // ****** Border color *******
+                side: side ??
+                    const BorderSide(
+                      color: StaticColors.greenColor,
+                      width: 1.5,
+                    ),
+              ),
+        child: child,
+      ),
     );
   }
 }
