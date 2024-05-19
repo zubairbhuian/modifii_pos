@@ -11,12 +11,18 @@ class PosController extends GetxController {
 
   //** change page **
   PageController pageController = PageController();
+  RxBool isShowPos = true.obs;
   onchangePage(int index) {
     pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
       curve: Curves.ease,
     );
+    if (index == 0) {
+      isShowPos.value = false;
+    } else {
+      isShowPos.value = true;
+    }
   }
 
   RxBool isShowOrders = true.obs;
@@ -98,13 +104,19 @@ class PosController extends GetxController {
         .toList());
   }
 
-  List<String> orderTypes = ['TO GO', "DON'T MAKE", 'RUSH'];
-  int? selectedOrderTypesIndex;
-  void setSelectedOrderTypesIndex(int index) {
-    selectedOrderTypesIndex = index;
+  // List<String> orderTypes = ['TO GO', "DON'T MAKE", 'RUSH'];
+  bool isTogoSelected = false;
+  bool isDontMakeSelected = false;
+  bool isRushSelected = false;
+
+  List<String> orderTypes2 = ['APPETIZERS 1st', "ALL-TOGETHER"];
+  int? selectedOrderTypesIndex2;
+  void setSelectedOrderTypesIndex2(int index) {
+    selectedOrderTypesIndex2 = index;
     update();
   }
 
+  bool isDrink = true;
   List<String> orderModifiers = ['MILD', "MEDIUM", 'HOT', 'EXTRA HOT'];
   int? selectedOrderModifiersIndex;
   void setSelectedOrderModifiersIndex(int index) {
@@ -131,6 +143,12 @@ class PosController extends GetxController {
     getCategory();
     getProduct();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
   }
 }
 

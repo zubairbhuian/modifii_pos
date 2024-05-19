@@ -115,7 +115,7 @@ class CustomTextField extends StatelessWidget {
           //! ********** decoration ********
           decoration: InputDecoration(
             filled: isFilled,
-            // fillColor: kDisabledColor.withOpacity(.6),
+            fillColor: theme.scaffoldBackgroundColor,
             // ********** errorText ********
             errorText: errorText,
             errorStyle: errorStyle ??

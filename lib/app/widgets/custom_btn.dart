@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import '../utils/static_colors.dart';
@@ -6,7 +7,7 @@ import '../utils/static_colors.dart';
 class PrimaryBtn extends StatelessWidget {
   final Color? color;
   final Color? textColor;
-  final Function()? onPressed;
+  final VoidCallback onPressed;
   final double? borderRadius;
   final double? height;
   final double? width;
@@ -37,6 +38,10 @@ class PrimaryBtn extends StatelessWidget {
     this.textMinSize = 10,
   });
 
+  void playTapSound() {
+    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -44,7 +49,10 @@ class PrimaryBtn extends StatelessWidget {
       height: height ?? 48,
       width: width ?? 120,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: () {
+          playTapSound();
+          onPressed();
+        },
         style: !isOutline
             ? ElevatedButton.styleFrom(
                 elevation: elevation ?? 1,
@@ -70,7 +78,7 @@ class PrimaryBtn extends StatelessWidget {
                 // textStyle: style ?? theme.textTheme.labelLarge,
                 // disabledBackgroundColor: kDisabledColor,
                 // disabledForegroundColor: kDisabledTextColor,
-                backgroundColor: color ?? Colors.white,
+                backgroundColor: color ?? theme.scaffoldBackgroundColor,
                 foregroundColor: StaticColors.greenLightColor,
                 // splashFactory: NoSplash.splashFactory,
                 padding: padding ??
@@ -91,7 +99,7 @@ class PrimaryBtn extends StatelessWidget {
           textAlign: TextAlign.center,
           style: style ??
               TextStyle(
-                color: textColor ?? theme.primaryColorDark,
+                color: textColor ?? theme.colorScheme.background,
               ),
           // overflow: TextOverflow.ellipsis,
         ),
@@ -104,7 +112,7 @@ class OutLineBtn extends StatelessWidget {
   final Color? color;
   final Color? textColor;
   final Widget child;
-  final Function()? onPressed;
+  final VoidCallback onPressed;
   final double? borderRadius;
   final double? height;
   final double? width;
@@ -128,11 +136,18 @@ class OutLineBtn extends StatelessWidget {
     this.side,
   });
 
+  void playTapSound() {
+    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: () {
+        playTapSound();
+        onPressed();
+      },
       style: OutlinedButton.styleFrom(
         elevation: elevation ?? 1,
         textStyle: style ?? theme.textTheme.labelLarge,
@@ -161,7 +176,7 @@ class PrimaryBtnWithChild extends StatelessWidget {
   final Widget child;
   final Color? color;
   final Color? textColor;
-  final Function()? onPressed;
+  final VoidCallback onPressed;
   final double? borderRadius;
   final double? height;
   final double? width;
@@ -187,6 +202,10 @@ class PrimaryBtnWithChild extends StatelessWidget {
     this.isOutline = false,
   });
 
+  void playTapSound() {
+    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -194,7 +213,10 @@ class PrimaryBtnWithChild extends StatelessWidget {
       height: height ?? 48,
       width: width ?? 120,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: () {
+          playTapSound();
+          onPressed();
+        },
         style: !isOutline
             ? ElevatedButton.styleFrom(
                 elevation: elevation ?? 1,

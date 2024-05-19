@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
@@ -15,21 +16,25 @@ class Preferences {
   static Future<void> init() async {
     preferences = await SharedPreferences.getInstance();
   }
-  
-  
+
   /// is user signin
   static bool get isUserSignin => preferences.getBool(IS_USER_SIGNIN) ?? false;
-  static set isUserSignin(bool value) => preferences.setBool(IS_USER_SIGNIN, value);
+  static set isUserSignin(bool value) =>
+      preferences.setBool(IS_USER_SIGNIN, value);
+
   /// isFirstTime
   static bool get isFirstTime => preferences.getBool(KEY_IS_FIRST_TIME) ?? true;
-  static set isFirstTime(bool value) => preferences.setBool(KEY_IS_FIRST_TIME, value);
- /// token
+  static set isFirstTime(bool value) =>
+      preferences.setBool(KEY_IS_FIRST_TIME, value);
+
+  /// token
   static String get token => preferences.getString(KEY_TOKEN) ?? '';
   static set token(String value) => preferences.setString(KEY_TOKEN, value);
- /// is light theme
-  static bool get isLight => preferences.getBool(KEY_TOKEN) ?? true;
-  static set isLight(bool value) => preferences.setBool(KEY_TOKEN, value);
-  
+
+  /// is light theme
+  static bool get isLight =>
+      preferences.getBool(KEY_IS_LIGHT) ?? ThemeMode.system == ThemeMode.light;
+  static set isLight(bool value) => preferences.setBool(KEY_IS_LIGHT, value);
 
   // ***** Clear the SharedPreferences *****
   static void clear() {

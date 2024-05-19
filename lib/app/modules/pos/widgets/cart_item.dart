@@ -7,9 +7,9 @@ class CartItem extends StatelessWidget {
   final String description;
   final double amount;
   final int quantity;
-  final void Function()? onRemove;
-  final void Function()? onDecrement;
-  final void Function()? onIncrement;
+  final VoidCallback? onRemove;
+  final VoidCallback? onDecrement;
+  final VoidCallback? onIncrement;
   const CartItem(
       {super.key,
       required this.title,
@@ -24,7 +24,7 @@ class CartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -70,7 +70,7 @@ class CartItem extends StatelessWidget {
                         width: 32,
                         height: 32,
                         child: OutLineBtn(
-                          onPressed: onDecrement,
+                          onPressed: onDecrement!,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -101,7 +101,7 @@ class CartItem extends StatelessWidget {
                         width: 32,
                         height: 32,
                         child: OutLineBtn(
-                          onPressed: onIncrement,
+                          onPressed: onIncrement!,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -129,11 +129,6 @@ class CartItem extends StatelessWidget {
             description,
             style: theme.textTheme.labelMedium
                 ?.copyWith(fontWeight: FontWeight.w700, color: theme.hintColor),
-          ),
-          const SizedBox(height: 20),
-          Divider(
-            height: 0,
-            color: theme.dividerColor.withOpacity(.3),
           ),
         ],
       ),

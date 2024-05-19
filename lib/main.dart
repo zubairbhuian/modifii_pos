@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_base/app/services/controller/config_controller.dart';
 // import 'package:flutter_base/app/services/controller/config_controller.dart';
 import 'package:flutter_base/config/dark_theme.dart';
 import 'package:flutter_base/config/light_theme.dart';
@@ -26,10 +27,11 @@ Future<void> main() async {
   // init hive and adapters
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(1250, 673),
+    // size: Size(1250, 673),
     minimumSize: Size(1250, 673),
     center: true,
     backgroundColor: Colors.transparent,
+    // fullScreen: true,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
   );
@@ -37,6 +39,7 @@ Future<void> main() async {
     await windowManager.show();
     await windowManager.focus();
   });
+
   //Native Splash
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // await Future.delayed(const Duration(seconds: 2));
@@ -76,17 +79,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ConfigController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 0),
       title: 'flutter base',
-      themeMode: ThemeMode.light,
+      themeMode:
+          ConfigController.to.isLightTheme ? ThemeMode.light : ThemeMode.dark,
       theme: lightTheme,
       darkTheme: darkTheme,
       initialBinding: BaseBinding(apiService: apiService),
-      initialRoute: AppPages.INITIAL,
-      // initialRoute: Routes.POS,
+      // initialRoute: AppPages.INITIAL,
+      initialRoute: Routes.POS,
       getPages: AppPages.routes,
     );
   }

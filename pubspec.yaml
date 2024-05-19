@@ -42,6 +42,7 @@ dependencies:
   iconly: ^1.0.1
   font_awesome_flutter: ^10.7.0
   auto_size_text: ^3.0.0
+  audioplayers: ^6.0.0
 
   window_manager: ^0.3.8
   intl: ^0.19.0
@@ -57,16 +58,13 @@ dependencies:
   flutter_staggered_grid_view: ^0.7.0
   # shimmer: ^3.0.0
   # animate_do: ^3.3.3
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
+  # hive: ^2.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^3.0.0
-  build_runner:
-  hive_generator:
   # flutter_launcher_icons: ^0.13.1
 
 # launcher icons
@@ -93,6 +91,7 @@ flutter:
     - assets/images/splash/
     - assets/icons/
     - assets/icons/auth/
+    - assets/audio/
 
   fonts:
     - family: Inter

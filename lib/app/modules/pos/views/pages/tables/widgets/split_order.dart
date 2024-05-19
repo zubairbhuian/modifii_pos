@@ -23,8 +23,8 @@ class SplitOrder extends GetView<TablesController> {
         children: [
           Expanded(
             child: Container(
-              width: 250,
-              color: Colors.white,
+              width: 265,
+              color: theme.cardColor,
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
@@ -39,12 +39,25 @@ class SplitOrder extends GetView<TablesController> {
                   ),
                   const SizedBox(height: 8),
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                          8,
-                          (index) => const ItemTile(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: theme.colorScheme.background,
+                          width: 0.33,
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                              controller.orderItemsList.length, (index) {
+                            var item = controller.orderItemsList[index];
+                            return ItemTile(
+                              name: item.name,
+                              qnty: item.quantity,
+                              price: item.price,
+                            );
+                          }),
                         ),
                       ),
                     ),
@@ -65,16 +78,14 @@ class SplitOrder extends GetView<TablesController> {
           const SizedBox(height: 8),
           //Buttons
           SizedBox(
-            width: 250,
+            width: 265,
             child: Column(
               children: [
                 Row(
                   children: [
                     Expanded(
                       child: PrimaryBtn(
-                        onPressed: () {
-                          controller.setSelectedBookedTableOption(null);
-                        },
+                        onPressed: () {},
                         text: 'CREATE NEW ORDER',
                         textColor: Colors.white,
                       ),
@@ -82,9 +93,7 @@ class SplitOrder extends GetView<TablesController> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: PrimaryBtn(
-                        onPressed: () {
-                          controller.setSelectedBookedTableOption(null);
-                        },
+                        onPressed: () {},
                         text: 'PRINT CHECK',
                         textColor: Colors.white,
                         color: StaticColors.blueLightColor,
@@ -94,9 +103,7 @@ class SplitOrder extends GetView<TablesController> {
                 ),
                 const SizedBox(height: 8),
                 PrimaryBtn(
-                  onPressed: () {
-                    controller.setSelectedBookedTableOption(null);
-                  },
+                  onPressed: () {},
                   width: double.infinity,
                   text: 'GO TO ORDER',
                   textColor: Colors.white,
@@ -145,20 +152,32 @@ Widget _row(ThemeData theme,
 }
 
 class ItemTile extends StatelessWidget {
-  const ItemTile({super.key});
+  const ItemTile({
+    super.key,
+    required this.name,
+    required this.qnty,
+    required this.price,
+  });
+
+  final String name;
+  final int qnty;
+  final double price;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black38, width: 0.15),
+        border: Border.all(color: Theme.of(context).focusColor, width: 0.15),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Expanded(flex: 4, child: MyCustomText('Item Name')),
-          Expanded(flex: 1, child: MyCustomText('x1')),
-          Expanded(flex: 1, child: MyCustomText('\$999')),
+          Expanded(flex: 4, child: MyCustomText(name)),
+          Expanded(flex: 1, child: MyCustomText('x$qnty')),
+          Expanded(
+            flex: 2,
+            child: MyCustomText('\$${price.toStringAsFixed(2)}'),
+          ),
         ],
       ),
     );

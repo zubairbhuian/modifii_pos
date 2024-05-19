@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/utils/logger.dart';
+import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {
@@ -43,8 +42,7 @@ class AuthView extends GetView<AuthController> {
   Widget _passwordDisplay(ThemeData theme) {
     return Container(
         height: 65,
-        padding: const EdgeInsets.symmetric(horizontal: 26
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 26),
         decoration: BoxDecoration(
             color: theme.cardColor,
             borderRadius: BorderRadius.circular(8),
@@ -56,7 +54,10 @@ class AuthView extends GetView<AuthController> {
             children: List.generate(
                 controller.passwordLength.value,
                 (index) => CircleAvatar(
-                      backgroundColor:index+1>controller.password.value.length? Colors.transparent:theme.primaryColorDark,
+                      backgroundColor:
+                          index + 1 > controller.password.value.length
+                              ? Colors.transparent
+                              : theme.colorScheme.background,
                       radius: 7,
                     )),
           ),
@@ -92,8 +93,10 @@ class AuthView extends GetView<AuthController> {
                     style: ElevatedButton.styleFrom(
                       elevation: 1,
                       // ****** style ******
-                      textStyle: theme.textTheme.titleLarge
-                          ?.copyWith(color: Colors.red,fontWeight: FontWeight.w700,fontSize: 24),
+                      textStyle: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 24),
                       backgroundColor: controller.numberList[index] == "*"
                           ? controller.numberList.length - 1 == index
                               ? theme.primaryColorLight
@@ -117,12 +120,16 @@ class AuthView extends GetView<AuthController> {
                               controller.numberList.length - 1 == index
                                   ? const Icon(Icons.check, color: Colors.white)
                                   : const Icon(
-                                      Icons.cancel_presentation,
+                                      FontAwesomeIcons.deleteLeft,
                                       color: Colors.white,
                                     ),
                             ],
                           )
-                        : Text(controller.numberList[index]),
+                        : MyCustomText(
+                            controller.numberList[index],
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                          ),
                   ),
                 ),
               )),

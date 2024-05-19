@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 
 import '../../../../../../utils/static_colors.dart';
 import '../../../../../../widgets/custom_btn.dart';
@@ -33,7 +34,9 @@ class AvailableTableOption extends StatelessWidget {
           Row(
             children: [
               PrimaryBtn(
-                onPressed: () {},
+                onPressed: () {
+                  PosController.to.onchangePage(0);
+                },
                 width: 150,
                 text: 'Start Order',
                 textColor: Colors.white,

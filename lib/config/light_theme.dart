@@ -5,14 +5,14 @@ ThemeData lightTheme = ThemeData(
   // ***** Color *****
   primaryColor: const Color(0xffFD571A),
   primaryColorDark: const Color(0xff1C1917),
-  primaryColorLight: const Color(0xff008F5F),
+  primaryColorLight: const Color.fromARGB(255, 146, 255, 132),
   canvasColor: const Color.fromARGB(255, 255, 255, 255),
   cardColor: const Color(0xffFFFFFF),
   disabledColor: const Color(0xffC4CACF),
-  dividerColor: const Color(0xffABABAB),
+  dividerColor: Colors.grey.shade300,
   dialogBackgroundColor: const Color(0xffF9FAFD),
-  hintColor: const Color(0xffA0A3A9),
-  focusColor: const Color(0x000000ff),
+  hintColor: const Color.fromARGB(255, 128, 129, 133),
+  focusColor: Colors.grey.shade600,
   highlightColor: const Color(0x000000ff),
   indicatorColor: const Color(0x000000ff),
   shadowColor: const Color(0x000000ff),
@@ -22,7 +22,10 @@ ThemeData lightTheme = ThemeData(
   applyElevationOverlayColor: false,
   hoverColor: const Color(0x000000ff),
   unselectedWidgetColor: const Color(0xffEEEEEE),
-  colorScheme: const ColorScheme.light(error: Colors.red),
+  colorScheme: const ColorScheme.light(
+    error: Colors.red,
+    background: Color(0xff0c0c0c),
+  ),
 
   // *****  Others Color *****
   // primarySwatch: MyFunc.createMaterialColor(const Color(0xff8A0051)),
