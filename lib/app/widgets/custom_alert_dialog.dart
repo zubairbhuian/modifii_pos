@@ -8,7 +8,7 @@ void customAlertDialog({
     context: context,
     barrierDismissible: true,
     barrierLabel: '',
-    transitionDuration: const Duration(milliseconds: 150),
+    transitionDuration: const Duration(milliseconds: 50),
     pageBuilder: (context, anim1, anim2) {
       return const SizedBox();
     },
@@ -18,7 +18,7 @@ void customAlertDialog({
         child: FadeTransition(
           opacity: Tween<double>(begin: 0.5, end: 1).animate(anim1),
           child: AlertDialog(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             titlePadding:
                 const EdgeInsets.only(left: 0, top: 32, right: 0, bottom: 16),
             contentPadding:

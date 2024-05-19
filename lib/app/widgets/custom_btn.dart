@@ -70,7 +70,7 @@ class PrimaryBtn extends StatelessWidget {
                 // textStyle: style ?? theme.textTheme.labelLarge,
                 // disabledBackgroundColor: kDisabledColor,
                 // disabledForegroundColor: kDisabledTextColor,
-                backgroundColor: color ?? Colors.white,
+                backgroundColor: color ?? theme.scaffoldBackgroundColor,
                 foregroundColor: StaticColors.greenLightColor,
                 // splashFactory: NoSplash.splashFactory,
                 padding: padding ??
@@ -91,7 +91,7 @@ class PrimaryBtn extends StatelessWidget {
           textAlign: TextAlign.center,
           style: style ??
               TextStyle(
-                color: textColor ?? theme.primaryColorDark,
+                color: textColor ?? theme.colorScheme.background,
               ),
           // overflow: TextOverflow.ellipsis,
         ),

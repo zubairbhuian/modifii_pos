@@ -3,7 +3,6 @@ import 'package:flutter_base/app/modules/entryPoint/widgets/my_time.dart';
 import 'package:flutter_base/app/routes/app_pages.dart';
 import 'package:flutter_base/app/widgets/appbar.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../controllers/entry_point_controller.dart';
 
@@ -13,7 +12,11 @@ class EntryPointView extends GetView<EntryPointController> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: _appbar(),
+      appBar: const CustomAppBar(
+        preferredHeight: 80,
+        isLeading: false,
+        hasButtonsRow: false,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -36,25 +39,6 @@ class EntryPointView extends GetView<EntryPointController> {
           _bottomSheet(theme)
         ],
       ),
-    );
-  }
-
-  // **** appbar
-  PreferredSizeWidget _appbar() {
-    return AppBar(
-      title:
-          SvgPicture.asset(width: 200, 'assets/images/splash/logo_light.svg'),
-      actions: [
-        InkWell(
-          onTap: () {},
-          splashFactory: NoSplash.splashFactory,
-          child: const Icon(
-            Icons.menu,
-            size: 40,
-          ),
-        ),
-        const SizedBox(width: 24),
-      ],
     );
   }
 

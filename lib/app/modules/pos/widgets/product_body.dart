@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -122,9 +124,7 @@ class ProductBody extends GetView<PosController> {
               top: -30,
               right: -20,
               child: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
+                onPressed: Get.back,
                 icon: const Icon(
                   FontAwesomeIcons.circleXmark,
                   color: Colors.redAccent,
@@ -154,11 +154,11 @@ class ProductBody extends GetView<PosController> {
                 ),
                 const SizedBox(height: 14),
                 //description
-                const MyCustomText(
+                MyCustomText(
                   'Description',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black54,
+                  color: Theme.of(context).hintColor,
                 ),
                 const SizedBox(height: 4),
                 MyCustomText(
@@ -167,11 +167,11 @@ class ProductBody extends GetView<PosController> {
                 ),
                 const SizedBox(height: 14),
                 //kitchen note
-                const MyCustomText(
+                MyCustomText(
                   'Kitchen Note',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black54,
+                  color: Theme.of(context).hintColor,
                 ),
                 const SizedBox(height: 4),
                 const CustomTextField(
@@ -181,20 +181,67 @@ class ProductBody extends GetView<PosController> {
                 const SizedBox(height: 14),
                 //order types
                 Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryBtn(
+                        onPressed: () {
+                          c.isTogoSelected = !c.isTogoSelected;
+                          c.update();
+                        },
+                        text: 'TO GO',
+                        isOutline: true,
+                        color: c.isTogoSelected
+                            ? Theme.of(context).primaryColorLight
+                            : Theme.of(context).scaffoldBackgroundColor,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: PrimaryBtn(
+                        onPressed: () {
+                          c.isDontMakeSelected = !c.isDontMakeSelected;
+                          c.update();
+                        },
+                        text: "DON'T MAKE",
+                        isOutline: true,
+                        color: c.isDontMakeSelected
+                            ? Theme.of(context).primaryColorLight
+                            : Theme.of(context).scaffoldBackgroundColor,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: PrimaryBtn(
+                        onPressed: () {
+                          c.isRushSelected = !c.isRushSelected;
+                          c.update();
+                        },
+                        text: 'RUSH',
+                        isOutline: true,
+                        color: c.isRushSelected
+                            ? Theme.of(context).primaryColorLight
+                            : Theme.of(context).scaffoldBackgroundColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                //order types 2
+                Row(
                   children: List.generate(
-                    c.orderTypes.length,
+                    c.orderTypes2.length,
                     (index) => Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: PrimaryBtn(
                           onPressed: () {
-                            c.setSelectedOrderTypesIndex(index);
+                            c.setSelectedOrderTypesIndex2(index);
                           },
-                          text: c.orderTypes[index],
+                          text: c.orderTypes2[index],
                           isOutline: true,
-                          color: c.selectedOrderTypesIndex == index
-                              ? StaticColors.greenLightColor
-                              : Colors.white,
+                          color: c.selectedOrderTypesIndex2 == index
+                              ? Theme.of(context).primaryColorLight
+                              : Theme.of(context).scaffoldBackgroundColor,
                         ),
                       ),
                     ),
@@ -202,21 +249,24 @@ class ProductBody extends GetView<PosController> {
                 ),
                 const SizedBox(height: 14),
                 //order modifiers
-                Row(
-                  children: List.generate(
-                    c.orderModifiers.length,
-                    (index) => Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: PrimaryBtn(
-                          onPressed: () {
-                            c.setSelectedOrderModifiersIndex(index);
-                          },
-                          text: c.orderModifiers[index],
-                          isOutline: true,
-                          color: c.selectedOrderModifiersIndex == index
-                              ? StaticColors.greenLightColor
-                              : Colors.white,
+                Visibility(
+                  visible: c.isDrink,
+                  child: Row(
+                    children: List.generate(
+                      c.orderModifiers.length,
+                      (index) => Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: PrimaryBtn(
+                            onPressed: () {
+                              c.setSelectedOrderModifiersIndex(index);
+                            },
+                            text: c.orderModifiers[index],
+                            isOutline: true,
+                            color: c.selectedOrderModifiersIndex == index
+                                ? Theme.of(context).primaryColorLight
+                                : Theme.of(context).scaffoldBackgroundColor,
+                          ),
                         ),
                       ),
                     ),

@@ -81,12 +81,12 @@ class MyApp extends StatelessWidget {
       // defaultTransition: Transition.cupertino,
       // transitionDuration: const Duration(milliseconds: 0),
       title: 'flutter base',
-      themeMode: ThemeMode.light,
+      // themeMode: ThemeMode.light,
       theme: lightTheme,
       darkTheme: darkTheme,
       initialBinding: BaseBinding(apiService: apiService),
-      initialRoute: AppPages.INITIAL,
-      // initialRoute: Routes.POS,
+      // initialRoute: AppPages.INITIAL,
+      initialRoute: Routes.POS,
       getPages: AppPages.routes,
     );
   }
