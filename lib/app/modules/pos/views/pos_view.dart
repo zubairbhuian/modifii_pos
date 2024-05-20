@@ -15,7 +15,6 @@ class PosView extends GetView<PosController> {
   const PosView({super.key});
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: const CustomAppBar(),
       body: PageView(
