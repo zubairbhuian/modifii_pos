@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+
+import '../../../utils/static_colors.dart';
 import '../../../widgets/custom_alert_dialog.dart';
 import '../../../widgets/custom_textfield.dart';
 import '../../../widgets/my_custom_text.dart';
@@ -91,7 +96,6 @@ class ProductBody extends GetView<PosController> {
           var item = controller.productList[index];
           return PrimaryBtn(
             onPressed: () {
-              controller.checkIsDrink(item.productType);
               controller.orderTotalPrice = item.price.toDouble();
               controller.orderQuantity = 1;
               customAlertDialog(
@@ -116,12 +120,15 @@ class ProductBody extends GetView<PosController> {
           clipBehavior: Clip.none,
           children: [
             //close button
-            const Positioned(
-              top: -35,
-              right: -35,
-              child: Icon(
-                Icons.cancel,
-                color: Colors.redAccent,
+            Positioned(
+              top: -30,
+              right: -20,
+              child: IconButton(
+                onPressed: Get.back,
+                icon: const Icon(
+                  FontAwesomeIcons.circleXmark,
+                  color: Colors.redAccent,
+                ),
               ),
             ),
             Column(
@@ -141,6 +148,7 @@ class ProductBody extends GetView<PosController> {
                       '\$${item.price}',
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
+                      color: StaticColors.yellowColor,
                     ),
                   ],
                 ),
@@ -177,7 +185,8 @@ class ProductBody extends GetView<PosController> {
                     Expanded(
                       child: PrimaryBtn(
                         onPressed: () {
-                          c.toggleOrderTypeSelection(isTogo: true);
+                          c.isTogoSelected = !c.isTogoSelected;
+                          c.update();
                         },
                         text: 'TO GO',
                         isOutline: true,
@@ -190,7 +199,8 @@ class ProductBody extends GetView<PosController> {
                     Expanded(
                       child: PrimaryBtn(
                         onPressed: () {
-                          c.toggleOrderTypeSelection(isDontMake: true);
+                          c.isDontMakeSelected = !c.isDontMakeSelected;
+                          c.update();
                         },
                         text: "DON'T MAKE",
                         isOutline: true,
@@ -203,7 +213,8 @@ class ProductBody extends GetView<PosController> {
                     Expanded(
                       child: PrimaryBtn(
                         onPressed: () {
-                          c.toggleOrderTypeSelection(isRush: true);
+                          c.isRushSelected = !c.isRushSelected;
+                          c.update();
                         },
                         text: 'RUSH',
                         isOutline: true,
@@ -239,7 +250,7 @@ class ProductBody extends GetView<PosController> {
                 const SizedBox(height: 14),
                 //order modifiers
                 Visibility(
-                  visible: !c.isDrink,
+                  visible: c.isDrink,
                   child: Row(
                     children: List.generate(
                       c.orderModifiers.length,
@@ -322,6 +333,7 @@ class ProductBody extends GetView<PosController> {
                           '\$${c.orderTotalPrice.toStringAsFixed(2)}',
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
+                          color: StaticColors.yellowColor,
                         ),
                       ),
                     ),
@@ -331,12 +343,25 @@ class ProductBody extends GetView<PosController> {
                 //order button
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: PrimaryBtn(
-                    onPressed: Get.back,
-                    text: 'ADD',
-                    textMaxSize: 22,
-                    textMinSize: 18,
-                    textColor: Colors.white,
+                  child: PrimaryBtnWithChild(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.shopping_cart,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                        SizedBox(width: 6.0),
+                        MyCustomText(
+                          'Order',
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
