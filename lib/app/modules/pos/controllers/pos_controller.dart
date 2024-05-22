@@ -11,7 +11,7 @@ class PosController extends GetxController {
 
   //** change page **
   PageController pageController = PageController();
-  RxBool isShowPos = true.obs;
+  RxBool isShowPos = false.obs;
   onchangePage(int index) {
     pageController.animateToPage(
       index,
@@ -108,6 +108,22 @@ class PosController extends GetxController {
   bool isTogoSelected = false;
   bool isDontMakeSelected = false;
   bool isRushSelected = false;
+  void toggleOrderTypeSelection({
+    bool isTogo = false,
+    bool isDontMake = false,
+    bool isRush = false,
+  }) {
+    if (isTogo) {
+      isTogoSelected = !isTogoSelected;
+    }
+    if (isDontMake) {
+      isDontMakeSelected = !isDontMakeSelected;
+    }
+    if (isRush) {
+      isRushSelected = !isRushSelected;
+    }
+    update();
+  }
 
   List<String> orderTypes2 = ['APPETIZERS 1st', "ALL-TOGETHER"];
   int? selectedOrderTypesIndex2;
@@ -116,11 +132,16 @@ class PosController extends GetxController {
     update();
   }
 
-  bool isDrink = true;
   List<String> orderModifiers = ['MILD', "MEDIUM", 'HOT', 'EXTRA HOT'];
   int? selectedOrderModifiersIndex;
   void setSelectedOrderModifiersIndex(int index) {
     selectedOrderModifiersIndex = index;
+    update();
+  }
+
+  bool isDrink = true;
+  void checkIsDrink(String productType) {
+    isDrink = productType == 'drinks';
     update();
   }
 

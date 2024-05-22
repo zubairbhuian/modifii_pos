@@ -31,6 +31,7 @@ class MyCustomText extends StatelessWidget {
         style: TextStyle(
           color: color ?? Theme.of(context).colorScheme.background,
           fontSize: fontSize ?? 16,
+          height: 1,
           fontWeight: fontWeight ?? FontWeight.w400,
           fontStyle: fontStyle ?? FontStyle.normal,
         ),

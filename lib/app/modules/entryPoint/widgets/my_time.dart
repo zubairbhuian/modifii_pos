@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/utils/logger.dart';
 import 'package:intl/intl.dart';
 
 class MyTime extends StatefulWidget {
@@ -12,24 +10,21 @@ class MyTime extends StatefulWidget {
 }
 
 class _MyTimeState extends State<MyTime> {
-
-   
   @override
   void initState() {
-  Timer.periodic(const Duration(seconds: 1),(value){
-  setState(() {
-    
-  });
-});
-   
+    Timer.periodic(const Duration(seconds: 1), (value) {
+      setState(() {});
+    });
+
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     DateTime time = DateTime.now();
     String formattedTime = DateFormat.Hms().format(time);
-     String formattedDate =DateFormat('E, MMM d, y').format(time);
+    String formattedDate = DateFormat('E, MMM d, y').format(time);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -37,13 +32,13 @@ class _MyTimeState extends State<MyTime> {
       children: [
         Text(
           formattedTime,
-          style: theme.textTheme.displayLarge,
+          style: theme.textTheme.headlineLarge,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         Text(
           formattedDate,
-          style: theme.textTheme.displayMedium,
+          style: theme.textTheme.headlineMedium,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

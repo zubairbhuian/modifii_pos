@@ -108,7 +108,7 @@ class EntryPointView extends GetView<EntryPointController> {
                 Expanded(
                   child: Text(
                     "Station: 2",
-                    style: theme.textTheme.displaySmall,
+                    style: theme.textTheme.headlineSmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -119,7 +119,7 @@ class EntryPointView extends GetView<EntryPointController> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "User: modifii",
-                    style: theme.textTheme.displaySmall,
+                    style: theme.textTheme.headlineSmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

@@ -9,6 +9,7 @@ abstract class Routes {
   static const ENTRY_POINT = _Paths.ENTRY_POINT;
   static const POS = _Paths.POS;
   static const TABLES = _Paths.TABLES;
+  static const CLOCK_IN = _Paths.CLOCK_IN;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const ENTRY_POINT = '/entry-point';
   static const POS = '/pos';
   static const TABLES = '/tables';
+  static const CLOCK_IN = '/clock-in';
 }

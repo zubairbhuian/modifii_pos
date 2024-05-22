@@ -35,7 +35,7 @@ class AuthController extends GetxController {
         // kLogger.d(res.data);
         // PopupDialog.closeLoadingDialog();
         if (res.statusCode == 200 || res.statusCode == 201) {
-          Get.offAllNamed(Routes.ENTRY_POINT);
+          Get.offAllNamed(Routes.CLOCK_IN);
           PopupDialog.showSuccessDialog("Login success");
         } else {
           PopupDialog.showErrorMessage("password is not valid");

@@ -39,120 +39,116 @@ class PosPage extends GetView<PosController> {
 
   //** cart **
   Widget _cartArea(ThemeData theme) {
-    return Container(
-      // height: double.infinity,
-      color: theme.cardColor,
-      child: Column(
-        children: [
-          // add customer
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          //   child: Column(
-          //     children: [
-          //       Row(
-          //         children: [
-          //           Expanded(
-          //             child: CustomDropdownTextField(
-          //               hint: const Text('Search Customer'),
-          //               data: const ["demo"],
-          //               onChanged: (value) {},
-          //             ),
-          //           ),
-          //           const SizedBox(width: 16),
-          //           PrimaryBtn(
-          //             onPressed: () {},
-          //             height: 48,
-          //             width: 48,
-          //             color: StaticColors.blueColor,
-          //             text: '+',
-          //             textColor: Colors.white,
-          //             textMaxSize: 30,
-          //             textMinSize: 18,
-          //           ),
-          //         ],
-          //       ),
-          //       const SizedBox(height: 14),
-          //       SizedBox(
-          //         width: double.infinity,
-          //         child: PrimaryBtn(
-          //           onPressed: () {},
-          //           height: 48,
-          //           color: StaticColors.blueColor,
-          //           textColor: Colors.white,
-          //           textMaxSize: 24,
-          //           textMinSize: 16,
-          //           text: 'Take Out',
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // ****  Cart Items ****
-          // Container(
-          //   // color: const Color(0xfD9D9D9f),
-          //   color: theme.dividerColor,
-          //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-          //   width: double.infinity,
-          //   child: const MyCustomText(
-          //     'Cart Items',
-          //     fontWeight: FontWeight.w500,
-          //   ),
-          // ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: List.generate(
-                  12,
-                  (index) => CartItem(
-                    title: "Chana samosa ",
-                    description: "Add avocado",
-                    amount: 89,
-                    quantity: 1,
-                    onDecrement: () {},
-                    onIncrement: () {},
-                    onRemove: () {},
-                  ),
+    return Column(
+      children: [
+        // add customer
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        //   child: Column(
+        //     children: [
+        //       Row(
+        //         children: [
+        //           Expanded(
+        //             child: CustomDropdownTextField(
+        //               hint: const Text('Search Customer'),
+        //               data: const ["demo"],
+        //               onChanged: (value) {},
+        //             ),
+        //           ),
+        //           const SizedBox(width: 16),
+        //           PrimaryBtn(
+        //             onPressed: () {},
+        //             height: 48,
+        //             width: 48,
+        //             color: StaticColors.blueColor,
+        //             text: '+',
+        //             textColor: Colors.white,
+        //             textMaxSize: 30,
+        //             textMinSize: 18,
+        //           ),
+        //         ],
+        //       ),
+        //       const SizedBox(height: 14),
+        //       SizedBox(
+        //         width: double.infinity,
+        //         child: PrimaryBtn(
+        //           onPressed: () {},
+        //           height: 48,
+        //           color: StaticColors.blueColor,
+        //           textColor: Colors.white,
+        //           textMaxSize: 24,
+        //           textMinSize: 16,
+        //           text: 'Take Out',
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // ****  Cart Items ****
+        // Container(
+        //   // color: const Color(0xfD9D9D9f),
+        //   color: theme.dividerColor,
+        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        //   width: double.infinity,
+        //   child: const MyCustomText(
+        //     'Cart Items',
+        //     fontWeight: FontWeight.w500,
+        //   ),
+        // ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(
+                12,
+                (index) => CartItem(
+                  title: "Chana samosa ",
+                  description: "Add avocado",
+                  amount: 89,
+                  quantity: 1,
+                  onDecrement: () {},
+                  onIncrement: () {},
+                  onRemove: () {},
                 ),
               ),
             ),
           ),
-          // amount
-          const Divider(),
-          _row(theme, title: "Subtotal :", value: "\$00"),
-          _row(theme, title: "GST 5% :", value: "\$00"),
-          _row(theme, title: "PST 10% :", value: "\$00"),
-          const Divider(),
-          _row(theme, title: "Total :", value: "\$00", fontSize: 20),
-          // order btn
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: PrimaryBtn(
-                    onPressed: () {},
-                    height: 48,
-                    color: StaticColors.greenColor,
-                    textColor: Colors.white,
-                    text: 'Place Order',
-                  ),
+        ),
+        // amount
+        const Divider(),
+        _row(theme, title: "Subtotal :", value: "\$00"),
+        _row(theme, title: "GST 5% :", value: "\$00"),
+        _row(theme, title: "PST 10% :", value: "\$00"),
+        const Divider(),
+        _row(theme, title: "Total :", value: "\$00", fontSize: 20),
+        // order btn
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: PrimaryBtn(
+                  onPressed: () {},
+                  height: 48,
+                  color: StaticColors.greenColor,
+                  textColor: Colors.white,
+                  text: 'Place Order',
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: PrimaryBtn(
-                    onPressed: () {},
-                    height: 48,
-                    color: theme.colorScheme.error,
-                    textColor: Colors.white,
-                    text: 'Cancel',
-                  ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: PrimaryBtn(
+                  onPressed: () {},
+                  height: 48,
+                  color: theme.colorScheme.error,
+                  textColor: Colors.white,
+                  text: 'Cancel',
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
