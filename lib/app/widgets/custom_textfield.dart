@@ -31,38 +31,41 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final int? maxLines;
   final double? marginBottom;
+  final bool isFilled;
 
-  const CustomTextField(
-      {super.key,
-      this.controller,
-      this.obscureText,
-      this.readOnly,
-      this.suffixIcon,
-      this.prefixIcon,
-      this.hintText,
-      this.label,
-      this.onTap,
-      this.autovalidateMode,
-      this.keyboardType,
-      this.validator,
-      this.onChange,
-      this.padding,
-      this.cursorColor,
-      this.inputFormatters,
-      this.autofocus,
-      this.textAlign,
-      this.fontSize,
-      this.style,
-      this.errorText,
-      this.onEditingComplete,
-      this.maxLines,
-      this.suffixIconColor,
-      this.extraLabel,
-      this.extraLabelStyle,
-      this.labelStyle,
-      this.errorStyle,
-      this.marginBottom,
-      this.hintStyle});
+  const CustomTextField({
+    super.key,
+    this.controller,
+    this.obscureText,
+    this.readOnly,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.hintText,
+    this.label,
+    this.onTap,
+    this.autovalidateMode,
+    this.keyboardType,
+    this.validator,
+    this.onChange,
+    this.padding,
+    this.cursorColor,
+    this.inputFormatters,
+    this.autofocus,
+    this.textAlign,
+    this.fontSize,
+    this.style,
+    this.errorText,
+    this.onEditingComplete,
+    this.maxLines,
+    this.suffixIconColor,
+    this.extraLabel,
+    this.extraLabelStyle,
+    this.labelStyle,
+    this.errorStyle,
+    this.marginBottom,
+    this.hintStyle,
+    this.isFilled = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +114,8 @@ class CustomTextField extends StatelessWidget {
           keyboardType: keyboardType,
           //! ********** decoration ********
           decoration: InputDecoration(
-            // filled: false,
-            // fillColor: kDisabledColor.withOpacity(.6),
+            filled: isFilled,
+            fillColor: theme.scaffoldBackgroundColor,
             // ********** errorText ********
             errorText: errorText,
             errorStyle: errorStyle ??
@@ -173,7 +176,8 @@ class CustomDropdownTextField extends StatelessWidget {
     this.hint,
     this.icon,
     this.enabledBorderColor,
-    this.borderColor, this.hintStyle,
+    this.borderColor,
+    this.hintStyle,
   });
 
   final String? label;
@@ -220,7 +224,9 @@ class CustomDropdownTextField extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               // filled: true,
               // fillColor: kWhite,
-              hintStyle:hintStyle?? theme.textTheme.bodyLarge?.copyWith(color: theme.hintColor) // Set the background color here
+              hintStyle: hintStyle ??
+                  theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.hintColor) // Set the background color here
               ),
           items: List.generate(
               data.length,

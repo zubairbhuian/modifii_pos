@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/utils/logger.dart';
+import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
+import '../../../services/controller/config_controller.dart';
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {
@@ -12,62 +13,92 @@ class AuthView extends GetView<AuthController> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      body: Center(
-        child: SizedBox(
-          width: 240,
-          height: 580,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // brand icon
-                Image.asset(
-                  width: 160,
-                  "assets/images/splash/loog.png",
-                  fit: BoxFit.cover,
+                SvgPicture.asset(
+                  width: 200,
+                  ConfigController.to.isLightTheme
+                      ? 'assets/images/splash/logo_light.svg'
+                      : 'assets/images/splash/logo_dark.svg',
                 ),
-                const SizedBox(height: 24),
-                // password display
-                _passwordDisplay(theme),
-                const SizedBox(height: 24),
-                // keybord area
-                _customKeybord(theme),
+                Switch(
+                  value: ConfigController.to.isLightTheme,
+                  onChanged: (value) => ConfigController.to.toggleTheme(),
+                  activeColor: theme.primaryColor,
+                ),
               ],
             ),
           ),
-        ),
+          Center(
+            child: SizedBox(
+              width: 240,
+              height: 580,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // brand icon
+                    SvgPicture.asset(
+                      width: 175,
+                      "assets/images/splash/login_logo.svg",
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(height: 12),
+                    // password display
+                    _passwordDisplay(theme),
+                    const SizedBox(height: 12),
+                    // keybord area
+                    _customKeybord(theme),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _passwordDisplay(ThemeData theme) {
     return Container(
-        height: 65,
-        padding: const EdgeInsets.symmetric(horizontal: 26
+      height: 65,
+      padding: const EdgeInsets.symmetric(horizontal: 26),
+      decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: theme.colorScheme.background,
+            width: 0.75,
+          )),
+      child: Obx(
+        () => Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(
+              controller.passwordLength.value,
+              (index) => CircleAvatar(
+                    backgroundColor:
+                        index + 1 > controller.password.value.length
+                            ? Colors.transparent
+                            : theme.colorScheme.background,
+                    radius: 7,
+                  )),
         ),
-        decoration: BoxDecoration(
-            color: theme.cardColor,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: theme.dividerColor)),
-        child: Obx(
-          () => Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(
-                controller.passwordLength.value,
-                (index) => CircleAvatar(
-                      backgroundColor:index+1>controller.password.value.length? Colors.transparent:theme.primaryColorDark,
-                      radius: 7,
-                    )),
-          ),
-        ));
+      ),
+    );
   }
 
   Widget _customKeybord(ThemeData theme) {
     return StaggeredGrid.count(
       crossAxisCount: 3,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
       children: List.generate(
           controller.numberList.length,
           (index) => StaggeredGridTile.count(
@@ -82,7 +113,7 @@ class AuthView extends GetView<AuthController> {
                         // log in
                         controller.login();
                       } else if (controller.numberList[index] == "*") {
-                        // close number
+                        // remove number
                         controller.removePassword();
                       } else {
                         // add number
@@ -90,14 +121,16 @@ class AuthView extends GetView<AuthController> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      elevation: 1,
+                      elevation: 0,
                       // ****** style ******
-                      textStyle: theme.textTheme.titleLarge
-                          ?.copyWith(color: Colors.red,fontWeight: FontWeight.w700,fontSize: 24),
+                      textStyle: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 24),
                       backgroundColor: controller.numberList[index] == "*"
                           ? controller.numberList.length - 1 == index
-                              ? theme.primaryColorLight
-                              : theme.primaryColor
+                              ? const Color(0xff118A00)
+                              : const Color(0xffFD571A)
                           : theme.cardColor,
                       foregroundColor: theme.dividerColor,
                       padding: EdgeInsets.zero,
@@ -106,8 +139,8 @@ class AuthView extends GetView<AuthController> {
                       ),
                       // ****** Border color *******
                       side: BorderSide(
-                        color: theme.dividerColor,
-                        width: 0,
+                        color: theme.colorScheme.background,
+                        width: 0.75,
                       ),
                     ),
                     child: controller.numberList[index] == "*"
@@ -115,14 +148,17 @@ class AuthView extends GetView<AuthController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               controller.numberList.length - 1 == index
-                                  ? const Icon(Icons.check, color: Colors.white)
-                                  : const Icon(
-                                      Icons.cancel_presentation,
-                                      color: Colors.white,
-                                    ),
+                                  ? const Icon(FontAwesomeIcons.check,
+                                      color: Colors.white)
+                                  : const Icon(FontAwesomeIcons.deleteLeft,
+                                      color: Colors.white),
                             ],
                           )
-                        : Text(controller.numberList[index]),
+                        : MyCustomText(
+                            controller.numberList[index],
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                          ),
                   ),
                 ),
               )),

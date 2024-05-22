@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_base/app/routes/app_pages.dart';
-import 'package:flutter_base/app/services/controller/base_controller.dart';
 import 'package:flutter_base/app/utils/logger.dart';
 import 'package:flutter_base/app/utils/urls.dart';
 import 'package:flutter_base/app/widgets/popup_dialogs.dart';
@@ -32,12 +31,11 @@ class AuthController extends GetxController {
         PopupDialog.showLoadingDialog();
         // var res = await BaseController.to.apiService
         //     .makePostRequest("${URLS.baseURL}${URLS.login}", data);
-        var res = await Dio()
-            .post(URLS.login, data: data);
+        var res = await Dio().post(URLS.login, data: data);
         // kLogger.d(res.data);
         // PopupDialog.closeLoadingDialog();
         if (res.statusCode == 200 || res.statusCode == 201) {
-          Get.offAllNamed(Routes.ENTRY_POINT);
+          Get.offAllNamed(Routes.CLOCK_IN);
           PopupDialog.showSuccessDialog("Login success");
         } else {
           PopupDialog.showErrorMessage("password is not valid");

@@ -1,4 +1,4 @@
-
+import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,9 +10,9 @@ class PopupDialog {
     var snackBar = SnackBar(
       dismissDirection: DismissDirection.up,
       behavior: SnackBarBehavior.floating,
-       width: 300,
-      backgroundColor:const Color(0xff008F5F) ,
-      content: Text(message),
+      width: 300,
+      backgroundColor: Theme.of(Get.context!).primaryColorLight,
+      content: MyCustomText(message),
     );
     ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
   }
@@ -59,8 +59,8 @@ class PopupDialog {
                   // main body
                   /// DoubleBounce
                   /// SpinningLines
-                  child:  SpinKitSpinningLines(
-                    color: theme.primaryColor, 
+                  child: SpinKitSpinningLines(
+                    color: theme.primaryColor,
                     size: 43, // You can customize the size
                   ),
                 ),
@@ -76,7 +76,4 @@ class PopupDialog {
   static void closeLoadingDialog() {
     Get.back();
   }
-
-
-
 }

@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import '../utils/static_colors.dart';
@@ -6,7 +7,7 @@ import '../utils/static_colors.dart';
 class PrimaryBtn extends StatelessWidget {
   final Color? color;
   final Color? textColor;
-  final Function()? onPressed;
+  final VoidCallback onPressed;
   final double? borderRadius;
   final double? height;
   final double? width;
@@ -37,14 +38,21 @@ class PrimaryBtn extends StatelessWidget {
     this.textMinSize = 10,
   });
 
+  void playTapSound() {
+    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return SizedBox(
-      height: height ?? 60,
+      height: height ?? 48,
       width: width ?? 120,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: () {
+          playTapSound();
+          onPressed();
+        },
         style: !isOutline
             ? ElevatedButton.styleFrom(
                 elevation: elevation ?? 1,
@@ -53,6 +61,170 @@ class PrimaryBtn extends StatelessWidget {
                 // disabledForegroundColor: kDisabledTextColor,
                 backgroundColor: color ?? theme.primaryColor,
                 foregroundColor: Colors.white,
+                padding: padding ??
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                ),
+                // ****** Border color *******
+                side: side
+                // const BorderSide(
+                //   color: kPrimaryColor,
+                //   width: 0,
+                // ),
+                )
+            : ElevatedButton.styleFrom(
+                elevation: 0,
+                // textStyle: style ?? theme.textTheme.labelLarge,
+                // disabledBackgroundColor: kDisabledColor,
+                // disabledForegroundColor: kDisabledTextColor,
+                backgroundColor: color ?? theme.scaffoldBackgroundColor,
+                foregroundColor: StaticColors.greenLightColor,
+                // splashFactory: NoSplash.splashFactory,
+                padding: padding ??
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                ),
+                // ****** Border color *******
+                side: side ??
+                    const BorderSide(
+                      color: StaticColors.greenColor,
+                      width: 1.5,
+                    ),
+              ),
+        child: AutoSizeText(
+          text,
+          maxLines: 2, maxFontSize: textMaxSize, minFontSize: textMinSize,
+          textAlign: TextAlign.center,
+          style: style ??
+              TextStyle(
+                color: textColor ?? theme.colorScheme.background,
+              ),
+          // overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+}
+
+class OutLineBtn extends StatelessWidget {
+  final Color? color;
+  final Color? textColor;
+  final Widget child;
+  final VoidCallback onPressed;
+  final double? borderRadius;
+  final double? height;
+  final double? width;
+  final double? elevation;
+  final TextStyle? style;
+  final EdgeInsetsGeometry? padding;
+  final BorderSide? side;
+
+  const OutLineBtn({
+    super.key,
+    this.color,
+    this.textColor,
+    required this.onPressed,
+    this.borderRadius,
+    this.style,
+    this.height,
+    this.width,
+    this.elevation,
+    this.padding,
+    required this.child,
+    this.side,
+  });
+
+  void playTapSound() {
+    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return OutlinedButton(
+      onPressed: () {
+        playTapSound();
+        onPressed();
+      },
+      style: OutlinedButton.styleFrom(
+        elevation: elevation ?? 1,
+        textStyle: style ?? theme.textTheme.labelLarge,
+        // disabledBackgroundColor: kDisabledColor,
+        // disabledForegroundColor: kDisabledTextColor,
+        backgroundColor: color ?? Colors.transparent,
+        foregroundColor: textColor ?? theme.primaryColorDark,
+        padding:
+            padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius ?? 0),
+        ),
+        // ****** Border color *******
+        side: side ??
+            BorderSide(
+              color: theme.hintColor,
+              width: 1,
+            ),
+      ),
+      child: child,
+    );
+  }
+}
+
+class PrimaryBtnWithChild extends StatelessWidget {
+  final Widget child;
+  final Color? color;
+  final Color? textColor;
+  final VoidCallback onPressed;
+  final double? borderRadius;
+  final double? height;
+  final double? width;
+  final double? elevation;
+  final TextStyle? style;
+  final EdgeInsetsGeometry? padding;
+  final BorderSide? side;
+  final bool isOutline;
+
+  const PrimaryBtnWithChild({
+    super.key,
+    required this.child,
+    this.color,
+    this.textColor,
+    required this.onPressed,
+    this.borderRadius,
+    this.style,
+    this.height,
+    this.width,
+    this.elevation,
+    this.padding,
+    this.side,
+    this.isOutline = false,
+  });
+
+  void playTapSound() {
+    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return SizedBox(
+      height: height ?? 48,
+      width: width ?? 120,
+      child: ElevatedButton(
+        onPressed: () {
+          playTapSound();
+          onPressed();
+        },
+        style: !isOutline
+            ? ElevatedButton.styleFrom(
+                elevation: elevation ?? 1,
+                // textStyle: style ?? theme.textTheme.labelLarge,
+                // disabledBackgroundColor: kDisabledColor,
+                // disabledForegroundColor: kDisabledTextColor,
+                backgroundColor: color ?? theme.primaryColor,
+                foregroundColor: textColor ?? Colors.white,
                 padding: padding ??
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 shape: RoundedRectangleBorder(
@@ -85,74 +257,8 @@ class PrimaryBtn extends StatelessWidget {
                       width: 1.5,
                     ),
               ),
-        child: AutoSizeText(
-          text,
-          maxLines: 2, maxFontSize: textMaxSize, minFontSize: textMinSize,
-          textAlign: TextAlign.center,
-          style: style ??
-              TextStyle(
-                color: textColor ?? theme.primaryColorDark,
-              ),
-          // overflow: TextOverflow.ellipsis,
-        ),
+        child: child,
       ),
-    );
-  }
-}
-
-class OutLineBtn extends StatelessWidget {
-  final Color? color;
-  final Color? textColor;
-  final Widget child;
-  final Function()? onPressed;
-  final double? borderRadius;
-  final double? height;
-  final double? width;
-  final double? elevation;
-  final TextStyle? style;
-  final EdgeInsetsGeometry? padding;
-  final BorderSide? side;
-
-  const OutLineBtn({
-    super.key,
-    this.color,
-    this.textColor,
-    required this.onPressed,
-    this.borderRadius,
-    this.style,
-    this.height,
-    this.width,
-    this.elevation,
-    this.padding,
-    required this.child,
-    this.side,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        elevation: elevation ?? 1,
-        textStyle: style ?? theme.textTheme.labelLarge,
-        // disabledBackgroundColor: kDisabledColor,
-        // disabledForegroundColor: kDisabledTextColor,
-        backgroundColor: color ?? Colors.transparent,
-        foregroundColor: textColor ?? theme.primaryColorDark,
-        padding:
-            padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 0),
-        ),
-        // ****** Border color *******
-        side: side ??
-            BorderSide(
-              color: theme.hintColor,
-              width: 1,
-            ),
-      ),
-      child: child,
     );
   }
 }

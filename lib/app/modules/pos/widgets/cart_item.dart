@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
+import 'package:flutter_base/app/widgets/custom_inkwell.dart';
+import '../../../widgets/my_custom_text.dart';
 
 class CartItem extends StatelessWidget {
   final String title;
   final String description;
   final double amount;
   final int quantity;
-  final void Function()? onRemove;
-  final void Function()? onDecrement;
-  final void Function()? onIncrement;
+  final VoidCallback? onRemove;
+  final VoidCallback? onDecrement;
+  final VoidCallback? onIncrement;
   const CartItem(
       {super.key,
       required this.title,
@@ -24,53 +26,39 @@ class CartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.all(8),
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        clipBehavior: Clip.none,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                child: Text(
+                child: MyCustomText(
                   title,
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               Row(
                 children: [
-                  // SizedBox(
-                  //   height: 36,
-                  //   child: OutLineBtn(
-                  //     onPressed: onRemove,
-                  //     style: theme.textTheme.bodyLarge?.copyWith(
-                  //       fontWeight: FontWeight.w600,
-                  //     ),
-                  //     textColor: theme.colorScheme.error,
-                  //     padding: const EdgeInsets.only(
-                  //         left: 16, right: 16, bottom: 10),
-                  //     borderRadius: 4,
-                  //     child: const Text(
-                  //       "Remove",
-                  //     ),
-                  //   ),
-                  // ),
-                  IconButton(
-                    onPressed: onRemove,
-                    icon: Icon(
+                  CustomInkWell(
+                    onTap: onRemove,
+                    child: Icon(
                       Icons.delete,
                       color: theme.colorScheme.error,
-                      size: 24,
+                      size: 22,
                     ),
                   ),
-                  const SizedBox(width: 8.0),
+                  const SizedBox(width: 6.0),
                   Row(
                     children: [
                       SizedBox(
                         width: 32,
                         height: 32,
                         child: OutLineBtn(
-                          onPressed: onDecrement,
+                          onPressed: onDecrement!,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -81,7 +69,7 @@ class CartItem extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 55,
+                        width: 40,
                         height: 32,
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
@@ -101,7 +89,7 @@ class CartItem extends StatelessWidget {
                         width: 32,
                         height: 32,
                         child: OutLineBtn(
-                          onPressed: onIncrement,
+                          onPressed: onIncrement!,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -125,15 +113,14 @@ class CartItem extends StatelessWidget {
               ),
             ],
           ),
-          Text(
-            description,
-            style: theme.textTheme.labelMedium
-                ?.copyWith(fontWeight: FontWeight.w700, color: theme.hintColor),
-          ),
-          const SizedBox(height: 20),
-          Divider(
-            height: 0,
-            color: theme.dividerColor.withOpacity(.3),
+          Positioned(
+            bottom: -4,
+            child: MyCustomText(
+              description,
+              fontWeight: FontWeight.w600,
+              color: theme.hintColor,
+              fontSize: 14,
+            ),
           ),
         ],
       ),
