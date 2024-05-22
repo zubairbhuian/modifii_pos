@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/modules/pos/views/pages/pos_page.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/tables_page.dart';
 import 'package:flutter_base/app/widgets/appbar.dart';
 import 'package:get/get.dart';
 import '../controllers/pos_controller.dart';
+import 'pages/pos/pos_page.dart';
 
 class PosView extends GetView<PosController> {
   const PosView({super.key});

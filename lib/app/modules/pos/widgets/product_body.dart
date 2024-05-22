@@ -3,7 +3,6 @@ import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import '../../../utils/static_colors.dart';
 import '../../../widgets/custom_alert_dialog.dart';
 import '../../../widgets/custom_textfield.dart';
 import '../../../widgets/my_custom_text.dart';
@@ -142,7 +141,6 @@ class ProductBody extends GetView<PosController> {
                       '\$${item.price}',
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
-                      color: StaticColors.yellowColor,
                     ),
                   ],
                 ),
@@ -324,7 +322,6 @@ class ProductBody extends GetView<PosController> {
                           '\$${c.orderTotalPrice.toStringAsFixed(2)}',
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: StaticColors.yellowColor,
                         ),
                       ),
                     ),

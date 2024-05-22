@@ -6,8 +6,8 @@ import 'package:flutter_base/app/modules/pos/widgets/product_body.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:get/get.dart';
-
-import '../../../../widgets/custom_loading.dart';
+import '../../../../../widgets/custom_loading.dart';
+import 'widgets/search_custom_item_row.dart';
 
 class PosPage extends GetView<PosController> {
   const PosPage({super.key});
@@ -18,20 +18,37 @@ class PosPage extends GetView<PosController> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // item 1 (Category)
-        const Expanded(child: CategoryBody()),
-        const SizedBox(width: 24),
-        // item 2 (Product)
         Expanded(
-          child: Obx(
-            () => controller.isLoadingProduct.value
-                ? const CustomLoading()
-                : const ProductBody(),
+          flex: 2,
+          child: Column(
+            children: [
+              //search row
+              const SearchAndCustomItemRow(),
+              const SizedBox(height: 12),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // item 1 (Category)
+                    const Expanded(child: CategoryBody()),
+                    const SizedBox(width: 24),
+                    // item 2 (Product)
+                    Expanded(
+                      child: Obx(
+                        () => controller.isLoadingProduct.value
+                            ? const CustomLoading()
+                            : const ProductBody(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(width: 24),
         // item 3 (Cart)
-        Expanded(child: _cartArea(theme)),
+        Expanded(flex: 1, child: _cartArea(theme)),
         // cart area
       ],
     );
