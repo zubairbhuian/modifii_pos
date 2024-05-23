@@ -61,7 +61,8 @@ class PosController extends GetxController {
       kLogger.e('Error from %%%% get categori %%%% => $e');
     }
   }
-
+  
+  //** Get all product **
   RxBool isLoadingProduct = false.obs;
   getProduct({String? type, int? offset, int? limit, int? categoryIds}) async {
     isLoadingProduct.value = true;
