@@ -1,11 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import '../../../services/controller/config_controller.dart';
 import '../controllers/auth_controller.dart';
+import 'startup_view.dart';
 
 class AuthView extends GetView<AuthController> {
   const AuthView({super.key});
@@ -14,67 +14,51 @@ class AuthView extends GetView<AuthController> {
     ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SvgPicture.asset(
-                  width: 200,
-                  ConfigController.to.isLightTheme
-                      ? 'assets/images/splash/logo_light.svg'
-                      : 'assets/images/splash/logo_dark.svg',
-                ),
-                Switch(
-                  value: ConfigController.to.isLightTheme,
-                  onChanged: (value) => ConfigController.to.toggleTheme(),
-                  activeColor: theme.primaryColor,
-                ),
-              ],
+      body: Obx(
+        () => Stack(
+          alignment: Alignment.center,
+          children: [
+            StartupView(
+              onTap: () => controller.toggleStartup(false),
+              isOnTop: controller.isStartup.value,
             ),
-          ),
-          Center(
-            child: SizedBox(
-              width: 240,
-              height: 580,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // brand icon
-                    SvgPicture.asset(
-                      width: 175,
-                      "assets/images/splash/login_logo.svg",
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 12),
-                    // password display
-                    _passwordDisplay(theme),
-                    const SizedBox(height: 12),
-                    // keybord area
-                    _customKeybord(theme),
-                  ],
+            AnimatedOpacity(
+              opacity: controller.isStartup.value ? 0 : 1,
+              duration: const Duration(milliseconds: 300),
+              child: IgnorePointer(
+                ignoring: controller.isStartup.value,
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.20,
+                  height: MediaQuery.sizeOf(context).height * 0.85,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // password display
+                      _passwordDisplay(theme),
+                      const SizedBox(height: 14),
+                      // keybord area
+                      _customKeybord(theme),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _passwordDisplay(ThemeData theme) {
     return Container(
-      height: 65,
+      height: 100,
       padding: const EdgeInsets.symmetric(horizontal: 26),
       decoration: BoxDecoration(
           color: theme.cardColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: theme.colorScheme.background,
-            width: 0.75,
+            width: 1.75,
           )),
       child: Obx(
         () => Row(
@@ -87,7 +71,7 @@ class AuthView extends GetView<AuthController> {
                         index + 1 > controller.password.value.length
                             ? Colors.transparent
                             : theme.colorScheme.background,
-                    radius: 7,
+                    radius: 10,
                   )),
         ),
       ),
@@ -109,6 +93,7 @@ class AuthView extends GetView<AuthController> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
+                      AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
                       if (controller.numberList.length - 1 == index) {
                         // log in
                         controller.login();
@@ -126,7 +111,7 @@ class AuthView extends GetView<AuthController> {
                       textStyle: theme.textTheme.titleLarge?.copyWith(
                           color: Colors.red,
                           fontWeight: FontWeight.w700,
-                          fontSize: 24),
+                          fontSize: 36),
                       backgroundColor: controller.numberList[index] == "*"
                           ? controller.numberList.length - 1 == index
                               ? const Color(0xff118A00)
@@ -140,23 +125,18 @@ class AuthView extends GetView<AuthController> {
                       // ****** Border color *******
                       side: BorderSide(
                         color: theme.colorScheme.background,
-                        width: 0.75,
+                        width: 1.75,
                       ),
                     ),
                     child: controller.numberList[index] == "*"
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              controller.numberList.length - 1 == index
-                                  ? const Icon(FontAwesomeIcons.check,
-                                      color: Colors.white)
-                                  : const Icon(FontAwesomeIcons.deleteLeft,
-                                      color: Colors.white),
-                            ],
-                          )
+                        ? controller.numberList.length - 1 == index
+                            ? const Icon(FontAwesomeIcons.check,
+                                color: Colors.white, size: 36)
+                            : const Icon(FontAwesomeIcons.deleteLeft,
+                                color: Colors.white, size: 36)
                         : MyCustomText(
                             controller.numberList[index],
-                            fontSize: 28,
+                            fontSize: 42,
                             fontWeight: FontWeight.w700,
                           ),
                   ),

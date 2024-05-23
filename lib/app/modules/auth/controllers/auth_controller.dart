@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_base/app/routes/app_pages.dart';
 import 'package:flutter_base/app/utils/logger.dart';
@@ -7,6 +9,29 @@ import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   static AuthController get to => Get.find();
+
+  //Hide Password pad on inactivity
+  Timer? inactivityTimer;
+  void startInactivityTimer() {
+    inactivityTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timer.tick > 5) {
+        toggleStartup(true);
+      }
+    });
+  }
+
+  //startup logo screen
+  RxBool isStartup = true.obs;
+  void toggleStartup(bool value) {
+    isStartup.value = value;
+    if (!value) {
+      inactivityTimer?.cancel();
+      startInactivityTimer();
+    } else {
+      inactivityTimer?.cancel();
+    }
+  }
+
   RxString password = "".obs;
   RxInt passwordLength = 6.obs;
   List<String> numberList = [

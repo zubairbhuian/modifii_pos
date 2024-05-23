@@ -23,40 +23,14 @@ class TablesController extends GetxController {
     }
   }
 
-  // int? selectedBookedTableOption;
-  // void setSelectedBookedTableOption(int? index) {
-  //   selectedBookedTableOption = index;
-  //   update();
-  // }
-
-  // List<Map<String, Color>> bookedTableOptions = [
-  //   {'Go to Order': StaticColors.greenColor},
-  //   {'Add Items': StaticColors.orangeColor},
-  //   {'Print Check': StaticColors.blueLightColor},
-  //   {'Split Order': StaticColors.purpleColor},
-  // ];
-
-  // Widget? getSelectedOption() {
-  //   if (selectedBookedTableOption != null) {
-  //     if (selectedBookedTableOption == 0) {
-  //       return const SplitOrder();
-  //     }
-  //     if (selectedBookedTableOption == 1) {
-  //       return const SplitOrder();
-  //     }
-  //     if (selectedBookedTableOption == 2) {
-  //       return const SplitOrder();
-  //     }
-  //     if (selectedBookedTableOption == 3) {
-  //       return const SplitOrder();
-  //     }
-  //   }
-  //   return null;
-  // }
-
-  //Order Items
+  //*******ORDER ITEMS RECIEPTS******* */
+  //list of total receipts
   List<List<OrderItemModel>> orderReceiptsList = [];
+  //initial receipt items
   List<OrderItemModel> orderItemsList = [];
+  //copy list of orderItemsList
+  List<OrderItemModel> orderItemsListTemporary = [];
+
   void getOrderItems() {
     for (int i = 1; i <= 8; i++) {
       int randomInt = Random().nextInt(4) + 1;
@@ -71,18 +45,33 @@ class TablesController extends GetxController {
     }
 
     orderReceiptsList.add(orderItemsList);
+    update();
+    orderItemsListTemporary = List.from(orderItemsList);
   }
 
-  //split order
-  void createAnotherOrderItemsList() {
-    if (orderItemsList.isNotEmpty) {
-      //remove last item from first list
-      orderItemsList = [orderItemsList.removeLast()];
+  List<OrderItemModel> orderItemsListSplit = [];
+  void toggleOrderItemsListSplit(OrderItemModel item) {
+    if (!orderItemsListSplit.contains(item)) {
+      orderItemsListSplit.add(item);
+      orderItemsListTemporary.remove(item);
+    } else {
+      orderItemsListSplit.remove(item);
+      orderItemsListTemporary.add(item);
+    }
+    isItemContainsOnSplitList(item);
+    update();
+  }
 
-      //create new list, item is last item from first list
-      List<OrderItemModel> newList = [orderItemsList.last];
-      orderReceiptsList.add(newList);
+  bool isItemContainsOnSplitList(OrderItemModel item) {
+    return orderItemsListSplit.contains(item);
+  }
 
+  void splitReceipts() {
+    if (orderItemsListSplit.isNotEmpty) {
+      List<OrderItemModel> list = List.from(orderItemsListSplit);
+      orderReceiptsList.add(list);
+      orderReceiptsList[0] = List.from(orderItemsListTemporary);
+      orderItemsListSplit.clear();
       update();
     }
   }

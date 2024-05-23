@@ -17,7 +17,7 @@ ThemeData darkTheme = ThemeData(
   highlightColor: const Color(0x000000ff),
   indicatorColor: const Color(0x000000ff),
   shadowColor: const Color(0x000000ff),
-  splashColor: Colors.blueGrey.shade200,
+  splashColor: Colors.blueGrey.shade600,
   scaffoldBackgroundColor: const Color(0xff0c0c0c),
   secondaryHeaderColor: null,
   hoverColor: const Color(0x000000ff),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:intl/intl.dart';
 
 class MyTime extends StatefulWidget {
@@ -21,26 +22,71 @@ class _MyTimeState extends State<MyTime> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     DateTime time = DateTime.now();
-    String formattedTime = DateFormat.Hms().format(time);
     String formattedDate = DateFormat('E, MMM d, y').format(time);
 
+    List<String> times = [
+      DateFormat('hh').format(time),
+      DateFormat('mm').format(time),
+      DateFormat('ss').format(time),
+      DateFormat('a').format(time),
+    ];
+
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          formattedTime,
-          style: theme.textTheme.headlineLarge,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        // MyCustomText(
+        //   formattedTime,
+        //   fontSize: 54,
+        //   fontWeight: FontWeight.w600,
+        // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 80,
+              child: ListView.separated(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: times.length - 1,
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    height: 75,
+                    width: 85,
+                    child: Center(
+                      child: MyCustomText(
+                        times[index],
+                        fontSize: 54,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (_, indes) {
+                  return const Center(
+                    child: MyCustomText(
+                      ':',
+                      fontSize: 54,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 5),
+            MyCustomText(
+              times.last,
+              fontSize: 54,
+              fontWeight: FontWeight.w600,
+            ),
+          ],
         ),
-        Text(
+        MyCustomText(
           formattedDate,
-          style: theme.textTheme.headlineMedium,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          fontSize: 40,
+          fontWeight: FontWeight.w500,
         ),
       ],
     );
