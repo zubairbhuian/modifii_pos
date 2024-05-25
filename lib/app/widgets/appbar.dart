@@ -208,7 +208,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 10),
           PrimaryBtn(
-            onPressed: () {},
+            onPressed: () {
+              PosController.to.onchangePage(1);
+            },
             color: StaticColors.yellowColor,
             textColor: Colors.white,
             text: 'TABLE\nORDERS',
@@ -216,7 +218,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 10),
           PrimaryBtn(
             onPressed: () {
-              PosController.to.onchangePage(1);
+              PosController.to.onchangePage(2);
             },
             color: StaticColors.purpleColor,
             textColor: Colors.white,

@@ -29,6 +29,7 @@ class AuthController extends GetxController {
       startInactivityTimer();
     } else {
       inactivityTimer?.cancel();
+      password.value = "";
     }
   }
 

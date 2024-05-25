@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/table_order/table_order_page.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/tables_page.dart';
 import 'package:flutter_base/app/widgets/appbar.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class PosView extends GetView<PosController> {
           onPageChanged: (value) {},
           children: const [
             PosPage(),
+            TableOrderPage(),
             TablesPage(),
           ],
         ),

@@ -1,5 +1,8 @@
+//https://pub.dev/packages/dropdown_button2
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_base/app/widgets/my_custom_text.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -195,11 +198,7 @@ class CustomDropdownTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null)
-          Text(
-            label ?? "",
-            style: theme.textTheme.labelMedium,
-          ),
+        if (label != null) MyCustomText(label ?? ""),
         SizedBox(height: label == null ? 0 : 8),
         DropdownButtonFormField<String>(
           hint: hint ??
@@ -209,21 +208,23 @@ class CustomDropdownTextField extends StatelessWidget {
                     ?.copyWith(color: const Color(0xFFC0C0C0)),
               ),
           icon: icon,
-          dropdownColor: Colors.white,
+          dropdownColor: theme.scaffoldBackgroundColor,
+          focusColor: theme.scaffoldBackgroundColor,
           decoration: InputDecoration(
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
+                  borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(color: theme.hintColor)),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
+                  borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(color: theme.hintColor)),
               enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
+                  borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(color: theme.hintColor)),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               // filled: true,
-              // fillColor: kWhite,
+              // fillColor: theme.scaffoldBackgroundColor,
+              focusColor: theme.scaffoldBackgroundColor,
               hintStyle: hintStyle ??
                   theme.textTheme.bodyLarge?.copyWith(
                       color: theme.hintColor) // Set the background color here
@@ -232,9 +233,9 @@ class CustomDropdownTextField extends StatelessWidget {
               data.length,
               (index) => DropdownMenuItem<String>(
                     value: data[index],
-                    child: Text(
+                    child: MyCustomText(
                       data[index],
-                      style: theme.textTheme.labelLarge,
+                      color: theme.cardColor,
                     ),
                   )),
           onChanged: onChanged,
@@ -244,7 +245,6 @@ class CustomDropdownTextField extends StatelessWidget {
     );
   }
 }
-
 // class CustomTextWithLabel extends StatelessWidget {
 //   final String text;
 //   final String text2;

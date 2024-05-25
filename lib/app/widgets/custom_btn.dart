@@ -175,6 +175,7 @@ class OutLineBtn extends StatelessWidget {
 class PrimaryBtnWithChild extends StatelessWidget {
   final Widget child;
   final Color? color;
+  final Color? borderColor;
   final Color? textColor;
   final VoidCallback onPressed;
   final double? borderRadius;
@@ -190,6 +191,7 @@ class PrimaryBtnWithChild extends StatelessWidget {
     super.key,
     required this.child,
     this.color,
+    this.borderColor,
     this.textColor,
     required this.onPressed,
     this.borderRadius,
@@ -242,8 +244,8 @@ class PrimaryBtnWithChild extends StatelessWidget {
                 // textStyle: style ?? theme.textTheme.labelLarge,
                 // disabledBackgroundColor: kDisabledColor,
                 // disabledForegroundColor: kDisabledTextColor,
-                backgroundColor: color ?? Colors.white,
-                foregroundColor: StaticColors.greenLightColor,
+                backgroundColor: color ?? theme.scaffoldBackgroundColor,
+                foregroundColor: borderColor ?? StaticColors.greenLightColor,
                 // splashFactory: NoSplash.splashFactory,
                 padding: padding ??
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -252,9 +254,9 @@ class PrimaryBtnWithChild extends StatelessWidget {
                 ),
                 // ****** Border color *******
                 side: side ??
-                    const BorderSide(
-                      color: StaticColors.greenColor,
-                      width: 1.5,
+                    BorderSide(
+                      color: borderColor ?? StaticColors.greenColor,
+                      width: 1.75,
                     ),
               ),
         child: child,
