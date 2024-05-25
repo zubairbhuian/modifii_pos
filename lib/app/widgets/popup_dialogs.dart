@@ -1,6 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class PopupDialog {
@@ -67,6 +69,56 @@ class PopupDialog {
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  static customDialog({required Widget child}) {
+    return showDialog<void>(
+      // Context
+      context: Get.context!,
+      // barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.5,
+            child: Material(
+              elevation: 2,
+              // dialog color
+              shadowColor: Colors.black12,
+              // backgraund color
+              color: Theme.of(context).scaffoldBackgroundColor,
+              // border radius
+              borderRadius: BorderRadius.circular(8),
+              // main body
+              /// DoubleBounce
+              /// SpinningLines
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 4,right: 4),
+                      child: InkWell(
+                        onTap: Get.back,
+                        splashFactory: NoSplash.splashFactory,
+                        child: const Icon(
+                          FontAwesomeIcons.circleXmark,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20,right: 26,bottom: 20),
+                    child: child,
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

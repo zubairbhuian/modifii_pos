@@ -16,11 +16,13 @@ class CustomInkWell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
       onDoubleTap: onDoubleTap,
       onLongPress: onLongTap,
-      borderRadius: BorderRadius.circular(12.0),
+      splashColor: theme.primaryColor.withOpacity(.1),
+      borderRadius: BorderRadius.circular(800),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: child,

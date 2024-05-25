@@ -303,23 +303,53 @@ class TableOrderPage extends GetView<TablesController> {
             const SizedBox(width: 14),
             Expanded(
               flex: 2,
-              child: CustomDropdownTextField(
-                label: 'Start Date',
-                hint: MyCustomText('All Branch',
-                    color: Theme.of(context).hintColor),
-                data: const ["demo"],
-                onChanged: (value) {},
+              child: CustomTextField(
+                controller: controller.startDateTEC,
+                extraLabel: 'Start Date',
+                hintText: 'dd/mm/yyyy',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.background),
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2010, 1),
+                    lastDate: DateTime(2050, 12),
+                  ).then((date) {
+                    if (date != null) {
+                      controller.startDateTEC.text =
+                          date.toString().split(' ').first;
+                      controller.update();
+                    }
+                  });
+                },
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
               flex: 2,
-              child: CustomDropdownTextField(
-                label: 'End Date',
-                hint: MyCustomText('All Branch',
-                    color: Theme.of(context).hintColor),
-                data: const ["demo"],
-                onChanged: (value) {},
+              child: CustomTextField(
+                controller: controller.endDateTEC,
+                extraLabel: 'End Date',
+                hintText: 'dd/mm/yyyy',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.background),
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2010, 1),
+                    lastDate: DateTime(2050, 12),
+                  ).then((date) {
+                    if (date != null) {
+                      controller.endDateTEC.text =
+                          date.toString().split(' ').first;
+                      controller.update();
+                    }
+                  });
+                },
               ),
             ),
             const SizedBox(width: 14),

@@ -77,11 +77,7 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // ********** extraLabel ********
-        if (extraLabel != null)
-          Text(
-            extraLabel ?? "",
-            style: extraLabelStyle ?? theme.textTheme.labelLarge,
-          ),
+        if (extraLabel != null) MyCustomText(extraLabel ?? ""),
         if (extraLabel != null)
           const SizedBox(
             height: 10,
@@ -230,14 +226,14 @@ class CustomDropdownTextField extends StatelessWidget {
                       color: theme.hintColor) // Set the background color here
               ),
           items: List.generate(
-              data.length,
-              (index) => DropdownMenuItem<String>(
-                    value: data[index],
-                    child: MyCustomText(
-                      data[index],
-                      color: theme.cardColor,
-                    ),
-                  )),
+            data.length,
+            (index) => DropdownMenuItem<String>(
+              value: data[index],
+              child: MyCustomText(
+                data[index],
+              ),
+            ),
+          ),
           onChanged: onChanged,
         ),
         // SizedBox(height: 24.h),
