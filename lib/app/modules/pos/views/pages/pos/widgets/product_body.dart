@@ -2,18 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
-import 'package:flutter_base/app/modules/pos/widgets/add_to_cart_dialog_options.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/pos/widgets/add_to_cart_dialog_options.dart';
 import 'package:flutter_base/app/modules/pos/widgets/variations_card.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
+import 'package:flutter_base/app/widgets/popup_dialogs.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/static_colors.dart';
-import '../../../widgets/custom_alert_dialog.dart';
-import '../../../widgets/custom_textfield.dart';
-import '../../../widgets/my_custom_text.dart';
-import '../models/product_model.dart';
+import '../../../../../../utils/static_colors.dart';
+import '../../../../../../widgets/custom_alert_dialog.dart';
+import '../../../../../../widgets/custom_textfield.dart';
+import '../../../../../../widgets/my_custom_text.dart';
+import '../../../../models/product_model.dart';
 
 class ProductBody extends GetView<PosController> {
   const ProductBody({super.key});
@@ -101,10 +102,13 @@ class ProductBody extends GetView<PosController> {
               controller.orderTotalPrice = item.price.toDouble();
               controller.orderQuantity = 1;
               // Logger().e(item.variations.first.values.first.optionPrice);
-              customAlertDialog(
-                context: context,
-                child: AddToCartDialogOptions(item: item),
-              );
+              // customAlertDialog(
+              //   context: context,
+              //   child: AddToCartDialogOptions(item: item),
+              // );
+             PopupDialog.customDialog(
+              child:AddToCartDialogOptions(item: item) 
+             );
             },
             isOutline: true,
             text: item.name,
@@ -113,6 +117,4 @@ class ProductBody extends GetView<PosController> {
       );
     }));
   }
-
-
 }

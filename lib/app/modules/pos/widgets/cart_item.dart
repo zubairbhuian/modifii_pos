@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
@@ -7,8 +8,8 @@ import '../../../widgets/my_custom_text.dart';
 class CartItem extends StatelessWidget {
   final String title;
   final String description;
-  final double amount;
-  final int quantity;
+  final num amount;
+  final num quantity;
   final VoidCallback? onRemove;
   final VoidCallback? onDecrement;
   final VoidCallback? onIncrement;
@@ -32,15 +33,30 @@ class CartItem extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                child: MyCustomText(
-                  title,
-                  fontWeight: FontWeight.w700,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    MyCustomText(
+                      title,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    const SizedBox(height: 2),
+                    MyCustomText(
+                      description,
+                      fontWeight: FontWeight.w600,
+                      color: theme.hintColor,
+                      fontSize: 14,
+                      maxLines: 2,
+                    )
+                  ],
                 ),
               ),
+              // btns
               Row(
                 children: [
                   CustomInkWell(
@@ -103,24 +119,22 @@ class CartItem extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(width: 30),
-              Text(
-                "\$$amount",
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: StaticColors.yellowColor,
+              const SizedBox(width: 10),
+              // amount
+              SizedBox(
+                width: 70,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "\$$amount",
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: StaticColors.yellowColor,
+                    ),
+                  ),
                 ),
               ),
             ],
-          ),
-          Positioned(
-            bottom: -4,
-            child: MyCustomText(
-              description,
-              fontWeight: FontWeight.w600,
-              color: theme.hintColor,
-              fontSize: 14,
-            ),
           ),
         ],
       ),

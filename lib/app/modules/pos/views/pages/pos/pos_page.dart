@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/modules/pos/widgets/cart_item.dart';
-import 'package:flutter_base/app/modules/pos/widgets/category_body.dart';
-import 'package:flutter_base/app/modules/pos/widgets/product_body.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/pos/widgets/category_body.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/pos/widgets/product_body.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:get/get.dart';
@@ -58,78 +58,30 @@ class PosPage extends GetView<PosController> {
   Widget _cartArea(ThemeData theme) {
     return Column(
       children: [
-        // add customer
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        //   child: Column(
-        //     children: [
-        //       Row(
-        //         children: [
-        //           Expanded(
-        //             child: CustomDropdownTextField(
-        //               hint: const Text('Search Customer'),
-        //               data: const ["demo"],
-        //               onChanged: (value) {},
-        //             ),
-        //           ),
-        //           const SizedBox(width: 16),
-        //           PrimaryBtn(
-        //             onPressed: () {},
-        //             height: 48,
-        //             width: 48,
-        //             color: StaticColors.blueColor,
-        //             text: '+',
-        //             textColor: Colors.white,
-        //             textMaxSize: 30,
-        //             textMinSize: 18,
-        //           ),
-        //         ],
-        //       ),
-        //       const SizedBox(height: 14),
-        //       SizedBox(
-        //         width: double.infinity,
-        //         child: PrimaryBtn(
-        //           onPressed: () {},
-        //           height: 48,
-        //           color: StaticColors.blueColor,
-        //           textColor: Colors.white,
-        //           textMaxSize: 24,
-        //           textMinSize: 16,
-        //           text: 'Take Out',
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // ****  Cart Items ****
-        // Container(
-        //   // color: const Color(0xfD9D9D9f),
-        //   color: theme.dividerColor,
-        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        //   width: double.infinity,
-        //   child: const MyCustomText(
-        //     'Cart Items',
-        //     fontWeight: FontWeight.w500,
-        //   ),
-        // ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                12,
-                (index) => CartItem(
-                  title: "Chana samosa ",
-                  description: "Add avocado",
-                  amount: 89,
-                  quantity: 1,
-                  onDecrement: () {},
-                  onIncrement: () {},
-                  onRemove: () {},
-                ),
-              ),
-            ),
-          ),
+          child: GetBuilder<PosController>(builder: (controller) => ListView.builder(
+              shrinkWrap: true,
+              itemCount: controller.cartList.length,
+              itemBuilder: (context, index) {
+                var data = controller.cartList[index];
+                return CartItem(
+                  title: data.name ?? "",
+                  description: data.description ?? "",
+                  amount: data.price * data.quantity,
+                  quantity: data.quantity,
+                  onDecrement: () {
+                    controller.quantityUpdateWithCartListIndex(index,
+                        isIncriment: false);
+                  },
+                  onIncrement: () {
+                    controller.quantityUpdateWithCartListIndex(index,
+                        isIncriment: true);
+                  },
+                  onRemove: () {
+                    controller.onRemoveCartItemWithIndex(index);
+                  },
+                );
+              }),),
         ),
         // amount
         const Divider(),
