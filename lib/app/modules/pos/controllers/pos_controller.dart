@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/models/category_model.dart';
+import 'package:flutter_base/app/modules/pos/models/order_place_model.dart';
 import 'package:flutter_base/app/modules/pos/models/product_model.dart';
 import 'package:flutter_base/app/utils/logger.dart';
 import 'package:flutter_base/app/utils/urls.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 class PosController extends GetxController {
   static PosController get to => Get.find();
@@ -62,6 +64,7 @@ class PosController extends GetxController {
     }
   }
 
+  //** Get all product **
   RxBool isLoadingProduct = false.obs;
   getProduct({String? type, int? offset, int? limit, int? categoryIds}) async {
     isLoadingProduct.value = true;
@@ -125,20 +128,6 @@ class PosController extends GetxController {
     update();
   }
 
-  List<String> orderTypes2 = ['APPETIZERS 1st', "ALL-TOGETHER"];
-  int? selectedOrderTypesIndex2;
-  void setSelectedOrderTypesIndex2(int index) {
-    selectedOrderTypesIndex2 = index;
-    update();
-  }
-
-  List<String> orderModifiers = ['MILD', "MEDIUM", 'HOT', 'EXTRA HOT'];
-  int? selectedOrderModifiersIndex;
-  void setSelectedOrderModifiersIndex(int index) {
-    selectedOrderModifiersIndex = index;
-    update();
-  }
-
   bool isDrink = true;
   void checkIsDrink(String productType) {
     isDrink = productType == 'drinks';
@@ -157,6 +146,38 @@ class PosController extends GetxController {
       orderTotalPrice -= price;
       update();
     }
+  }
+
+  //** Order Process **
+  // **======+=======**
+  //** Order Process **
+
+  List<Cart> cartList = <Cart>[];
+  OrderPlaceModel orderPlaceModel = OrderPlaceModel();
+
+  //** Add cart item  **
+  onAddCartItem(Cart item) {
+    cartList.add(item);
+    update();
+  }
+
+  //** Remove cart item with index **
+  onRemoveCartItemWithIndex(int index) {
+    // Check if the index is within bounds
+    if (index >= 0 && index < cartList.length) {
+      cartList.removeAt(index);
+    }
+    update();
+  }
+
+  //** Quantity Update **
+  void quantityUpdateWithCartListIndex(int index, {required bool isIncriment}) {
+    if (cartList[index].quantity < 10 && isIncriment) {
+      cartList[index].quantity = cartList[index].quantity + 1;
+    } else if (cartList[index].quantity > 1 && !isIncriment) {
+      cartList[index].quantity = cartList[index].quantity - 1;
+    }
+    update();
   }
 
   @override
