@@ -12,12 +12,38 @@ class TablesController extends GetxController {
   }
 
   List<TableModel> tablesList = [];
+  List<TableModel> barList = [];
+  List<TableModel> hallList = [];
   void getTables() {
-    for (int i = 1; i <= 60; i++) {
+    for (int i = 1; i <= 20; i++) {
       bool isBooked = Random().nextBool();
       tablesList.add(
         TableModel(
           tableNo: 'T$i',
+          isBooked: isBooked,
+        ),
+      );
+    }
+  }
+
+  void getBars() {
+    for (int i = 1; i <= 10; i++) {
+      bool isBooked = Random().nextBool();
+      barList.add(
+        TableModel(
+          tableNo: 'B$i',
+          isBooked: isBooked,
+        ),
+      );
+    }
+  }
+
+  void getHalls() {
+    for (int i = 1; i <= 14; i++) {
+      bool isBooked = Random().nextBool();
+      hallList.add(
+        TableModel(
+          tableNo: 'H$i',
           isBooked: isBooked,
         ),
       );
@@ -84,6 +110,8 @@ class TablesController extends GetxController {
   @override
   void onInit() {
     getTables();
+    getBars();
+    getHalls();
     getOrderItems();
     super.onInit();
   }

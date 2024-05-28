@@ -56,68 +56,76 @@ class PosPage extends GetView<PosController> {
 
   //** cart **
   Widget _cartArea(ThemeData theme) {
-    return Column(
-      children: [
-        Expanded(
-          child: GetBuilder<PosController>(builder: (controller) => ListView.builder(
-              shrinkWrap: true,
-              itemCount: controller.cartList.length,
-              itemBuilder: (context, index) {
-                var data = controller.cartList[index];
-                return CartItem(
-                  title: data.name ?? "",
-                  description: data.description ?? "",
-                  amount: data.price * data.quantity,
-                  quantity: data.quantity,
-                  onDecrement: () {
-                    controller.quantityUpdateWithCartListIndex(index,
-                        isIncriment: false);
-                  },
-                  onIncrement: () {
-                    controller.quantityUpdateWithCartListIndex(index,
-                        isIncriment: true);
-                  },
-                  onRemove: () {
-                    controller.onRemoveCartItemWithIndex(index);
-                  },
-                );
-              }),),
-        ),
-        // amount
-        const Divider(),
-        _row(theme, title: "Subtotal :", value: "\$00"),
-        _row(theme, title: "GST 5% :", value: "\$00"),
-        _row(theme, title: "PST 10% :", value: "\$00"),
-        const Divider(),
-        _row(theme, title: "Total :", value: "\$00", fontSize: 20),
-        // order btn
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {},
-                  height: 48,
-                  color: StaticColors.greenColor,
-                  textColor: Colors.white,
-                  text: 'Place Order',
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {},
-                  height: 48,
-                  color: theme.colorScheme.error,
-                  textColor: Colors.white,
-                  text: 'Cancel',
-                ),
-              ),
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        border: Border.all(color: Colors.white),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: GetBuilder<PosController>(
+              builder: (controller) => ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: controller.cartList.length,
+                  itemBuilder: (context, index) {
+                    var data = controller.cartList[index];
+                    return CartItem(
+                      title: data.name ?? "",
+                      description: data.description ?? "",
+                      amount: data.price * data.quantity,
+                      quantity: data.quantity,
+                      onDecrement: () {
+                        controller.quantityUpdateWithCartListIndex(index,
+                            isIncriment: false);
+                      },
+                      onIncrement: () {
+                        controller.quantityUpdateWithCartListIndex(index,
+                            isIncriment: true);
+                      },
+                      onRemove: () {
+                        controller.onRemoveCartItemWithIndex(index);
+                      },
+                    );
+                  }),
+            ),
           ),
-        )
-      ],
+          // amount
+          const Divider(),
+          _row(theme, title: "Subtotal :", value: "\$00"),
+          _row(theme, title: "GST 5% :", value: "\$00"),
+          _row(theme, title: "PST 10% :", value: "\$00"),
+          const Divider(),
+          _row(theme, title: "Total :", value: "\$00", fontSize: 20),
+          // order btn
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    height: 48,
+                    color: StaticColors.greenColor,
+                    textColor: Colors.white,
+                    text: 'Place Order',
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: PrimaryBtn(
+                    onPressed: () {},
+                    height: 48,
+                    color: theme.colorScheme.error,
+                    textColor: Colors.white,
+                    text: 'Cancel',
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 

@@ -7,15 +7,12 @@ import '../../../../../../widgets/custom_btn.dart';
 import '../../../../../../widgets/custom_textfield.dart';
 
 class SearchAndCustomItemRow extends StatelessWidget {
-  const SearchAndCustomItemRow({
-    super.key,
-  });
+  const SearchAndCustomItemRow({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const SizedBox(width: 12.0),
         Expanded(
             child: PrimaryBtn(
           onPressed: () {
@@ -40,12 +37,15 @@ class SearchAndCustomItemRow extends StatelessWidget {
           text: 'Custom Drink',
           textColor: Colors.white,
         )),
-        const SizedBox(width: 12.0),
-        const Expanded(
+        const SizedBox(width: 36.0),
+        Expanded(
           flex: 2,
-          child: CustomTextField(hintText: 'Search product'),
+          child: CustomTextField(
+            hintText: 'Search product',
+            prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),
+          ),
         ),
-        const SizedBox(width: 12.0),
+        const SizedBox(width: 36.0),
         Expanded(
             child: PrimaryBtn(
           onPressed: () {

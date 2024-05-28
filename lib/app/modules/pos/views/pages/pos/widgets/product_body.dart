@@ -97,7 +97,7 @@ class ProductBody extends GetView<PosController> {
               //   child: AddToCartDialogOptions(item: item),
               // );
               controller.checkIsDrink(item.productType);
-              controller.resetModifierSelect();
+              // controller.resetModifierSelect();
               PopupDialog.customDialog(
                   child: AddToCartDialogOptions(item: item));
             },

@@ -10,4 +10,5 @@ class StaticColors {
   static const Color orangeColor = Color(0xfff65b1c);
   static const Color pinkColor = Color(0xffec4c79);
   static const Color redColor = Color.fromARGB(255, 184, 9, 9);
+  static const Color blackLightColor = Color(0xff303030);
 }

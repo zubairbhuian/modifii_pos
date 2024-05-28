@@ -42,13 +42,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: centerTitle,
       leadingWidth: 80,
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: theme.canvasColor,
       // foregroundColor: kTextColor,
       // titleTextStyle: kTitleLarge.copyWith(color: const Color(0xff2F2F2F)),
       // appbar leading
       // appbar title
       flexibleSpace: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: theme.dividerColor))),
         width: double.infinity,
@@ -72,7 +71,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     ClockInController clockInController = ClockInController.to;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20, top: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -142,7 +141,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   PrimaryBtn(
                                     onPressed: Get.back,
                                     text: 'Cancel',
-                                    color: Colors.black87,
+                                    color: StaticColors.blackLightColor,
                                     textColor: Colors.white,
                                   ),
                                 ],
@@ -206,78 +205,83 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   //** buttons **
-  Widget _buttons(ThemeData theme) => Row(
-        children: [
-          Obx(
-            () => Visibility(
-              visible: PosController.to.isShowPos.value,
-              child: PrimaryBtn(
+  Widget _buttons(ThemeData theme) => Expanded(
+        child: ColoredBox(
+          color: theme.scaffoldBackgroundColor,
+          child: Row(
+            children: [
+              Obx(
+                () => Visibility(
+                  visible: PosController.to.isShowPos.value,
+                  child: PrimaryBtn(
+                    onPressed: () {
+                      PosController.to.onchangePage(0);
+                    },
+                    color: StaticColors.greenColor,
+                    textColor: Colors.white,
+                    text: 'POS',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              PrimaryBtn(
                 onPressed: () {
-                  PosController.to.onchangePage(0);
+                  // controller.getCategory(type: 'drinks');
+                },
+                color: StaticColors.yellowColor,
+                textColor: Colors.white,
+                text: 'ORDERS',
+              ),
+              const SizedBox(width: 10),
+              PrimaryBtn(
+                onPressed: () {
+                  PosController.to.onchangePage(1);
+                },
+                color: StaticColors.yellowColor,
+                textColor: Colors.white,
+                text: 'TABLE\nORDERS',
+              ),
+              const SizedBox(width: 10),
+              PrimaryBtn(
+                onPressed: () {
+                  PosController.to.onchangePage(2);
+                },
+                color: StaticColors.purpleColor,
+                textColor: Colors.white,
+                text: 'DINE-IN',
+              ),
+              const SizedBox(width: 10),
+              PrimaryBtn(
+                onPressed: () {},
+                color: StaticColors.purpleColor,
+                textColor: Colors.white,
+                text: 'BAR',
+              ),
+              const SizedBox(width: 10),
+              PrimaryBtn(
+                onPressed: () {},
+                color: StaticColors.blueColor,
+                textColor: Colors.white,
+                text: 'TAKEOUT',
+              ),
+              const SizedBox(width: 10),
+              PrimaryBtn(
+                onPressed: () {},
+                color: StaticColors.blueColor,
+                textColor: Colors.white,
+                text: 'Check\nSummery',
+              ),
+              const SizedBox(width: 10),
+              PrimaryBtn(
+                onPressed: () {
+                  // controller.getCategory(type: 'drinks');
                 },
                 color: StaticColors.greenColor,
                 textColor: Colors.white,
-                text: 'POS',
+                text: 'Cash\nOut',
               ),
-            ),
+            ],
           ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.yellowColor,
-            textColor: Colors.white,
-            text: 'ORDERS',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              PosController.to.onchangePage(1);
-            },
-            color: StaticColors.yellowColor,
-            textColor: Colors.white,
-            text: 'TABLE\nORDERS',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              PosController.to.onchangePage(2);
-            },
-            color: StaticColors.purpleColor,
-            textColor: Colors.white,
-            text: 'TABLES',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {},
-            color: StaticColors.purpleColor,
-            textColor: Colors.white,
-            text: 'BAR',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {},
-            color: StaticColors.blueColor,
-            textColor: Colors.white,
-            text: 'TAKEOUT',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {},
-            color: StaticColors.blueColor,
-            textColor: Colors.white,
-            text: 'Check\nSummery',
-          ),
-          const SizedBox(width: 10),
-          PrimaryBtn(
-            onPressed: () {
-              // controller.getCategory(type: 'drinks');
-            },
-            color: StaticColors.greenColor,
-            textColor: Colors.white,
-            text: 'Cash\nOut',
-          ),
-        ],
+        ),
       );
 }

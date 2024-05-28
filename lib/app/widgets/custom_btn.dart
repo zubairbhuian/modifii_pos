@@ -66,7 +66,7 @@ class PrimaryBtn extends StatelessWidget {
                 padding: padding ??
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),
                 // ****** Border color *******
                 side: side
@@ -86,12 +86,12 @@ class PrimaryBtn extends StatelessWidget {
                 padding: padding ??
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),
                 // ****** Border color *******
                 side: side ??
                     BorderSide(
-                      color: borderColor ?? StaticColors.greenColor,
+                      color: borderColor ?? theme.colorScheme.background,
                       width: 1.5,
                     ),
               ),
@@ -232,7 +232,7 @@ class PrimaryBtnWithChild extends StatelessWidget {
                 padding: padding ??
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),
                 // ****** Border color *******
                 side: side
@@ -252,12 +252,12 @@ class PrimaryBtnWithChild extends StatelessWidget {
                 padding: padding ??
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),
                 // ****** Border color *******
                 side: side ??
                     BorderSide(
-                      color: borderColor ?? StaticColors.greenColor,
+                      color: borderColor ?? theme.colorScheme.background,
                       width: 1.75,
                     ),
               ),

@@ -6,7 +6,6 @@ import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
 import '../../../../../../widgets/custom_alert_dialog.dart';
 import '../../../../controllers/tables_controller.dart';
 
@@ -25,8 +24,7 @@ class BookedTableOption extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        border: Border.all(color: StaticColors.greenColor),
-        borderRadius: BorderRadius.circular(4.0),
+        border: Border.all(color: Colors.white),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

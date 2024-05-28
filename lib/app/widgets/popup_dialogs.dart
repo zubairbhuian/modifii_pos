@@ -88,7 +88,8 @@ class PopupDialog {
               // backgraund color
               color: Theme.of(context).scaffoldBackgroundColor,
               // border radius
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
+
               // main body
               /// DoubleBounce
               /// SpinningLines

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
-
 import '../../../../../../utils/static_colors.dart';
 import '../../../../../../widgets/custom_btn.dart';
 import '../../../../../../widgets/my_custom_text.dart';
@@ -19,8 +18,7 @@ class AvailableTableOption extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        border: Border.all(color: StaticColors.greenColor),
-        borderRadius: BorderRadius.circular(4.0),
+        border: Border.all(color: Colors.white),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

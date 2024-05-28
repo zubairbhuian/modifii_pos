@@ -54,7 +54,7 @@ class AuthView extends GetView<AuthController> {
       height: 100,
       padding: const EdgeInsets.symmetric(horizontal: 26),
       decoration: BoxDecoration(
-          color: theme.cardColor,
+          color: theme.canvasColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: theme.colorScheme.background,
@@ -117,7 +117,7 @@ class AuthView extends GetView<AuthController> {
                           ? controller.numberList.length - 1 == index
                               ? const Color(0xff118A00)
                               : const Color(0xffFD571A)
-                          : theme.cardColor,
+                          : theme.canvasColor,
                       foregroundColor: theme.dividerColor,
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(

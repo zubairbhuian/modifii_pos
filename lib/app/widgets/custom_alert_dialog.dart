@@ -19,14 +19,16 @@ void customAlertDialog({
           opacity: Tween<double>(begin: 0.5, end: 1).animate(anim1),
           child: AlertDialog(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            surfaceTintColor: Colors.transparent,
             titlePadding:
                 const EdgeInsets.only(left: 0, top: 32, right: 0, bottom: 16),
             contentPadding:
                 const EdgeInsets.only(left: 16, top: 26, right: 16, bottom: 16),
             content: child,
             shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.0),
-                borderSide: BorderSide.none),
+              borderRadius: BorderRadius.circular(6.0),
+              borderSide: const BorderSide(color: Colors.white, width: 1.25),
+            ),
           ),
         ),
       );
