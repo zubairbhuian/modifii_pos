@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 ThemeData darkTheme = ThemeData(
   // ***** Color *****
-  primaryColor: const Color(0xffFF7A59),
+  primaryColor: const Color(0xfff65b1c),
   primaryColorDark: const Color(0xff0c0c0c),
   primaryColorLight: const Color(0xff118A00),
   canvasColor: const Color(0x000000ff),
@@ -70,14 +70,17 @@ ThemeData darkTheme = ThemeData(
           fontFamily: Fonts.primary,
           fontSize: 16,
           fontWeight: FontWeight.w400,
-          color: Color(0xff666666)),
+          color: Color(0xffEDF2F7)),
       bodyMedium: TextStyle(
-          fontFamily: Fonts.primary, fontSize: 14, fontWeight: FontWeight.w400),
+          fontFamily: Fonts.primary,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Color(0xffEDF2F7)),
       bodySmall: TextStyle(
           fontFamily: Fonts.primary,
           fontSize: 12,
           fontWeight: FontWeight.w400,
-          color: Color(0xff666666)),
+          color: Color(0xffEDF2F7)),
       //******  Title  ******
       titleLarge: TextStyle(
           fontFamily: Fonts.primary,

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/modules/pos/models/category_model.dart';
 import 'package:flutter_base/app/modules/pos/models/order_place_model.dart';
 import 'package:flutter_base/app/modules/pos/models/product_model.dart';
@@ -107,6 +108,7 @@ class PosController extends GetxController {
         .toList());
   }
 
+  TextEditingController kitchenNoteTEC = TextEditingController();
   // List<String> orderTypes = ['TO GO', "DON'T MAKE", 'RUSH'];
   bool isTogoSelected = false;
   bool isDontMakeSelected = false;

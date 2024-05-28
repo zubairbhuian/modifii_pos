@@ -7,6 +7,7 @@ import '../utils/static_colors.dart';
 class PrimaryBtn extends StatelessWidget {
   final Color? color;
   final Color? textColor;
+  final Color? borderColor;
   final VoidCallback onPressed;
   final double? borderRadius;
   final double? height;
@@ -24,6 +25,7 @@ class PrimaryBtn extends StatelessWidget {
     super.key,
     this.color,
     this.textColor,
+    this.borderColor,
     required this.onPressed,
     this.borderRadius,
     required this.text,
@@ -79,7 +81,7 @@ class PrimaryBtn extends StatelessWidget {
                 // disabledBackgroundColor: kDisabledColor,
                 // disabledForegroundColor: kDisabledTextColor,
                 backgroundColor: color ?? theme.scaffoldBackgroundColor,
-                foregroundColor: StaticColors.greenLightColor,
+                foregroundColor: color ?? StaticColors.greenLightColor,
                 // splashFactory: NoSplash.splashFactory,
                 padding: padding ??
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -88,8 +90,8 @@ class PrimaryBtn extends StatelessWidget {
                 ),
                 // ****** Border color *******
                 side: side ??
-                    const BorderSide(
-                      color: StaticColors.greenColor,
+                    BorderSide(
+                      color: borderColor ?? StaticColors.greenColor,
                       width: 1.5,
                     ),
               ),

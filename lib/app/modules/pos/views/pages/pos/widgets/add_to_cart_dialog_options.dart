@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/modules/pos/models/product_model.dart';
+import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_base/app/widgets/custom_textfield.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:get/get.dart';
-
 import '../../../../../../widgets/popup_dialogs.dart';
 import '../../../../models/order_place_model.dart';
 
@@ -50,85 +50,90 @@ class AddToCartDialogOptions extends StatelessWidget {
             item.description == '' ? 'N/A' : item.description,
             fontSize: 14,
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 18),
           //kitchen note
-          MyCustomText(
-            'Kitchen Note',
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).hintColor,
-          ),
-          const SizedBox(height: 4),
-          const CustomTextField(
-            maxLines: 2,
-            isFilled: true,
-          ),
-          const SizedBox(height: 14),
-          //order types
+
           Row(
             children: [
               Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {
-                    c.toggleOrderTypeSelection(isTogo: true);
-                  },
-                  text: 'TO GO',
-                  isOutline: true,
-                  color: c.isTogoSelected
-                      ? Theme.of(context).primaryColorLight
-                      : Theme.of(context).scaffoldBackgroundColor,
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const MyCustomText(
+                      'Kitchen Note',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      controller: c.kitchenNoteTEC,
+                      hintText: 'Write a note for kitchen',
+                      maxLines: 3,
+                      isFilled: true,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
+              //order types 2
               Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {
-                    c.toggleOrderTypeSelection(isDontMake: true);
-                  },
-                  text: "DON'T MAKE",
-                  isOutline: true,
-                  color: c.isDontMakeSelected
-                      ? Theme.of(context).primaryColorLight
-                      : Theme.of(context).scaffoldBackgroundColor,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: PrimaryBtn(
-                  onPressed: () {
-                    c.toggleOrderTypeSelection(isRush: true);
-                  },
-                  text: 'RUSH',
-                  isOutline: true,
-                  color: c.isRushSelected
-                      ? Theme.of(context).primaryColorLight
-                      : Theme.of(context).scaffoldBackgroundColor,
+                flex: 2,
+                child: Column(
+                  children: List.generate(
+                    c.orderTypes2.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: _popupPrimaryBtn(
+                        onPressed: () {
+                          c.setSelectedOrderTypesIndex2(index);
+                        },
+                        text: c.orderTypes2[index],
+                        isSelected: c.selectedOrderTypesIndex2 == index,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          //order types 2
+
+          const SizedBox(height: 18),
+          //order types
           Row(
-            children: List.generate(
-              c.orderTypes2.length,
-              (index) => Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: PrimaryBtn(
-                    onPressed: () {
-                      c.setSelectedOrderTypesIndex2(index);
-                    },
-                    text: c.orderTypes2[index],
-                    isOutline: true,
-                    color: c.selectedOrderTypesIndex2 == index
-                        ? Theme.of(context).primaryColorLight
-                        : Theme.of(context).scaffoldBackgroundColor,
-                  ),
+            children: [
+              Expanded(
+                child: _popupPrimaryBtn(
+                  onPressed: () {
+                    c.toggleOrderTypeSelection(isTogo: true);
+                  },
+                  text: 'TO GO',
+                  isSelected: c.isTogoSelected,
                 ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _popupPrimaryBtn(
+                  onPressed: () {
+                    c.toggleOrderTypeSelection(isDontMake: true);
+                  },
+                  text: "DON'T MAKE",
+                  isSelected: c.isDontMakeSelected,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _popupPrimaryBtn(
+                  onPressed: () {
+                    c.toggleOrderTypeSelection(isRush: true);
+                  },
+                  text: 'RUSH',
+                  isSelected: c.isRushSelected,
+                ),
+              ),
+            ],
           ),
+
           const SizedBox(height: 14),
           //order modifiers
           Visibility(
@@ -139,15 +144,12 @@ class AddToCartDialogOptions extends StatelessWidget {
                 (index) => Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: PrimaryBtn(
+                    child: _popupPrimaryBtn(
                       onPressed: () {
                         c.setSelectedOrderModifiersIndex(index);
                       },
                       text: c.orderModifiers[index],
-                      isOutline: true,
-                      color: c.selectedOrderModifiersIndex == index
-                          ? Theme.of(context).primaryColorLight
-                          : Theme.of(context).scaffoldBackgroundColor,
+                      isSelected: c.selectedOrderModifiersIndex == index,
                     ),
                   ),
                 ),
@@ -168,17 +170,17 @@ class AddToCartDialogOptions extends StatelessWidget {
               ),
               Expanded(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     PrimaryBtnWithChild(
                       onPressed: () {
                         c.updateOrderQuantity(false, item.price.toDouble());
                       },
-                      color: Colors.white,
                       width: 48,
                       child: const Icon(
                         Icons.remove,
                         size: 24,
-                        color: Colors.black87,
+                        color: Colors.white,
                       ),
                     ),
                     SizedBox(
@@ -195,12 +197,11 @@ class AddToCartDialogOptions extends StatelessWidget {
                       onPressed: () {
                         c.updateOrderQuantity(true, item.price.toDouble());
                       },
-                      color: Colors.white,
                       width: 48,
                       child: const Icon(
                         Icons.add,
                         size: 24,
-                        color: Colors.black87,
+                        color: Colors.white,
                       ),
                     ),
                   ],
@@ -247,5 +248,22 @@ class AddToCartDialogOptions extends StatelessWidget {
         ],
       );
     });
+  }
+
+  PrimaryBtn _popupPrimaryBtn(
+      {required VoidCallback onPressed,
+      required String text,
+      required bool isSelected}) {
+    return PrimaryBtn(
+      onPressed: onPressed,
+      width: double.infinity,
+      text: text,
+      isOutline: true,
+      color: isSelected
+          ? StaticColors.blueColor
+          : Theme.of(Get.context!).scaffoldBackgroundColor,
+      borderColor:
+          isSelected ? StaticColors.blueColor : StaticColors.greenColor,
+    );
   }
 }

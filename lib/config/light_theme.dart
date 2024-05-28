@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 ThemeData lightTheme = ThemeData(
   // ***** Color *****
-  primaryColor: const Color(0xffFD571A),
+  primaryColor: const Color(0xfff65b1c),
   primaryColorDark: const Color(0xff1C1917),
   primaryColorLight: const Color.fromARGB(255, 146, 255, 132),
   canvasColor: const Color.fromARGB(255, 255, 255, 255),
