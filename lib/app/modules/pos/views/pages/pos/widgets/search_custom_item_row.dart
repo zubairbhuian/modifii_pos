@@ -15,10 +15,6 @@ class SearchAndCustomItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(
-          flex: 2,
-          child: CustomTextField(hintText: 'Search product'),
-        ),
         const SizedBox(width: 12.0),
         Expanded(
             child: PrimaryBtn(
@@ -42,6 +38,23 @@ class SearchAndCustomItemRow extends StatelessWidget {
           },
           color: StaticColors.blueColor,
           text: 'Custom Drink',
+          textColor: Colors.white,
+        )),
+        const SizedBox(width: 12.0),
+        const Expanded(
+          flex: 2,
+          child: CustomTextField(hintText: 'Search product'),
+        ),
+        const SizedBox(width: 12.0),
+        Expanded(
+            child: PrimaryBtn(
+          onPressed: () {
+            PopupDialog.customDialog(
+              child: const CustomOrderDialogOptions(productType: "Custom Bar"),
+            );
+          },
+          color: StaticColors.blueColor,
+          text: 'Custom Bar',
           textColor: Colors.white,
         )),
         const SizedBox(width: 12.0),

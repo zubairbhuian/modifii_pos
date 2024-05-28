@@ -155,12 +155,11 @@ class _CustomOrderDialogOptionsState extends State<CustomOrderDialogOptions> {
                         false,
                       );
                     },
-                    color: Colors.white,
                     width: 48,
                     child: const Icon(
                       Icons.remove,
                       size: 24,
-                      color: Colors.black87,
+                      color: Colors.white,
                     ),
                   ),
                   SizedBox(
@@ -177,12 +176,11 @@ class _CustomOrderDialogOptionsState extends State<CustomOrderDialogOptions> {
                     onPressed: () {
                       updateOrderQuantity(true);
                     },
-                    color: Colors.white,
                     width: 48,
                     child: const Icon(
                       Icons.add,
                       size: 24,
-                      color: Colors.black87,
+                      color: Colors.white,
                     ),
                   ),
                 ],
