@@ -93,6 +93,7 @@ class AuthView extends GetView<AuthController> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
+                      controller.toggleStartup(false);
                       AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
                       if (controller.numberList.length - 1 == index) {
                         // log in

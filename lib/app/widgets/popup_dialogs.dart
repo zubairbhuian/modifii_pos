@@ -1,8 +1,6 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class PopupDialog {
@@ -100,19 +98,21 @@ class PopupDialog {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 4,right: 4),
+                      padding: const EdgeInsets.only(top: 4, right: 4),
                       child: InkWell(
                         onTap: Get.back,
                         splashFactory: NoSplash.splashFactory,
-                        child: const Icon(
-                          FontAwesomeIcons.circleXmark,
-                          color: Colors.redAccent,
+                        child: Icon(
+                          Icons.close,
+                          color: Theme.of(context).focusColor,
+                          size: 18,
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20,right: 26,bottom: 20),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 26, bottom: 20),
                     child: child,
                   ),
                 ],

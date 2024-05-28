@@ -128,6 +128,28 @@ class PosController extends GetxController {
     update();
   }
 
+  List<String> orderTypes2 = ['APPETIZERS 1st', "ALL-TOGETHER"];
+  int? selectedOrderTypesIndex2;
+  void setSelectedOrderTypesIndex2(int index) {
+    if (selectedOrderTypesIndex2 == index) {
+      selectedOrderTypesIndex2 = null;
+    } else {
+      selectedOrderTypesIndex2 = index;
+    }
+    update();
+  }
+
+  List<String> orderModifiers = ['MILD', "MEDIUM", 'HOT', 'EXTRA HOT'];
+  int? selectedOrderModifiersIndex;
+  void setSelectedOrderModifiersIndex(int index) {
+    if (selectedOrderModifiersIndex == index) {
+      selectedOrderModifiersIndex = null;
+    } else {
+      selectedOrderModifiersIndex = index;
+    }
+    update();
+  }
+
   bool isDrink = true;
   void checkIsDrink(String productType) {
     isDrink = productType == 'drinks';
@@ -146,6 +168,14 @@ class PosController extends GetxController {
       orderTotalPrice -= price;
       update();
     }
+  }
+
+  void resetModifierSelect() {
+    isTogoSelected = false;
+    isDontMakeSelected = false;
+    isRushSelected = false;
+    selectedOrderTypesIndex2 = null;
+    selectedOrderModifiersIndex = null;
   }
 
   //** Order Process **
