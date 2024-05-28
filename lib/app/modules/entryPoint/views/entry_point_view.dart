@@ -13,7 +13,7 @@ class EntryPointView extends GetView<EntryPointController> {
     ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: const CustomAppBar(
-        preferredHeight: 80,
+        preferredHeight: 110,
         isLeading: false,
         hasButtonsRow: false,
       ),
@@ -51,7 +51,7 @@ class EntryPointView extends GetView<EntryPointController> {
         },
         height: 220,
         style: theme.textTheme.displayLarge?.copyWith(color: Colors.white),
-        textMaxSize: 26,
+        textMaxSize: 46,
         text: 'Dine-in',
       ),
     );
@@ -67,7 +67,7 @@ class EntryPointView extends GetView<EntryPointController> {
         height: 220,
         style: theme.textTheme.displayLarge?.copyWith(color: Colors.white),
         color: const Color(0xff008F5F),
-        textMaxSize: 26,
+        textMaxSize: 46,
         text: 'Take Out',
       ),
     );
@@ -83,7 +83,7 @@ class EntryPointView extends GetView<EntryPointController> {
         height: 220,
         style: theme.textTheme.displayLarge?.copyWith(color: Colors.white),
         color: const Color(0xffFBB052),
-        textMaxSize: 26,
+        textMaxSize: 46,
         text: 'Delivery',
       ),
     );

@@ -1,8 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/modules/clockIn/controllers/clock_in_controller.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/services/controller/config_controller.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
+import 'package:flutter_base/app/widgets/custom_alert_dialog.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
@@ -11,7 +11,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../routes/app_pages.dart';
 import 'custom_inkwell.dart';
-import 'popup_dialogs.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isLeading;
@@ -56,7 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Column(
           children: [
             // topbar
-            _topBar(theme),
+            _topBar(theme, context),
             Visibility(
               visible: hasButtonsRow,
               child: _buttons(theme),
@@ -68,7 +67,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   //** Buttons **
-  Widget _topBar(ThemeData theme) {
+  Widget _topBar(ThemeData theme, BuildContext context) {
     ConfigController configController = ConfigController.to;
     ClockInController clockInController = ClockInController.to;
 
@@ -117,46 +116,71 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    CustomInkWell(
-                      onTap: () => PopupDialog.showSuccessDialog(
-                          'Tap again to CLOCK OUT!'),
-                      onDoubleTap: clockInController.clockOut,
-                      onLongTap: clockInController.clockOut,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.redAccent,
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const MyCustomText(
-                          'CLOCK OUT',
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
+                    PrimaryBtn(
+                      onPressed: () {
+                        customAlertDialog(
+                          context: context,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const MyCustomText(
+                                'Do you want to clock out?',
+                                fontSize: 28,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              const SizedBox(height: 28),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  PrimaryBtn(
+                                    onPressed: clockInController.clockOut,
+                                    text: 'Yes',
+                                    textColor: Colors.white,
+                                  ),
+                                  const SizedBox(width: 24),
+                                  PrimaryBtn(
+                                    onPressed: Get.back,
+                                    text: 'Cancel',
+                                    color: Colors.black87,
+                                    textColor: Colors.white,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      text: 'Clockout',
+                      textColor: Colors.white,
+                      color: StaticColors.redColor,
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 18),
-              Switch(
-                value: configController.isLightTheme,
-                onChanged: (value) => configController.toggleTheme(),
-                activeColor: theme.primaryColor,
+              CustomInkWell(
+                onTap: configController.toggleTheme,
+                child: SvgPicture.asset(
+                  'assets/icons/theme.svg',
+                  height: 45,
+                  colorFilter: ColorFilter.mode(
+                      configController.isLightTheme
+                          ? Colors.black
+                          : Colors.white,
+                      BlendMode.srcIn),
+                ),
               ),
               const SizedBox(width: 18),
               Visibility(
                 visible: hasLogoutBtn,
-                child: CustomInkWell(
-                  onTap: () =>
-                      PopupDialog.showSuccessDialog('Tap again to Logout!'),
-                  onDoubleTap: () => Get.offAllNamed(AppPages.INITIAL),
-                  onLongTap: () => Get.offAllNamed(AppPages.INITIAL),
-                  child: const Icon(
-                    FontAwesomeIcons.rightFromBracket,
-                    color: Colors.redAccent,
-                    size: 26,
-                  ),
+                child: PrimaryBtn(
+                  onPressed: () {
+                    Get.offAllNamed(AppPages.INITIAL);
+                  },
+                  text: 'Logout',
+                  textColor: Colors.white,
+                  color: StaticColors.redColor,
                 ),
               ),
               // PrimaryBtn(

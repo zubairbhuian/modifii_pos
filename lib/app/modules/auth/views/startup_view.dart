@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../services/controller/config_controller.dart';
+import '../../../widgets/custom_inkwell.dart';
 import '../../entryPoint/widgets/my_time.dart';
 
 class StartupView extends StatelessWidget {
@@ -32,18 +33,21 @@ class StartupView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
-                    width: 300,
+                    width: 255,
                     ConfigController.to.isLightTheme
                         ? 'assets/images/splash/logo_light.svg'
                         : 'assets/images/splash/logo_dark.svg',
                   ),
-                  Switch(
-                    value: ConfigController.to.isLightTheme,
-                    onChanged: (value) => ConfigController.to.toggleTheme(),
-                    activeColor: Theme.of(context).colorScheme.background,
-                    trackColor: MaterialStateProperty.all(Colors.transparent),
-                    trackOutlineColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.background,
+                  CustomInkWell(
+                    onTap: ConfigController.to.toggleTheme,
+                    child: SvgPicture.asset(
+                      'assets/icons/theme.svg',
+                      height: 55,
+                      colorFilter: ColorFilter.mode(
+                          ConfigController.to.isLightTheme
+                              ? Colors.black
+                              : Colors.white,
+                          BlendMode.srcIn),
                     ),
                   ),
                 ],
