@@ -222,7 +222,7 @@ class _CustomOrderDialogOptionsState extends State<CustomOrderDialogOptions> {
               } else {
                 PosController.to.onAddCartItem(item);
                 Get.back();
-                PopupDialog.showSuccessDialog("Cart Items Added Successfully");
+                // PopupDialog.showSuccessDialog("Cart Items Added Successfully");
               }
             },
             text: 'Add',

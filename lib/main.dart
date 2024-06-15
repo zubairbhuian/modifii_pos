@@ -90,8 +90,8 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       initialBinding: BaseBinding(apiService: apiService),
-      initialRoute: AppPages.INITIAL,
-      // initialRoute: Routes.POS,
+      // initialRoute: AppPages.INITIAL,
+      initialRoute: Routes.POS,
       getPages: AppPages.routes,
     );
   }

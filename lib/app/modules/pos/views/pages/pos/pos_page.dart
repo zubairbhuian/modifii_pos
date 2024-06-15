@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
+import 'package:flutter_base/app/modules/pos/controllers/tables_controller.dart';
 import 'package:flutter_base/app/modules/pos/widgets/cart_item.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/pos/widgets/category_body.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/pos/widgets/product_body.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
+import 'package:flutter_base/app/widgets/custom_alert_dialog.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import '../../../../../widgets/custom_dropdown.dart';
 import '../../../../../widgets/custom_loading.dart';
+import '../../../../../widgets/custom_textfield.dart';
+import '../../../../../widgets/my_custom_text.dart';
 import 'widgets/search_custom_item_row.dart';
 
 class PosPage extends GetView<PosController> {
@@ -19,7 +26,6 @@ class PosPage extends GetView<PosController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          flex: 2,
           child: Column(
             children: [
               //search row
@@ -30,14 +36,105 @@ class PosPage extends GetView<PosController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // item 1 (Category)
-                    const Expanded(child: CategoryBody()),
+                    const Expanded(flex: 2, child: CategoryBody()),
                     const SizedBox(width: 24),
                     // item 2 (Product)
                     Expanded(
-                      child: Obx(
-                        () => controller.isLoadingProduct.value
-                            ? const CustomLoading()
-                            : const ProductBody(),
+                      flex: 3,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Obx(
+                              () => controller.isLoadingProduct.value
+                                  ? const CustomLoading()
+                                  : const ProductBody(),
+                            ),
+                          ),
+                          const SizedBox(width: 18),
+                          Expanded(
+                            flex: 1,
+                            child: SingleChildScrollView(
+                              child: GetBuilder<PosController>(builder: (c) {
+                                return Column(
+                                  children: [
+                                    ...List.generate(
+                                      c.orderTypes2.length,
+                                      (index) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0),
+                                        child: _popupPrimaryBtn(
+                                          onPressed: () {
+                                            c.setSelectedOrderTypesIndex2(
+                                                index);
+                                          },
+                                          text: c.orderTypes2[index],
+                                          isSelected:
+                                              c.selectedOrderTypesIndex2 ==
+                                                  index,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 18),
+                                    _popupPrimaryBtn(
+                                      onPressed: () {
+                                        c.toggleOrderTypeSelection(
+                                            isTogo: true);
+                                      },
+                                      text: 'TO GO',
+                                      isSelected: c.isTogoSelected,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    _popupPrimaryBtn(
+                                      onPressed: () {
+                                        c.toggleOrderTypeSelection(
+                                            isDontMake: true);
+                                      },
+                                      text: "DON'T MAKE",
+                                      isSelected: c.isDontMakeSelected,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    _popupPrimaryBtn(
+                                      onPressed: () {
+                                        c.toggleOrderTypeSelection(
+                                            isRush: true);
+                                      },
+                                      text: 'RUSH',
+                                      isSelected: c.isRushSelected,
+                                    ),
+                                    const SizedBox(height: 18),
+                                    ...List.generate(
+                                      c.orderModifiers.length,
+                                      (index) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0),
+                                        child: _popupPrimaryBtn(
+                                          onPressed: () {
+                                            c.setSelectedOrderModifiersIndex(
+                                                index);
+                                          },
+                                          text: c.orderModifiers[index],
+                                          isSelected:
+                                              c.selectedOrderModifiersIndex ==
+                                                  index,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 18),
+                                    _popupPrimaryBtn(
+                                      onPressed: () {
+                                        _kitchenNoteDialog(context);
+                                      },
+                                      text: 'KITCHEN NOTE',
+                                      isSelected: true,
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -48,43 +145,136 @@ class PosPage extends GetView<PosController> {
         ),
         const SizedBox(width: 24),
         // item 3 (Cart)
-        Expanded(flex: 1, child: _cartArea(theme)),
+        _cartArea(theme),
         // cart area
       ],
+    );
+  }
+
+  void _kitchenNoteDialog(BuildContext context) {
+    return customAlertDialog(
+      context: context,
+      child: SizedBox(
+        width: 400,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const MyCustomText('Add Kitchen Note'),
+                IconButton(
+                  onPressed: Get.back,
+                  icon: const Icon(FontAwesomeIcons.xmark, size: 16),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            CustomTextField(
+              controller: PosController.to.kitchenNoteTEC,
+              hintText: 'Kitchen Note',
+              maxLines: 5,
+            ),
+            const SizedBox(height: 14),
+            PrimaryBtn(
+              onPressed: Get.back,
+              text: 'Submit',
+              textColor: Colors.white,
+            )
+          ],
+        ),
+      ),
     );
   }
 
   //** cart **
   Widget _cartArea(ThemeData theme) {
     return Container(
+      width: 400,
       decoration: BoxDecoration(
         color: theme.cardColor,
-        border: Border.all(color: Colors.white),
+        // border: Border.all(color: Colors.white),
       ),
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: GetBuilder<TablesController>(builder: (c) {
+                    return MyDropdownBtn(
+                      hintText: 'Select Table',
+                      data: c.availableTablesIdNumber
+                          .map((e) => DropdownMenuItem<String>(
+                                value: e.keys.first,
+                                child: MyCustomText(e.values.first),
+                              ))
+                          .toList(),
+                      selectedValue: c.selectedTableId,
+                      onChanged: c.updateSelectedTableId,
+                    );
+                  }),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: GetBuilder<TablesController>(builder: (c) {
+                    return MyDropdownBtn(
+                      hintText: 'Select Bar',
+                      data: c.availableBarsIdNumber
+                          .map((e) => DropdownMenuItem<String>(
+                                value: e.keys.first,
+                                child: MyCustomText(e.values.first),
+                              ))
+                          .toList(),
+                      selectedValue: c.selectedBarId,
+                      onChanged: c.updateSelectedBarId,
+                    );
+                  }),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: GetBuilder<TablesController>(builder: (c) {
+              return MyDropdownBtn(
+                hintText: 'Number of Guests',
+                data: c.guestNumbers
+                    .map((e) => DropdownMenuItem<String>(
+                          value: e,
+                          child: MyCustomText(e),
+                        ))
+                    .toList(),
+                selectedValue: c.selectedGuestNumbers,
+                onChanged: c.updatedSelectedGuestNumbers,
+              );
+            }),
+          ),
           Expanded(
             child: GetBuilder<PosController>(
-              builder: (controller) => ListView.builder(
+              builder: (c) => ListView.builder(
+                  controller: c.cartListScrollController,
                   shrinkWrap: true,
-                  itemCount: controller.cartList.length,
+                  itemCount: c.cartList.length,
                   itemBuilder: (context, index) {
-                    var data = controller.cartList[index];
+                    var data = c.cartList[index];
                     return CartItem(
                       title: data.name ?? "",
                       description: data.description ?? "",
                       amount: data.price * data.quantity,
                       quantity: data.quantity,
                       onDecrement: () {
-                        controller.quantityUpdateWithCartListIndex(index,
+                        c.quantityUpdateWithCartListIndex(index,
                             isIncriment: false);
                       },
                       onIncrement: () {
-                        controller.quantityUpdateWithCartListIndex(index,
+                        c.quantityUpdateWithCartListIndex(index,
                             isIncriment: true);
                       },
                       onRemove: () {
-                        controller.onRemoveCartItemWithIndex(index);
+                        c.onRemoveCartItemWithIndex(index);
                       },
                     );
                   }),
@@ -92,11 +282,35 @@ class PosPage extends GetView<PosController> {
           ),
           // amount
           const Divider(),
-          _row(theme, title: "Subtotal :", value: "\$00"),
-          _row(theme, title: "GST 5% :", value: "\$00"),
-          _row(theme, title: "PST 10% :", value: "\$00"),
+          Obx(
+            () => _row(
+              theme,
+              title: "Subtotal : ",
+              value: "\$${controller.cartSubTotalPrice.toStringAsFixed(2)}",
+            ),
+          ),
+          Obx(
+            () => _row(
+              theme,
+              title: "GST 5% : ",
+              value: "\$${controller.cartGSTAmount.toStringAsFixed(2)}",
+            ),
+          ),
+          Obx(
+            () => _row(
+              theme,
+              title: "PST 10% : ",
+              value: "\$${controller.cartPSTAmount.toStringAsFixed(2)}",
+            ),
+          ),
           const Divider(),
-          _row(theme, title: "Total :", value: "\$00", fontSize: 20),
+          Obx(
+            () => _row(
+              theme,
+              title: "Total : ",
+              value: "\$${controller.cartTotalAmount.toStringAsFixed(2)}",
+            ),
+          ),
           // order btn
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -104,7 +318,7 @@ class PosPage extends GetView<PosController> {
               children: [
                 Expanded(
                   child: PrimaryBtn(
-                    onPressed: () {},
+                    onPressed: controller.postPlaceOrder,
                     height: 48,
                     color: StaticColors.greenColor,
                     textColor: Colors.white,
@@ -114,7 +328,7 @@ class PosPage extends GetView<PosController> {
                 const SizedBox(width: 20),
                 Expanded(
                   child: PrimaryBtn(
-                    onPressed: () {},
+                    onPressed: controller.clearCartList,
                     height: 48,
                     color: theme.colorScheme.error,
                     textColor: Colors.white,
@@ -149,6 +363,23 @@ class PosPage extends GetView<PosController> {
           ),
         ],
       ),
+    );
+  }
+
+  PrimaryBtn _popupPrimaryBtn(
+      {required VoidCallback onPressed,
+      required String text,
+      required bool isSelected}) {
+    return PrimaryBtn(
+      onPressed: onPressed,
+      width: double.infinity,
+      text: text,
+      isOutline: true,
+      color: isSelected
+          ? StaticColors.blueColor
+          : Theme.of(Get.context!).scaffoldBackgroundColor,
+      borderColor:
+          isSelected ? StaticColors.blueColor : StaticColors.greenColor,
     );
   }
 }

@@ -1,53 +1,112 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 // import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/utils/my_formatter.dart';
+import 'package:flutter_base/app/utils/urls.dart';
 import 'package:get/get.dart';
+
+import '../../../utils/logger.dart';
+import '../models/table_model.dart';
 
 class TablesController extends GetxController {
   static TablesController get to => Get.find();
+  bool isShowOrderDetails = false;
+  void updateIsShowOrderDetails(bool value) {
+    isShowOrderDetails = value;
+    update();
+  }
+
   RxInt selectedTableIndex = 0.obs;
   void updateSelectedTableIndex(int value) {
     selectedTableIndex.value = value;
   }
 
-  List<TableModel> tablesList = [];
-  List<TableModel> barList = [];
-  List<TableModel> hallList = [];
-  void getTables() {
-    for (int i = 1; i <= 20; i++) {
-      bool isBooked = Random().nextBool();
-      tablesList.add(
-        TableModel(
-          tableNo: 'T$i',
-          isBooked: isBooked,
-        ),
-      );
+  RxList<TableModel> tablesList = <TableModel>[].obs;
+
+  void getTables() async {
+    try {
+      var res = await Dio().get(URLS.tableList);
+      if (res.statusCode == 200) {
+        tablesList.assignAll(
+          (res.data as List).map((e) => TableModel.fromJson(e)).toList(),
+        );
+
+        availableTablesIdNumber = getAvailableList(tablesList);
+      }
+    } catch (e) {
+      kLogger.e('Error from %%%% get tables %%%% => $e');
     }
   }
 
-  void getBars() {
-    for (int i = 1; i <= 10; i++) {
-      bool isBooked = Random().nextBool();
-      barList.add(
-        TableModel(
-          tableNo: 'B$i',
-          isBooked: isBooked,
-        ),
-      );
+  RxList<TableModel> barsList = <TableModel>[].obs;
+
+  void getBars() async {
+    try {
+      var res = await Dio().get(URLS.barList);
+      if (res.statusCode == 200) {
+        barsList.assignAll(
+          (res.data as List).map((e) => TableModel.fromJson(e)).toList(),
+        );
+
+        availableBarsIdNumber = getAvailableList(barsList);
+      }
+    } catch (e) {
+      kLogger.e('Error from %%%% get bars %%%% => $e');
     }
   }
 
-  void getHalls() {
-    for (int i = 1; i <= 14; i++) {
-      bool isBooked = Random().nextBool();
-      hallList.add(
-        TableModel(
-          tableNo: 'H$i',
-          isBooked: isBooked,
-        ),
-      );
+  RxList<TableModel> hallsList = <TableModel>[].obs;
+  void getHalls() async {
+    try {
+      var res = await Dio().get(URLS.hallList);
+      if (res.statusCode == 200) {
+        hallsList.assignAll(
+          (res.data as List).map((e) => TableModel.fromJson(e)).toList(),
+        );
+      }
+    } catch (e) {
+      kLogger.e('Error from %%%% get halls %%%% => $e');
     }
+  }
+
+  List<Map<String, String>> availableTablesIdNumber = [];
+  String? selectedTableId;
+  void updateSelectedTableId(String? value) {
+    selectedTableId = value;
+    update();
+  }
+
+  List<Map<String, String>> availableBarsIdNumber = [];
+  String? selectedBarId;
+  void updateSelectedBarId(String? value) {
+    selectedBarId = value;
+    update();
+  }
+
+  bool isTableOrBarSelected() {
+    if (selectedBarId != null || selectedTableId != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  List<Map<String, String>> getAvailableList(List list) {
+    var values = list
+        .where((e) => e.status == 1) //available
+        .map((e) => {'${e.id}': '${e.number}'})
+        .toList();
+    update();
+    return values;
+  }
+
+  List<String> guestNumbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
+  String? selectedGuestNumbers;
+  void updatedSelectedGuestNumbers(String? value) {
+    selectedGuestNumbers = value;
+    update();
   }
 
   //*******ORDER ITEMS RECIEPTS******* */
@@ -74,6 +133,17 @@ class TablesController extends GetxController {
     orderReceiptsList.add(orderItemsList);
     update();
     orderItemsListTemporary = List.from(orderItemsList);
+  }
+
+  final List<String> branches = [
+    'Branch 1',
+    'Branch 2',
+    'Branch 3',
+  ];
+  String? selectedBranch;
+  void updateSelectedBranch(String? value) {
+    selectedBranch = value;
+    update();
   }
 
   List<OrderItemModel> orderItemsListSplit = [];
@@ -103,10 +173,24 @@ class TablesController extends GetxController {
     }
   }
 
-//Table Orders
-
   TextEditingController startDateTEC = TextEditingController();
+  updateStartDate(DateTime? date) {
+    if (date != null) {
+      startDateTEC.text =
+          MyFormatter.formatDate(date.toString().split(' ').first);
+      update();
+    }
+  }
+
   TextEditingController endDateTEC = TextEditingController();
+  updateEndDate(DateTime? date) {
+    if (date != null) {
+      endDateTEC.text =
+          MyFormatter.formatDate(date.toString().split(' ').first);
+      update();
+    }
+  }
+
   @override
   void onInit() {
     getTables();
@@ -118,10 +202,10 @@ class TablesController extends GetxController {
 }
 
 //temporary table model
-class TableModel {
+class TableModelTemp {
   String tableNo;
   bool isBooked;
-  TableModel({
+  TableModelTemp({
     required this.tableNo,
     required this.isBooked,
   });

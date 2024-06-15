@@ -217,7 +217,7 @@ class CustomDropdownTextField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(color: theme.hintColor)),
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
               // filled: true,
               // fillColor: theme.scaffoldBackgroundColor,
               focusColor: theme.scaffoldBackgroundColor,

@@ -11,16 +11,18 @@ class ClockInView extends GetView<ClockInController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
+        preferredHeight: 80,
         hasButtonsRow: false,
         isLeading: false,
         hasHomeButton: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Center(
         child: PrimaryBtn(
           onPressed: controller.clockIn,
-          height: 220,
-          width: 220,
+          height: 180,
+          width: 320,
           textMaxSize: 32,
           textMinSize: 24,
           text: 'CLOCK IN',

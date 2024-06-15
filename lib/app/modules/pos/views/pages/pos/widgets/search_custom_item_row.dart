@@ -41,7 +41,7 @@ class SearchAndCustomItemRow extends StatelessWidget {
         Expanded(
           flex: 2,
           child: CustomTextField(
-            hintText: 'Search product',
+            hintText: 'Search item',
             prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),
           ),
         ),

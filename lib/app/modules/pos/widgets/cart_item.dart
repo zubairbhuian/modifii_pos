@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_base/app/widgets/custom_inkwell.dart';
 import '../../../widgets/my_custom_text.dart';
@@ -39,99 +37,77 @@ class CartItem extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: [
                     MyCustomText(
                       title,
                       fontWeight: FontWeight.w700,
-                    ),
-                    const SizedBox(height: 2),
-                    MyCustomText(
-                      description,
-                      fontWeight: FontWeight.w600,
-                      color: theme.hintColor,
-                      fontSize: 14,
                       maxLines: 2,
-                    )
+                    ),
+                    // const SizedBox(height: 2),
+                    // MyCustomText(
+                    //   description,
+                    //   color: theme.hintColor,
+                    //   fontSize: 12,
+                    //   maxLines: 2,
+                    // )
                   ],
                 ),
               ),
+
+              const SizedBox(width: 4),
               // btns
               Row(
                 children: [
-                  CustomInkWell(
-                    onTap: onRemove,
-                    child: Icon(
-                      Icons.delete,
-                      color: theme.colorScheme.error,
-                      size: 22,
+                  PrimaryBtnWithChild(
+                    onPressed: onDecrement!,
+                    width: 32,
+                    height: 32,
+                    padding: const EdgeInsets.all(4),
+                    child: const Center(child: Icon(Icons.remove)),
+                  ),
+                  Container(
+                    width: 40,
+                    height: 28,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: theme.hintColor)),
+                    child: Center(
+                      child: MyCustomText(
+                        quantity.toString(),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 6.0),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 32,
-                        height: 32,
-                        child: OutLineBtn(
-                          onPressed: onDecrement!,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textColor: theme.hintColor,
-                          padding: EdgeInsets.zero,
-                          borderRadius: 4,
-                          child: const Icon(Icons.remove),
-                        ),
-                      ),
-                      Container(
-                        width: 40,
-                        height: 32,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(
-                              color: theme.hintColor,
-                            )),
-                        child: Center(
-                            child: Text(
-                          quantity.toString(),
-                          style: theme.textTheme.labelLarge?.copyWith(
-                              color: theme.hintColor,
-                              fontWeight: FontWeight.w600),
-                        )),
-                      ),
-                      SizedBox(
-                        width: 32,
-                        height: 32,
-                        child: OutLineBtn(
-                          onPressed: onIncrement!,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textColor: theme.hintColor,
-                          padding: EdgeInsets.zero,
-                          borderRadius: 4,
-                          child: const Icon(Icons.add),
-                        ),
-                      ),
-                    ],
-                  )
+                  PrimaryBtnWithChild(
+                    onPressed: onIncrement!,
+                    width: 32,
+                    height: 32,
+                    padding: const EdgeInsets.all(4),
+                    child: const Center(child: Icon(Icons.add)),
+                  ),
                 ],
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 4),
               // amount
               SizedBox(
                 width: 70,
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "\$$amount",
+                    "\$${amount.toStringAsFixed(2)}",
                     style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: StaticColors.yellowColor,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                ),
+              ),
+              const SizedBox(width: 4.0),
+              CustomInkWell(
+                onTap: onRemove,
+                child: Icon(
+                  Icons.delete,
+                  color: theme.colorScheme.error,
+                  size: 22,
                 ),
               ),
             ],

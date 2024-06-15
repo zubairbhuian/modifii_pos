@@ -20,92 +20,96 @@ class TableBody extends GetView<TablesController> {
       child: Column(
         children: [
           _title('Bar Area'),
-          GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 110,
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 2,
-            ),
-            itemCount: controller.barList.length,
-            itemBuilder: (context, index) {
-              return Obx(
-                () => Container(
-                  padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    color: controller.selectedTableIndex.value == index
-                        ? StaticColors.blueLightColor
-                        : Colors.transparent,
-                  ),
-                  child: PrimaryBtnWithChild(
-                    onPressed: () {
-                      controller.updateSelectedTableIndex(index);
-                    },
-                    height: 75,
-                    width: 75,
-                    padding: const EdgeInsets.all(10.0),
-                    color: controller.barList[index].isBooked
-                        ? StaticColors.yellowColor
-                        : StaticColors.greenColor,
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(color: Colors.white),
-                    // text: controller.tablesList[index].tableNo,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MyCustomText(
-                              controller.barList[index].tableNo,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
+          Obx(
+            () => GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 110,
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+              ),
+              itemCount: controller.barsList.length,
+              itemBuilder: (context, index) {
+                return Obx(
+                  () => Container(
+                    padding: const EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: controller.selectedTableIndex.value == index
+                          ? StaticColors.blueLightColor
+                          : Colors.transparent,
+                    ),
+                    child: PrimaryBtnWithChild(
+                      onPressed: () {
+                        controller.updateSelectedTableIndex(index);
+                      },
+                      height: 75,
+                      width: 75,
+                      padding: const EdgeInsets.all(10.0),
+                      color: controller.barsList[index].status == 2
+                          ? StaticColors.yellowColor
+                          : StaticColors.greenColor,
+                      style: theme.textTheme.titleLarge
+                          ?.copyWith(color: Colors.white),
+                      // text: controller.tablesList[index].tableNo,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MyCustomText(
+                                '${controller.barsList[index].number}',
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                              MyCustomText(
+                                '${controller.barsList[index].capacity}',
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          Visibility(
+                            visible: controller.barsList[index].status == 2,
+                            child: MyCustomText(
+                              'username',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                               color: Colors.white,
                             ),
-                            const MyCustomText(
-                              '16',
-                              fontSize: 10,
+                          ),
+                          Visibility(
+                            visible: controller.barsList[index].status == 2,
+                            child: MyCustomText(
+                              '\$34.99',
+                              fontSize: 12,
                               color: Colors.white,
                             ),
-                          ],
-                        ),
-                        Visibility(
-                          visible: controller.barList[index].isBooked,
-                          child: const MyCustomText(
-                            'username',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
                           ),
-                        ),
-                        Visibility(
-                          visible: controller.barList[index].isBooked,
-                          child: const MyCustomText(
-                            '\$34.99',
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           /*******Dine IN******** */
           _title('Dine-In Area'),
-          GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 110,
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 2,
-            ),
-            itemCount: controller.tablesList.length,
-            itemBuilder: (context, index) {
-              return Obx(
-                () => Container(
+          Obx(
+            () => GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 110,
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+              ),
+              itemCount: controller.tablesList.length,
+              itemBuilder: (context, index) {
+                return Container(
                   padding: const EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
                     color: controller.selectedTableIndex.value == index
@@ -119,7 +123,7 @@ class TableBody extends GetView<TablesController> {
                     height: 75,
                     width: 75,
                     padding: const EdgeInsets.all(10.0),
-                    color: controller.tablesList[index].isBooked
+                    color: controller.tablesList[index].status == 2
                         ? StaticColors.yellowColor
                         : StaticColors.greenColor,
                     style: theme.textTheme.titleLarge
@@ -132,20 +136,22 @@ class TableBody extends GetView<TablesController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             MyCustomText(
-                              controller.tablesList[index].tableNo,
+                              '${controller.tablesList[index].number}',
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
-                            const MyCustomText(
-                              '16',
+                            MyCustomText(
+                              '${controller.tablesList[index].capacity}',
                               fontSize: 10,
                               color: Colors.white,
                             ),
                           ],
                         ),
                         Visibility(
-                          visible: controller.tablesList[index].isBooked,
+                          visible:
+                              controller.tablesList[index].reservationType !=
+                                  null,
                           child: const MyCustomText(
                             'username',
                             fontSize: 12,
@@ -154,7 +160,9 @@ class TableBody extends GetView<TablesController> {
                           ),
                         ),
                         Visibility(
-                          visible: controller.tablesList[index].isBooked,
+                          visible:
+                              controller.tablesList[index].reservationType !=
+                                  null,
                           child: const MyCustomText(
                             '\$34.99',
                             fontSize: 12,
@@ -164,84 +172,87 @@ class TableBody extends GetView<TablesController> {
                       ],
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           /*******Hall Area******** */
           _title('Hall Area'),
-          GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 110,
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 2,
-            ),
-            itemCount: controller.hallList.length,
-            itemBuilder: (context, index) {
-              return Obx(
-                () => Container(
-                  padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    color: controller.selectedTableIndex.value == index
-                        ? StaticColors.blueLightColor
-                        : Colors.transparent,
-                  ),
-                  child: PrimaryBtnWithChild(
-                    onPressed: () {
-                      controller.updateSelectedTableIndex(index);
-                    },
-                    height: 75,
-                    width: 75,
-                    padding: const EdgeInsets.all(10.0),
-                    color: controller.tablesList[index].isBooked
-                        ? StaticColors.yellowColor
-                        : StaticColors.greenColor,
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(color: Colors.white),
-                    // text: controller.tablesList[index].tableNo,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MyCustomText(
-                              controller.hallList[index].tableNo,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
+          Obx(
+            () => GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 110,
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+              ),
+              itemCount: controller.hallsList.length,
+              itemBuilder: (context, index) {
+                return Obx(
+                  () => Container(
+                    padding: const EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: controller.selectedTableIndex.value == index
+                          ? StaticColors.blueLightColor
+                          : Colors.transparent,
+                    ),
+                    child: PrimaryBtnWithChild(
+                      onPressed: () {
+                        controller.updateSelectedTableIndex(index);
+                      },
+                      height: 75,
+                      width: 75,
+                      padding: const EdgeInsets.all(10.0),
+                      color: controller.hallsList[index].status == 2
+                          ? StaticColors.yellowColor
+                          : StaticColors.greenColor,
+                      style: theme.textTheme.titleLarge
+                          ?.copyWith(color: Colors.white),
+                      // text: controller.tablesList[index].tableNo,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MyCustomText(
+                                '${controller.hallsList[index].number}',
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                              MyCustomText(
+                                '${controller.hallsList[index].capacity}',
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          const Visibility(
+                            visible: false,
+                            child: MyCustomText(
+                              'username',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                               color: Colors.white,
                             ),
-                            const MyCustomText(
-                              '16',
-                              fontSize: 10,
+                          ),
+                          const Visibility(
+                            visible: false,
+                            child: MyCustomText(
+                              '\$34.99',
+                              fontSize: 12,
                               color: Colors.white,
                             ),
-                          ],
-                        ),
-                        Visibility(
-                          visible: controller.hallList[index].isBooked,
-                          child: const MyCustomText(
-                            'username',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
                           ),
-                        ),
-                        Visibility(
-                          visible: controller.hallList[index].isBooked,
-                          child: const MyCustomText(
-                            '\$34.99',
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ],
       ),

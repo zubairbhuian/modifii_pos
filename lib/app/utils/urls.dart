@@ -1,13 +1,17 @@
 class URLS {
+  URLS._();
   // ***** Base URL
-  static String baseURL = 'https://staging.modifii.com';
+  static String baseURL = 'https://staging.modifii.com/api/v1';
 
-  
   //** end popint **
-  static String login = '$baseURL/api/v1/server/login';
-  static String categories = '$baseURL/api/v1/server/categories';
-  static String products = '$baseURL/api/v1/products/latest';
+  static String login = '$baseURL/server/login';
+  static String categories = '$baseURL/server/categories';
+  static String products = '$baseURL/products/latest';
+  static String placeOrder = '$baseURL/table/order/place';
 
+  static String tableList = '$baseURL/table/dine-in-area';
+  static String barList = '$baseURL/bars/list';
+  static String hallList = '$baseURL/table/hall-area';
 
-
+  static String ordersList = '$baseURL/table/order/list';
 }

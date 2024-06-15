@@ -23,7 +23,7 @@ class _MyTimeState extends State<MyTime> {
   @override
   Widget build(BuildContext context) {
     DateTime time = DateTime.now();
-    String formattedDate = DateFormat('E, MMM d, y').format(time);
+    String formattedDate = DateFormat('E, MMMM d, y').format(time);
 
     List<String> times = [
       DateFormat('hh').format(time),

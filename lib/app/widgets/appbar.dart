@@ -1,5 +1,6 @@
 import 'package:flutter_base/app/modules/clockIn/controllers/clock_in_controller.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
+import 'package:flutter_base/app/modules/pos/controllers/tables_controller.dart';
 import 'package:flutter_base/app/services/controller/config_controller.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_alert_dialog.dart';
@@ -18,6 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool hasButtonsRow;
   final bool hasLogoutBtn;
   final double? preferredHeight;
+  final Color? backgroundColor;
   final bool centerTitle;
 
   const CustomAppBar({
@@ -27,11 +29,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.hasHomeButton = true,
     this.hasLogoutBtn = true,
     this.preferredHeight,
+    this.backgroundColor,
     this.hasButtonsRow = true,
   });
 // Specify the desired height of the AppBar
   @override
-  Size get preferredSize => Size.fromHeight(preferredHeight ?? 148.0);
+  Size get preferredSize => Size.fromHeight(preferredHeight ?? 185.0);
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +45,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: centerTitle,
       leadingWidth: 80,
-      backgroundColor: theme.canvasColor,
+      backgroundColor: backgroundColor ?? theme.canvasColor,
       // foregroundColor: kTextColor,
       // titleTextStyle: kTitleLarge.copyWith(color: const Color(0xff2F2F2F)),
       // appbar leading
       // appbar title
       flexibleSpace: Container(
-        decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: theme.dividerColor))),
+        // decoration: BoxDecoration(
+        //     border: Border(bottom: BorderSide(color: theme.dividerColor))),
         width: double.infinity,
         child: Column(
           children: [
@@ -95,23 +98,64 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ).marginOnly(right: 20),
               SvgPicture.asset(
                 width: 200,
-                configController.isLightTheme
-                    ? 'assets/images/splash/logo_light.svg'
-                    : 'assets/images/splash/logo_dark.svg',
+                'assets/images/splash/yogo_logo.svg',
+                colorFilter: ColorFilter.mode(
+                  configController.isLightTheme ? Colors.black : Colors.white,
+                  BlendMode.srcIn,
+                ),
               ),
             ],
           ),
           Row(
             children: [
+              CustomInkWell(
+                onTap: configController.toggleTheme,
+                child: SvgPicture.asset(
+                  'assets/icons/theme.svg',
+                  height: 45,
+                  colorFilter: ColorFilter.mode(
+                      configController.isLightTheme
+                          ? Colors.black
+                          : Colors.white,
+                      BlendMode.srcIn),
+                ),
+              ),
+              const SizedBox(width: 18),
               Visibility(
                 visible: clockInController.timer?.isActive ?? false,
                 child: Row(
                   children: [
                     Obx(
-                      () => MyCustomText(
-                        clockInController.showClockInTimer(
-                            clockInController.secondsElapsed.value),
-                        fontSize: 20,
+                      () => SizedBox(
+                        height: 80,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount:
+                              clockInController.showClockInTimer().length,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              height: 28,
+                              width: 32,
+                              child: Center(
+                                child: MyCustomText(
+                                  clockInController.showClockInTimer()[index],
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (_, indes) {
+                            return const Center(
+                              child: MyCustomText(
+                                ':',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -158,23 +202,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               const SizedBox(width: 18),
-              CustomInkWell(
-                onTap: configController.toggleTheme,
-                child: SvgPicture.asset(
-                  'assets/icons/theme.svg',
-                  height: 45,
-                  colorFilter: ColorFilter.mode(
-                      configController.isLightTheme
-                          ? Colors.black
-                          : Colors.white,
-                      BlendMode.srcIn),
-                ),
-              ),
-              const SizedBox(width: 18),
+
               Visibility(
                 visible: hasLogoutBtn,
                 child: PrimaryBtn(
                   onPressed: () {
+                    ClockInController.to.clockOut();
                     Get.offAllNamed(AppPages.INITIAL);
                   },
                   text: 'Logout',
@@ -205,83 +238,115 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   //** buttons **
-  Widget _buttons(ThemeData theme) => Expanded(
-        child: ColoredBox(
-          color: theme.scaffoldBackgroundColor,
-          child: Row(
-            children: [
-              Obx(
-                () => Visibility(
-                  visible: PosController.to.isShowPos.value,
+  Widget _buttons(ThemeData theme) {
+    const double btnSize = 130;
+    const double txtMaxSize = 22;
+    const double txtMinSize = 18;
+    return Expanded(
+      child: ColoredBox(
+        color: theme.scaffoldBackgroundColor,
+        child: Row(
+          children: [
+            Obx(
+              () => Visibility(
+                visible: PosController.to.isShowPos.value,
+                replacement: const SizedBox(width: 16),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 10),
                   child: PrimaryBtn(
+                    width: btnSize,
+                    height: btnSize,
                     onPressed: () {
                       PosController.to.onchangePage(0);
                     },
                     color: StaticColors.greenColor,
                     textColor: Colors.white,
                     text: 'POS',
+                    textMaxSize: txtMaxSize,
+                    textMinSize: txtMinSize,
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
-              PrimaryBtn(
-                onPressed: () {
-                  // controller.getCategory(type: 'drinks');
-                },
-                color: StaticColors.yellowColor,
-                textColor: Colors.white,
-                text: 'ORDERS',
-              ),
-              const SizedBox(width: 10),
-              PrimaryBtn(
-                onPressed: () {
-                  PosController.to.onchangePage(1);
-                },
-                color: StaticColors.yellowColor,
-                textColor: Colors.white,
-                text: 'TABLE\nORDERS',
-              ),
-              const SizedBox(width: 10),
-              PrimaryBtn(
-                onPressed: () {
-                  PosController.to.onchangePage(2);
-                },
-                color: StaticColors.purpleColor,
-                textColor: Colors.white,
-                text: 'DINE-IN',
-              ),
-              const SizedBox(width: 10),
-              PrimaryBtn(
-                onPressed: () {},
-                color: StaticColors.purpleColor,
-                textColor: Colors.white,
-                text: 'BAR',
-              ),
-              const SizedBox(width: 10),
-              PrimaryBtn(
-                onPressed: () {},
-                color: StaticColors.blueColor,
-                textColor: Colors.white,
-                text: 'TAKEOUT',
-              ),
-              const SizedBox(width: 10),
-              PrimaryBtn(
-                onPressed: () {},
-                color: StaticColors.blueColor,
-                textColor: Colors.white,
-                text: 'Check\nSummery',
-              ),
-              const SizedBox(width: 10),
-              PrimaryBtn(
-                onPressed: () {
-                  // controller.getCategory(type: 'drinks');
-                },
-                color: StaticColors.greenColor,
-                textColor: Colors.white,
-                text: 'Cash\nOut',
-              ),
-            ],
-          ),
+            ),
+            PrimaryBtn(
+              width: btnSize,
+              height: btnSize,
+              onPressed: () {
+                // controller.getCategory(type: 'drinks');
+              },
+              color: StaticColors.yellowColor,
+              textColor: Colors.white,
+              text: 'ORDERS',
+              textMaxSize: txtMaxSize,
+              textMinSize: txtMinSize,
+            ),
+            const SizedBox(width: 10),
+            PrimaryBtn(
+              width: btnSize,
+              height: btnSize,
+              onPressed: () {
+                TablesController.to.updateIsShowOrderDetails(false);
+                PosController.to.onchangePage(1);
+              },
+              color: StaticColors.yellowColor,
+              textColor: Colors.white,
+              text: 'DINE-IN\nORDERS',
+              textMaxSize: txtMaxSize,
+              textMinSize: txtMinSize,
+            ),
+            const SizedBox(width: 10),
+            PrimaryBtn(
+              width: btnSize,
+              height: btnSize,
+              onPressed: () {
+                PosController.to.onchangePage(2);
+              },
+              color: StaticColors.purpleColor,
+              textColor: Colors.white,
+              text: 'DINE-IN',
+              textMaxSize: txtMaxSize,
+              textMinSize: txtMinSize,
+            ),
+            const SizedBox(width: 10),
+            PrimaryBtn(
+              width: btnSize,
+              height: btnSize,
+              onPressed: () {},
+              color: StaticColors.blueColor,
+              textColor: Colors.white,
+              text: 'TAKEOUT',
+              textMaxSize: txtMaxSize,
+              textMinSize: txtMinSize,
+            ),
+            const SizedBox(width: 10),
+            const Spacer(),
+            PrimaryBtn(
+              width: btnSize,
+              height: btnSize,
+              onPressed: () {},
+              color: StaticColors.blueColor,
+              textColor: Colors.white,
+              text: 'Check\nSummery',
+              textMaxSize: txtMaxSize,
+              textMinSize: txtMinSize,
+            ),
+            const SizedBox(width: 10),
+            PrimaryBtn(
+              width: btnSize,
+              height: btnSize,
+              onPressed: () {
+                // controller.getCategory(type: 'drinks');
+              },
+              color: StaticColors.greenColor,
+              textColor: Colors.white,
+              text: 'Cash\nOut',
+              textMaxSize: txtMaxSize,
+              textMinSize: txtMinSize,
+            ),
+            const SizedBox(width: 16),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

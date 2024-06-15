@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/table_order/table_order_page.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/tables_page.dart';
@@ -12,13 +13,14 @@ class PosView extends GetView<PosController> {
   Widget build(BuildContext context) {
     // ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: const CustomAppBar(),
+      // appBar: const CustomAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: PageView(
           controller: controller.pageController,
           onPageChanged: (value) {},
           children: const [
+            // TableOrderPage(),
             PosPage(),
             TableOrderPage(),
             TablesPage(),

@@ -9,6 +9,7 @@ class MyCustomText extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
   final FontStyle? fontStyle;
+  final double? height;
 
   const MyCustomText(
     this.text, {
@@ -19,6 +20,7 @@ class MyCustomText extends StatelessWidget {
     this.overflow,
     this.maxLines,
     this.fontStyle,
+    this.height,
     super.key,
   });
 
@@ -26,12 +28,12 @@ class MyCustomText extends StatelessWidget {
   Widget build(BuildContext context) => Text(
         text,
         textAlign: textAlign ?? TextAlign.start,
-        overflow: overflow,
+        overflow: overflow ?? TextOverflow.ellipsis,
         maxLines: maxLines,
         style: TextStyle(
           color: color ?? Theme.of(context).colorScheme.background,
           fontSize: fontSize ?? 16,
-          height: 1,
+          height: height ?? 1,
           fontWeight: fontWeight ?? FontWeight.w400,
           fontStyle: fontStyle ?? FontStyle.normal,
         ),
