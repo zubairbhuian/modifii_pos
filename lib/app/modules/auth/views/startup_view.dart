@@ -33,10 +33,14 @@ class StartupView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
-                    width: 255,
-                    ConfigController.to.isLightTheme
-                        ? 'assets/images/splash/logo_light.svg'
-                        : 'assets/images/splash/logo_dark.svg',
+                    width: 225,
+                    'assets/images/splash/yogo_logo.svg',
+                    colorFilter: ColorFilter.mode(
+                      ConfigController.to.isLightTheme
+                          ? Colors.black
+                          : Colors.white,
+                      BlendMode.srcIn,
+                    ),
                   ),
                   CustomInkWell(
                     onTap: ConfigController.to.toggleTheme,

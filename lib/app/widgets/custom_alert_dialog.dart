@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 void customAlertDialog({
   required BuildContext context,
   required Widget child,
+  // EdgeInsetsGeometry? titlePadding,
+  EdgeInsetsGeometry? contentPadding,
 }) {
   showGeneralDialog(
     context: context,
@@ -20,9 +22,9 @@ void customAlertDialog({
           child: AlertDialog(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             surfaceTintColor: Colors.transparent,
-            titlePadding:
-                const EdgeInsets.only(left: 0, top: 32, right: 0, bottom: 16),
-            contentPadding:
+            // titlePadding: titlePadding ??
+            //     const EdgeInsets.only(left: 0, top: 32, right: 0, bottom: 16),
+            contentPadding: contentPadding ??
                 const EdgeInsets.only(left: 16, top: 26, right: 16, bottom: 16),
             content: child,
             shape: OutlineInputBorder(

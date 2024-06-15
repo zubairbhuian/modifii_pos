@@ -24,11 +24,12 @@ class ClockInController extends GetxController {
     Get.offAllNamed(Routes.CLOCK_IN);
   }
 
-  String showClockInTimer(int seconds) {
-    final hours = (seconds ~/ 3600).toString().padLeft(2, '0');
-    final minutes = ((seconds % 3600) ~/ 60).toString().padLeft(2, '0');
-    final secs = (seconds % 60).toString().padLeft(2, '0');
-    return "$hours:$minutes:$secs";
+  List<String> showClockInTimer() {
+    final hours = (secondsElapsed ~/ 3600).toString().padLeft(2, '0');
+    final minutes = ((secondsElapsed % 3600) ~/ 60).toString().padLeft(2, '0');
+    final secs = (secondsElapsed % 60).toString().padLeft(2, '0');
+    // return "$hours:$minutes:$secs";
+    return [hours, minutes, secs];
   }
 
   @override

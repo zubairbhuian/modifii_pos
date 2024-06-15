@@ -47,8 +47,10 @@ class CategoryBody extends GetView<PosController> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: data.length,
           itemBuilder: (context, index) => PrimaryBtn(
+            height: 65,
             onPressed: () {
               controller.findProductsByCategoryId(data[index].id.toString());
+              FocusScope.of(context).unfocus();
             },
             color: MyFunc.productColor(data[index].type),
             style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),

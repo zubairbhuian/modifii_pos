@@ -36,8 +36,8 @@ class PrimaryBtn extends StatelessWidget {
     this.padding,
     this.side,
     this.isOutline = false,
-    this.textMaxSize = 18,
-    this.textMinSize = 14,
+    this.textMaxSize = 14,
+    this.textMinSize = 12,
   });
 
   void playTapSound() {
@@ -48,7 +48,7 @@ class PrimaryBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return SizedBox(
-      height: height ?? 48,
+      height: height ?? 55,
       width: width ?? 120,
       child: ElevatedButton(
         onPressed: () {
@@ -63,8 +63,7 @@ class PrimaryBtn extends StatelessWidget {
                 // disabledForegroundColor: kDisabledTextColor,
                 backgroundColor: color ?? theme.primaryColor,
                 foregroundColor: Colors.white,
-                padding: padding ??
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: padding ?? const EdgeInsets.all(2.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),
@@ -83,8 +82,7 @@ class PrimaryBtn extends StatelessWidget {
                 backgroundColor: color ?? theme.scaffoldBackgroundColor,
                 foregroundColor: color ?? StaticColors.greenLightColor,
                 // splashFactory: NoSplash.splashFactory,
-                padding: padding ??
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: padding ?? const EdgeInsets.all(2.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),
@@ -229,8 +227,7 @@ class PrimaryBtnWithChild extends StatelessWidget {
                 // disabledForegroundColor: kDisabledTextColor,
                 backgroundColor: color ?? theme.primaryColor,
                 foregroundColor: textColor ?? Colors.white,
-                padding: padding ??
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: padding ?? const EdgeInsets.all(2.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),
@@ -249,8 +246,7 @@ class PrimaryBtnWithChild extends StatelessWidget {
                 backgroundColor: color ?? theme.scaffoldBackgroundColor,
                 foregroundColor: borderColor ?? StaticColors.greenLightColor,
                 // splashFactory: NoSplash.splashFactory,
-                padding: padding ??
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: padding ?? const EdgeInsets.all(2.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius ?? 0),
                 ),

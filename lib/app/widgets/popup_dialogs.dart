@@ -12,7 +12,7 @@ class PopupDialog {
       behavior: SnackBarBehavior.floating,
       width: 300,
       backgroundColor: Theme.of(Get.context!).primaryColorLight,
-      content: MyCustomText(message),
+      content: Center(child: MyCustomText(message)),
     );
     ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
   }
@@ -24,8 +24,8 @@ class PopupDialog {
       width: 300,
       behavior: SnackBarBehavior.floating,
       dismissDirection: DismissDirection.up,
-      backgroundColor: Colors.red,
-      content: Text(message),
+      backgroundColor: Colors.redAccent,
+      content: Center(child: MyCustomText(message, color: Colors.white)),
     );
     ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
   }
@@ -106,14 +106,14 @@ class PopupDialog {
                         child: Icon(
                           Icons.close,
                           color: Theme.of(context).focusColor,
-                          size: 18,
+                          size: 30,
                         ),
                       ),
                     ),
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, right: 26, bottom: 20),
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: child,
                   ),
                 ],

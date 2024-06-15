@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_base/app/routes/app_pages.dart';
 import 'package:flutter_base/app/utils/logger.dart';
@@ -9,6 +8,14 @@ import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   static AuthController get to => Get.find();
+
+  //splash screen
+  RxBool isShowSplashScreen = true.obs;
+  void hideSplashScreen() {
+    Timer(const Duration(milliseconds: 2500), () {
+      isShowSplashScreen.value = false;
+    });
+  }
 
   //Hide Password pad on inactivity
   Timer? inactivityTimer;
@@ -34,7 +41,7 @@ class AuthController extends GetxController {
   }
 
   RxString password = "".obs;
-  RxInt passwordLength = 6.obs;
+  RxInt passwordLength = 3.obs;
   List<String> numberList = [
     "1",
     "2",
@@ -49,11 +56,13 @@ class AuthController extends GetxController {
     "0",
     "*",
   ];
+
   // **** Login *****
   void login() async {
-    if (password.value.length == passwordLength.value) {
+    if (password.value.length >= passwordLength.value) {
       Map<String, dynamic> data = {"auth_pin": password.value};
       try {
+        kLogger.i('auth: $data');
         PopupDialog.showLoadingDialog();
         // var res = await BaseController.to.apiService
         //     .makePostRequest("${URLS.baseURL}${URLS.login}", data);
@@ -61,8 +70,7 @@ class AuthController extends GetxController {
         // kLogger.d(res.data);
         // PopupDialog.closeLoadingDialog();
         if (res.statusCode == 200 || res.statusCode == 201) {
-          Get.offAllNamed(Routes.CLOCK_IN);
-          PopupDialog.showSuccessDialog("Login success");
+          Get.offAllNamed(Routes.POS);
         } else {
           PopupDialog.showErrorMessage("password is not valid");
         }
@@ -72,7 +80,8 @@ class AuthController extends GetxController {
         PopupDialog.closeLoadingDialog();
       }
     } else {
-      PopupDialog.showErrorMessage("The password should be 6 character");
+      PopupDialog.showErrorMessage(
+          "The password should be ${passwordLength.value} character");
     }
   }
 
@@ -87,5 +96,11 @@ class AuthController extends GetxController {
       password.value += characterToAdd;
       // kLogger.e(password.value);
     }
+  }
+
+  @override
+  void onInit() {
+    hideSplashScreen();
+    super.onInit();
   }
 }

@@ -1,7 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
+import 'package:flutter_base/app/widgets/my_scale_animation.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
@@ -15,36 +17,76 @@ class AuthView extends GetView<AuthController> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Obx(
-        () => Stack(
-          alignment: Alignment.center,
-          children: [
-            StartupView(
-              onTap: () => controller.toggleStartup(false),
-              isOnTop: controller.isStartup.value,
-            ),
-            AnimatedOpacity(
-              opacity: controller.isStartup.value ? 0 : 1,
-              duration: const Duration(milliseconds: 300),
-              child: IgnorePointer(
-                ignoring: controller.isStartup.value,
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.20,
-                  height: MediaQuery.sizeOf(context).height * 0.85,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // password display
-                      _passwordDisplay(theme),
-                      const SizedBox(height: 14),
-                      // keybord area
-                      _customKeybord(theme),
-                    ],
-                  ),
+        () => AnimatedSwitcher(
+          duration: const Duration(milliseconds: 800),
+          child: !controller.isShowSplashScreen.value
+              ? _authView(context, theme)
+              : _splashView(context),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          // replacement: _splashView(context),
+          // child: _authView(context, theme),
+        ),
+      ),
+    );
+  }
+
+  Center _splashView(BuildContext context) {
+    return Center(
+      child: MyScaleAnimation(
+        startSize: 0,
+        endSize: MediaQuery.sizeOf(context).width * 0.75,
+        duration: 2750,
+        child: SvgPicture.asset(
+          'assets/images/splash/yogo_logo.svg',
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).colorScheme.background,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
+      // child: Image.asset(
+      //   'assets/images/splash/yogo_logo.jpeg',
+      //   width: MediaQuery.sizeOf(context).width * 0.6,
+      // ),
+    );
+  }
+
+  Obx _authView(BuildContext context, ThemeData theme) {
+    return Obx(
+      () => Stack(
+        alignment: Alignment.center,
+        children: [
+          StartupView(
+            onTap: () => controller.toggleStartup(false),
+            isOnTop: controller.isStartup.value,
+          ),
+          AnimatedOpacity(
+            opacity: controller.isStartup.value ? 0 : 1,
+            duration: const Duration(milliseconds: 300),
+            child: IgnorePointer(
+              ignoring: controller.isStartup.value,
+              child: SizedBox(
+                width: MediaQuery.sizeOf(context).width * 0.20,
+                height: MediaQuery.sizeOf(context).height * 0.85,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // password display
+                    _passwordDisplay(theme),
+                    const SizedBox(height: 14),
+                    // keybord area
+                    _customKeybord(theme),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -65,7 +107,7 @@ class AuthView extends GetView<AuthController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
-              controller.passwordLength.value,
+              6, //controller.passwordLength.value,
               (index) => CircleAvatar(
                     backgroundColor:
                         index + 1 > controller.password.value.length

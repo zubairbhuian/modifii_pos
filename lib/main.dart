@@ -16,29 +16,58 @@ import 'app/services/base/dio_interceptor.dart';
 import 'app/services/base/preferences.dart';
 import 'app/services/bindings/base_binding.dart';
 import 'app/routes/app_pages.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'app/utils/notification_helper.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: 'apiKey',
+          appId: 'appId',
+          messagingSenderId: 'messagingSenderId',
+          projectId: 'projectId'));
+
+  int? orderID;
+  try {
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+      orderID = notificationAppLaunchDetails?.notificationResponse?.payload !=
+              null
+          ? int.parse(
+              '${notificationAppLaunchDetails?.notificationResponse?.payload}')
+          : null;
+    }
+    await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
+    FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+  } catch (e) {}
   // Must add this line.
-  await windowManager.ensureInitialized();
+  // await windowManager.ensureInitialized();
   //hive init
   // init hive and adapters
 
-  WindowOptions windowOptions = const WindowOptions(
-    // size: Size(1250, 673),
-    minimumSize: Size(1250, 673),
-    center: true,
-    backgroundColor: Colors.transparent,
-    // fullScreen: true,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.normal,
-  );
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
+  // WindowOptions windowOptions = const WindowOptions(
+  //   // size: Size(1250, 673),
+  //   minimumSize: Size(1250, 673),
+  //   center: true,
+  //   backgroundColor: Colors.transparent,
+  //   // fullScreen: true,
+  //   skipTaskbar: false,
+  //   titleBarStyle: TitleBarStyle.normal,
+  // );
+  // windowManager.waitUntilReadyToShow(windowOptions, () async {
+  //   await windowManager.show();
+  //   await windowManager.focus();
+  // });
 
   //Native Splash
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -47,7 +76,11 @@ Future<void> main() async {
 
   /// mobile orientation off
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+      [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+
+  //fullscreen
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   // Status Bar Color
   // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
   //   statusBarColor: kPrimaryColor,
@@ -67,14 +100,16 @@ Future<void> main() async {
   final apiService = ApiService(dio: dio);
 
   /// Add the dio instance to the bindings
-  runApp(MyApp(apiService: apiService));
+  runApp(MyApp(apiService: apiService, orderID: orderID));
 }
 
 class MyApp extends StatelessWidget {
   final ApiService apiService;
+  final int? orderID;
   const MyApp({
     super.key,
     required this.apiService,
+    required this.orderID,
   });
 
   @override

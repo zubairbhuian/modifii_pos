@@ -106,6 +106,7 @@ class _CustomOrderDialogOptionsState extends State<CustomOrderDialogOptions> {
                     controller: _priceController,
                     maxLines: 1,
                     isFilled: true,
+                    keyboardType: TextInputType.number,
                     onChange: (value) {
                       onCalculatTotalPrice(value);
                     },
@@ -203,26 +204,32 @@ class _CustomOrderDialogOptionsState extends State<CustomOrderDialogOptions> {
         Center(
           child: PrimaryBtn(
             onPressed: () {
-              Cart item = Cart(
-                  id: "custom_food",
+              if (_nameController.text.isEmpty) {
+                PopupDialog.showErrorMessage("Name Field Is Required!");
+              } else if (_priceController.text.isEmpty) {
+                PopupDialog.showErrorMessage("Price Field Is Required!");
+              } else if (_descriptionController.text.isEmpty) {
+                PopupDialog.showErrorMessage("Description Field Is Required!");
+              } else {
+                Cart item = Cart(
+                  id: widget.productType,
                   name: _nameController.text,
                   description: _descriptionController.text,
-                  type: widget.productType,
+                  type: widget.productType == "custom_food" ? 'food' : 'drinks',
                   price: num.parse(_priceController.text),
-                  quantity: quantity);
-              if (_nameController.text.isEmpty) {
-                PopupDialog.showErrorMessage(
-                    "Name Field Is Required For ${widget.productType}");
-              } else if (_priceController.text.isEmpty) {
-                PopupDialog.showErrorMessage(
-                    "Price Field Is Required For ${widget.productType}");
-              } else if (_descriptionController.text.isEmpty) {
-                PopupDialog.showErrorMessage(
-                    "Description Field Is Required For ${widget.productType}");
-              } else {
+                  quantity: quantity,
+                  isLiquor: widget.productType == "custom_bar" ? 1 : 0,
+                  togo: '',
+                  dontMake: '',
+                  rush: '',
+                  heat: '',
+                  serveFirst: '',
+                  kitchenNote: '',
+                );
+
                 PosController.to.onAddCartItem(item);
                 Get.back();
-                PopupDialog.showSuccessDialog("Cart Items Added Successfully");
+                // PopupDialog.showSuccessDialog("Cart Items Added Successfully");
               }
             },
             text: 'Add',
