@@ -74,89 +74,74 @@ class PosPage extends GetView<PosController> {
 
   GetBuilder<PosController> _modifiersRow(BuildContext context) {
     return GetBuilder<PosController>(builder: (c) {
-      return Visibility(
-        visible: c.cartList.isNotEmpty,
-        replacement: const Center(
-          child: MyCustomText(
-            'Add\nitem\nto\ncart',
-            textAlign: TextAlign.center,
-            fontSize: 18,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            ...List.generate(
+              c.orderServeTypes.length,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: _popupPrimaryBtn(
+                  onPressed: () {
+                    c.setSelectedOrderTypesIndex2(index);
+                  },
+                  text: c.orderServeTypes[index],
+                  isSelected: c.selectedOrderServeTypesIndex == index,
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            _popupPrimaryBtn(
+              onPressed: () {
+                c.toggleOrderTypeSelection(isTogo: true);
+              },
+              text: 'TO GO',
+              isSelected: c.isTogoSelected,
+            ),
+            const SizedBox(height: 8),
+            _popupPrimaryBtn(
+              onPressed: () {
+                c.toggleOrderTypeSelection(isDontMake: true);
+              },
+              text: "DON'T MAKE",
+              isSelected: c.isDontMakeSelected,
+            ),
+            const SizedBox(height: 8),
+            _popupPrimaryBtn(
+              onPressed: () {
+                c.toggleOrderTypeSelection(isRush: true);
+              },
+              text: 'RUSH',
+              isSelected: c.isRushSelected,
+            ),
+            Column(children: [
+              const SizedBox(height: 18),
               ...List.generate(
-                c.orderServeTypes.length,
+                c.orderHeatModifiers.length,
                 (index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: _popupPrimaryBtn(
                     onPressed: () {
-                      c.setSelectedOrderTypesIndex2(index);
+                      c.setSelectedOrderModifiersIndex(index);
                     },
-                    text: c.orderServeTypes[index],
-                    isSelected: c.selectedOrderServeTypesIndex == index,
+                    text: c.orderHeatModifiers[index],
+                    isSelected: c.selectedOrderHeatModifiersIndex == index,
                   ),
                 ),
               ),
-              const SizedBox(height: 18),
-              _popupPrimaryBtn(
+            ]),
+            const SizedBox(height: 18),
+            _popupPrimaryBtn(
                 onPressed: () {
-                  c.toggleOrderTypeSelection(isTogo: true);
+                  _kitchenNoteDialog(context);
                 },
-                text: 'TO GO',
-                isSelected: c.isTogoSelected,
-              ),
-              const SizedBox(height: 8),
-              _popupPrimaryBtn(
-                onPressed: () {
-                  c.toggleOrderTypeSelection(isDontMake: true);
-                },
-                text: "DON'T MAKE",
-                isSelected: c.isDontMakeSelected,
-              ),
-              const SizedBox(height: 8),
-              _popupPrimaryBtn(
-                onPressed: () {
-                  c.toggleOrderTypeSelection(isRush: true);
-                },
-                text: 'RUSH',
-                isSelected: c.isRushSelected,
-              ),
-              if (c.cartList.isNotEmpty)
-                Visibility(
-                  visible: c.cartList.last.type != 'drinks',
-                  child: Column(children: [
-                    const SizedBox(height: 18),
-                    ...List.generate(
-                      c.orderHeatModifiers.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: _popupPrimaryBtn(
-                          onPressed: () {
-                            c.setSelectedOrderModifiersIndex(index);
-                          },
-                          text: c.orderHeatModifiers[index],
-                          isSelected:
-                              c.selectedOrderHeatModifiersIndex == index,
-                        ),
-                      ),
-                    ),
-                  ]),
-                ),
-              const SizedBox(height: 18),
-              if (c.cartList.isNotEmpty)
-                _popupPrimaryBtn(
-                  onPressed: () {
-                    _kitchenNoteDialog(context);
-                  },
-                  text: 'KITCHEN NOTE',
-                  isSelected: c.cartList.last.kitchenNote?.isEmpty ?? false
-                      ? false
-                      : true,
-                ),
-            ],
-          ),
+                text: 'KITCHEN NOTE',
+                isSelected: c.cartList.isNotEmpty
+                    ? c.cartList.last.kitchenNote == ""
+                        ? false
+                        : true
+                    : false),
+          ],
         ),
       );
     });
@@ -223,7 +208,7 @@ class PosPage extends GetView<PosController> {
                       data: c.availableTablesIdNumber
                           .map((e) => DropdownMenuItem<String>(
                                 value: e.keys.first,
-                                child: MyCustomText(e.values.first),
+                                child: MyCustomText('Table ${e.values.first}'),
                               ))
                           .toList(),
                       selectedValue: c.selectedTableId,

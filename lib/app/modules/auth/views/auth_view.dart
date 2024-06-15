@@ -15,7 +15,8 @@ class AuthView extends GetView<AuthController> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      // backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: Colors.black,
       body: Obx(
         () => AnimatedSwitcher(
           duration: const Duration(milliseconds: 800),
@@ -44,7 +45,7 @@ class AuthView extends GetView<AuthController> {
         child: SvgPicture.asset(
           'assets/images/splash/yogo_logo.svg',
           colorFilter: ColorFilter.mode(
-            Theme.of(context).colorScheme.background,
+            Colors.white,
             BlendMode.srcIn,
           ),
         ),
@@ -96,10 +97,10 @@ class AuthView extends GetView<AuthController> {
       height: 100,
       padding: const EdgeInsets.symmetric(horizontal: 26),
       decoration: BoxDecoration(
-          color: theme.canvasColor,
+          color: Color(0xff191919),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: theme.colorScheme.background,
+            color: Color(0xffEDF2F7),
             width: 1.75,
           )),
       child: Obx(
@@ -112,7 +113,7 @@ class AuthView extends GetView<AuthController> {
                     backgroundColor:
                         index + 1 > controller.password.value.length
                             ? Colors.transparent
-                            : theme.colorScheme.background,
+                            : Color(0xffEDF2F7),
                     radius: 10,
                   )),
         ),
@@ -159,15 +160,15 @@ class AuthView extends GetView<AuthController> {
                           ? controller.numberList.length - 1 == index
                               ? const Color(0xff118A00)
                               : const Color(0xffFD571A)
-                          : theme.canvasColor,
-                      foregroundColor: theme.dividerColor,
+                          : Color(0xff191919),
+                      foregroundColor: Color(0xff5B636B),
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
                       // ****** Border color *******
                       side: BorderSide(
-                        color: theme.colorScheme.background,
+                        color: Color(0xffEDF2F7),
                         width: 1.75,
                       ),
                     ),
@@ -181,6 +182,7 @@ class AuthView extends GetView<AuthController> {
                             controller.numberList[index],
                             fontSize: 42,
                             fontWeight: FontWeight.w700,
+                            color: Colors.white,
                           ),
                   ),
                 ),

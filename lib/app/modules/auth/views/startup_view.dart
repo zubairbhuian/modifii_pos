@@ -36,24 +36,22 @@ class StartupView extends StatelessWidget {
                     width: 225,
                     'assets/images/splash/yogo_logo.svg',
                     colorFilter: ColorFilter.mode(
-                      ConfigController.to.isLightTheme
-                          ? Colors.black
-                          : Colors.white,
+                      Colors.white,
                       BlendMode.srcIn,
                     ),
                   ),
-                  CustomInkWell(
-                    onTap: ConfigController.to.toggleTheme,
-                    child: SvgPicture.asset(
-                      'assets/icons/theme.svg',
-                      height: 55,
-                      colorFilter: ColorFilter.mode(
-                          ConfigController.to.isLightTheme
-                              ? Colors.black
-                              : Colors.white,
-                          BlendMode.srcIn),
-                    ),
-                  ),
+                  // CustomInkWell(
+                  //   onTap: ConfigController.to.toggleTheme,
+                  //   child: SvgPicture.asset(
+                  //     'assets/icons/theme.svg',
+                  //     height: 55,
+                  //     colorFilter: ColorFilter.mode(
+                  //         ConfigController.to.isLightTheme
+                  //             ? Colors.black
+                  //             : Colors.white,
+                  //         BlendMode.srcIn),
+                  //   ),
+                  // ),
                 ],
               ),
               Center(
@@ -74,6 +72,7 @@ class StartupView extends StatelessWidget {
                     'Version: 0.23.1',
                     fontSize: 36,
                     fontWeight: FontWeight.w400,
+                    color: Colors.white,
                   ),
                   MyTime(),
                 ],

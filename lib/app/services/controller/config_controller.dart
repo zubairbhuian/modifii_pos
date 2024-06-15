@@ -14,6 +14,8 @@ class ConfigController extends GetxController {
     Get.changeThemeMode(isLightTheme ? ThemeMode.light : ThemeMode.dark);
   }
 
+  int? serverId;
+
   @override
   void onReady() {
     isLightTheme = Preferences.isLight;

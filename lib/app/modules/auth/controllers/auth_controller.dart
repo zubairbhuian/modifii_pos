@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_base/app/routes/app_pages.dart';
+import 'package:flutter_base/app/services/controller/config_controller.dart';
 import 'package:flutter_base/app/utils/logger.dart';
 import 'package:flutter_base/app/utils/urls.dart';
 import 'package:flutter_base/app/widgets/popup_dialogs.dart';
@@ -70,6 +71,12 @@ class AuthController extends GetxController {
         // kLogger.d(res.data);
         // PopupDialog.closeLoadingDialog();
         if (res.statusCode == 200 || res.statusCode == 201) {
+          var decodedJson = res.data;
+          if (decodedJson.containsKey('0') &&
+              decodedJson['0'].containsKey('server') &&
+              decodedJson['0']['server'].containsKey('id')) {
+            ConfigController.to.serverId = decodedJson['0']['server']['id'];
+          }
           Get.offAllNamed(Routes.POS);
         } else {
           PopupDialog.showErrorMessage("password is not valid");

@@ -1,6 +1,9 @@
 class URLS {
   URLS._();
   // ***** Base URL
+  // static String baseURL = 'https://modifiipos.com/api/v1'; //live
+  // static String baseURLForNotification = 'https://modifiipos.com';
+
   static String baseURL = 'https://staging.modifii.com/api/v1';
   static String baseURLForNotification = 'https://staging.modifii.com';
 

@@ -60,6 +60,7 @@ class _MyTimeState extends State<MyTime> {
                         times[index],
                         fontSize: 54,
                         fontWeight: FontWeight.w600,
+                        color: Colors.white,
                       ),
                     ),
                   );
@@ -70,6 +71,7 @@ class _MyTimeState extends State<MyTime> {
                       ':',
                       fontSize: 54,
                       fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
                   );
                 },
@@ -80,6 +82,7 @@ class _MyTimeState extends State<MyTime> {
               times.last,
               fontSize: 54,
               fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
           ],
         ),
@@ -87,6 +90,7 @@ class _MyTimeState extends State<MyTime> {
           formattedDate,
           fontSize: 40,
           fontWeight: FontWeight.w500,
+          color: Colors.white,
         ),
       ],
     );

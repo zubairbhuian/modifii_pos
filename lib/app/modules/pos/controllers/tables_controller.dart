@@ -221,8 +221,8 @@ class TablesController extends GetxController {
   @override
   void onInit() {
     getTables();
-    getBars();
-    getHalls();
+    // getBars();
+    // getHalls();
     getOrderItems();
     super.onInit();
   }

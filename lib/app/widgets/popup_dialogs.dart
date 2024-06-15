@@ -80,7 +80,7 @@ class PopupDialog {
       builder: (BuildContext context) {
         return Center(
           child: SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.5,
+            width: MediaQuery.sizeOf(context).width * 0.70,
             child: Material(
               elevation: 2,
               // dialog color

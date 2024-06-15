@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_base/app/modules/pos/controllers/orders_controller.dart';
 import 'package:flutter_base/app/modules/pos/controllers/tables_controller.dart';
 import 'package:flutter_base/app/modules/pos/models/category_model.dart';
 import 'package:flutter_base/app/modules/pos/models/order_place_model.dart';
 import 'package:flutter_base/app/modules/pos/models/product_model.dart';
+import 'package:flutter_base/app/services/controller/config_controller.dart';
 import 'package:flutter_base/app/utils/logger.dart';
 import 'package:flutter_base/app/utils/urls.dart';
 import 'package:get/get.dart';
@@ -98,7 +98,7 @@ class PosController extends GetxController {
       }
       // kLogger.e(productList);
     } catch (e) {
-      kLogger.e('Error from %%%% get categori %%%% => $e');
+      kLogger.e('Error from %%%% get products %%%% => $e');
     }
   }
 
@@ -234,7 +234,6 @@ class PosController extends GetxController {
     update();
   }
 
-  //TODO: check drink and hide heat modifiers
   bool isDrink = true;
   RxBool checkIsDrink() {
     return (cartList.last.type == 'drinks').obs;
@@ -266,7 +265,7 @@ class PosController extends GetxController {
       update();
     } else if (!isIncrease && orderQuantity > 1) {
       orderQuantity--;
-      orderTotalPrice = price / orderQuantity;
+      orderTotalPrice = price * orderQuantity;
       update();
     }
   }
@@ -303,6 +302,7 @@ class PosController extends GetxController {
     TablesController.to.clearSelections();
     cartList.clear();
     getTotalPrice();
+    clearSearchItem();
     update();
   }
 
@@ -381,7 +381,7 @@ class PosController extends GetxController {
       "cart": cartItems,
       "table_id": num.parse(TablesController.to.selectedTableId.toString()),
       "bar_id": null,
-      "server_id": 1,
+      "server_id": ConfigController.to.serverId ?? 0,
       "branch_id": 1,
       "number_of_people":
           int.parse(TablesController.to.selectedGuestNumbers.toString()),

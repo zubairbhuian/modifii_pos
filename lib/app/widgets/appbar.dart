@@ -97,8 +97,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               //     ),
               //   ).marginOnly(right: 20),
               SvgPicture.asset(
-                width: 200,
-                'assets/images/splash/yogo_logo.svg',
+                width: 155,
+                'assets/images/splash/yogo_logo_write.svg',
                 colorFilter: ColorFilter.mode(
                   configController.isLightTheme ? Colors.black : Colors.white,
                   BlendMode.srcIn,
@@ -127,8 +127,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () {
                     // ClockInController.to.clockOut();
                     Get.offAllNamed(AppPages.INITIAL);
+                    TablesController.to.clearSelections();
+                    PosController.to.clearCartList();
                   },
+                  height: 48,
                   text: 'Logout',
+                  textMaxSize: 14,
+                  textMinSize: 12,
                   textColor: Colors.white,
                   color: StaticColors.redColor,
                 ),

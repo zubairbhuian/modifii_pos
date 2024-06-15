@@ -36,8 +36,8 @@ class PrimaryBtn extends StatelessWidget {
     this.padding,
     this.side,
     this.isOutline = false,
-    this.textMaxSize = 14,
-    this.textMinSize = 12,
+    this.textMaxSize = 12,
+    this.textMinSize = 10,
   });
 
   void playTapSound() {

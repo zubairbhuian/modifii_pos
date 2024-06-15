@@ -20,6 +20,7 @@ class AddToCartDialogOptions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: 14),
           //item name & price
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +50,7 @@ class AddToCartDialogOptions extends StatelessWidget {
             item.description == '' ? 'N/A' : item.description ?? '',
             fontSize: 14,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 24),
           //variations
           ...List.generate(c.productVariations.length, (index) {
             var variation = c.productVariations[index];
@@ -57,7 +58,7 @@ class AddToCartDialogOptions extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MyCustomText(variation.name),
-                const SizedBox(height: 8),
+                const SizedBox(height: 14),
                 SizedBox(
                   // height: 100,
                   child: Row(
@@ -203,7 +204,7 @@ class AddToCartDialogOptions extends StatelessWidget {
       padding: const EdgeInsets.only(right: 14.0),
       child: PrimaryBtnWithChild(
         onPressed: onPressed,
-        height: 60,
+        height: 70,
         width: 125,
         isOutline: true,
         color: isSelected
@@ -216,10 +217,10 @@ class AddToCartDialogOptions extends StatelessWidget {
           children: [
             MyCustomText(
               label,
-              fontSize: 14,
+              fontSize: 16,
               color: Colors.grey.shade400,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             MyCustomText(
               '\$$price',
               fontSize: 18,
