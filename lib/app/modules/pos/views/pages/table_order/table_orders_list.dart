@@ -159,7 +159,7 @@ class TableOrdersList extends StatelessWidget {
                       '${order.deliveryDate.toString().split(' ').first} ${order.deliveryTime}',
                   orderType: order.orderType ?? '',
                   orderStatus: order.orderStatus ?? '',
-                  totalAmount: order.orderAmount ?? 0,
+                  totalAmount: order.orderAmount?.toDouble() ?? 0,
                   paymetStatus: order.paymentStatus ?? '',
                 );
               },

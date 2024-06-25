@@ -104,47 +104,45 @@ class OrderData {
   dynamic userId;
   int? serverId;
   int? isGuest;
-  double? orderAmount;
-  double? gratuityAmount;
+  num? orderAmount;
+  num? gratuityAmount;
   num? pstAmount;
-  num? couponDiscountAmount;
+  int? couponDiscountAmount;
   dynamic couponDiscountTitle;
   String? paymentStatus;
   String? orderStatus;
-  double? totalTaxAmount;
+  num? totalTaxAmount;
   String? paymentMethod;
   dynamic transactionReference;
   dynamic deliveryAddressId;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  num? checked;
+  int? checked;
   dynamic deliveryManId;
-  num? deliveryCharge;
+  int? deliveryCharge;
   dynamic orderNote;
   dynamic couponCode;
   String? orderType;
   int? branchId;
   dynamic callback;
-  DateTime? deliveryDate;
+  String? deliveryDate;
   String? deliveryTime;
   String? extraDiscount;
   dynamic extraDiscountType;
-  num? extraDiscountDiscount;
+  int? extraDiscountDiscount;
   dynamic extraDiscountReason;
   dynamic deliveryAddress;
-  num? preparationTime;
+  int? preparationTime;
   int? tableId;
   int? numberOfPeople;
   int? tableOrderId;
   dynamic refundOrderId;
   dynamic voidOrderId;
   dynamic refundReason;
-  num? totalRefundAmount;
+  int? totalRefundAmount;
   String? authorizationCode;
-  num? recieveCash;
-  num? changeCashAmount;
+  int? recieveCash;
+  int? changeCashAmount;
   dynamic deliveryDistance;
-  num? addonSubTotal;
+  int? addonSubTotal;
   num? addonGst;
   num? addonPst;
   num? addonGratuity;
@@ -159,10 +157,11 @@ class OrderData {
   dynamic serveFirst;
   int? packagingCharge;
   String? extraPaymentMethod;
-  int? cashTip;
+  num? cashTip;
   String? serverName;
   Server? server;
   dynamic admin;
+  List<OrderProductDetailsModel>? details;
 
   OrderData({
     this.id,
@@ -181,8 +180,6 @@ class OrderData {
     this.paymentMethod,
     this.transactionReference,
     this.deliveryAddressId,
-    this.createdAt,
-    this.updatedAt,
     this.checked,
     this.deliveryManId,
     this.deliveryCharge,
@@ -229,6 +226,7 @@ class OrderData {
     this.serverName,
     this.server,
     this.admin,
+    this.details,
   });
 
   factory OrderData.fromJson(Map<String, dynamic> json) => OrderData(
@@ -237,23 +235,17 @@ class OrderData {
         userId: json["user_id"],
         serverId: json["server_id"],
         isGuest: json["is_guest"],
-        orderAmount: json["order_amount"]?.toDouble(),
-        gratuityAmount: json["gratuity_amount"]?.toDouble(),
+        orderAmount: json["order_amount"],
+        gratuityAmount: json["gratuity_amount"],
         pstAmount: json["pst_amount"],
         couponDiscountAmount: json["coupon_discount_amount"],
         couponDiscountTitle: json["coupon_discount_title"],
         paymentStatus: json["payment_status"],
         orderStatus: json["order_status"],
-        totalTaxAmount: json["total_tax_amount"]?.toDouble(),
+        totalTaxAmount: json["total_tax_amount"],
         paymentMethod: json["payment_method"],
         transactionReference: json["transaction_reference"],
         deliveryAddressId: json["delivery_address_id"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
         checked: json["checked"],
         deliveryManId: json["delivery_man_id"],
         deliveryCharge: json["delivery_charge"],
@@ -262,9 +254,7 @@ class OrderData {
         orderType: json["order_type"],
         branchId: json["branch_id"],
         callback: json["callback"],
-        deliveryDate: json["delivery_date"] == null
-            ? null
-            : DateTime.parse(json["delivery_date"]),
+        deliveryDate: json["delivery_date"],
         deliveryTime: json["delivery_time"],
         extraDiscount: json["extra_discount"],
         extraDiscountType: json["extra_discount_type"],
@@ -302,6 +292,14 @@ class OrderData {
         serverName: json["server_name"],
         server: json["server"] == null ? null : Server.fromJson(json["server"]),
         admin: json["admin"],
+        // details: OrderProductDetailsModel.fromJson(json["product_details"]),
+        // details: (json['details'] as List)
+        //     .map((item) => OrderProductDetailsModel.fromJson(item))
+        //     .toList(),
+        details: json["details"] == null
+            ? []
+            : List<OrderProductDetailsModel>.from(json["details"]!
+                .map((x) => OrderProductDetailsModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -321,8 +319,6 @@ class OrderData {
         "payment_method": paymentMethod,
         "transaction_reference": transactionReference,
         "delivery_address_id": deliveryAddressId,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
         "checked": checked,
         "delivery_man_id": deliveryManId,
         "delivery_charge": deliveryCharge,
@@ -331,8 +327,7 @@ class OrderData {
         "order_type": orderType,
         "branch_id": branchId,
         "callback": callback,
-        "delivery_date":
-            "${deliveryDate!.year.toString().padLeft(4, '0')}-${deliveryDate!.month.toString().padLeft(2, '0')}-${deliveryDate!.day.toString().padLeft(2, '0')}",
+        "delivery_date": deliveryDate,
         "delivery_time": deliveryTime,
         "extra_discount": extraDiscount,
         "extra_discount_type": extraDiscountType,
@@ -367,26 +362,24 @@ class OrderData {
         "packaging_charge": packagingCharge,
         "extra_payment_method": extraPaymentMethod,
         "cash_tip": cashTip,
-        "server_name": nameValues.reverse[serverName],
+        "server_name": serverName,
         "server": server?.toJson(),
         "admin": admin,
+        "details": details,
       };
 }
 
 class Server {
-  int? id;
-  Name? fName;
+  num? id;
+  String? fName;
   String? lName;
   String? phone;
   String? email;
   String? image;
   String? password;
   String? rememberToken;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  dynamic fcmToken;
-  int? adminRoleId;
-  int? status;
+  num? adminRoleId;
+  num? status;
   String? identityNumber;
   String? identityType;
   String? identityImage;
@@ -404,9 +397,6 @@ class Server {
     this.image,
     this.password,
     this.rememberToken,
-    this.createdAt,
-    this.updatedAt,
-    this.fcmToken,
     this.adminRoleId,
     this.status,
     this.identityNumber,
@@ -420,20 +410,13 @@ class Server {
 
   factory Server.fromJson(Map<String, dynamic> json) => Server(
         id: json["id"],
-        fName: nameValues.map[json["f_name"]]!,
+        fName: json["f_name"],
         lName: json["l_name"],
         phone: json["phone"],
         email: json["email"],
         image: json["image"],
         password: json["password"],
         rememberToken: json["remember_token"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        fcmToken: json["fcm_token"],
         adminRoleId: json["admin_role_id"],
         status: json["status"],
         identityNumber: json["identity_number"],
@@ -447,16 +430,13 @@ class Server {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "f_name": nameValues.reverse[fName],
+        "f_name": fName,
         "l_name": lName,
         "phone": phone,
         "email": email,
         "image": image,
         "password": password,
         "remember_token": rememberToken,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "fcm_token": fcmToken,
         "admin_role_id": adminRoleId,
         "status": status,
         "identity_number": identityNumber,
@@ -468,10 +448,6 @@ class Server {
         "work_time": workTime,
       };
 }
-
-enum Name { EMPTY, HAVELI }
-
-final nameValues = EnumValues({"": Name.EMPTY, "Haveli": Name.HAVELI});
 
 class Link {
   String? url;
@@ -497,14 +473,221 @@ class Link {
       };
 }
 
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
+OrderProductDetailsModel orderProductDetailsModelFromJson(String str) =>
+    OrderProductDetailsModel.fromJson(json.decode(str));
 
-  EnumValues(this.map);
+String orderProductDetailsModelToJson(OrderProductDetailsModel data) =>
+    json.encode(data.toJson());
 
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
+class OrderProductDetailsModel {
+  final int? id;
+  final int? productId;
+  final int? orderId;
+  final double? price;
+  final ProductDetailsModel? productDetails;
+  final String? variation;
+  final int? discountOnProduct;
+  final String? discountType;
+  final int? quantity;
+  final double? taxAmount;
+  final dynamic addOnIds;
+  final dynamic variant;
+  final dynamic addOnQtys;
+  final String? addOnTaxes;
+  final String? addOnPrices;
+  final int? addOnTaxAmount;
+  final dynamic orderStatus;
+  final String? productType;
+  final dynamic kitchenNote;
+  final int? isAddon;
+  final int? printStatus;
+  final dynamic heat;
+  final dynamic toGo;
+  final dynamic dontMake;
+  final dynamic modifier;
+  final dynamic rush;
+  final int? isLiquor;
+  final dynamic deletedAt;
+  final dynamic serveFirst;
+
+  OrderProductDetailsModel({
+    this.id,
+    this.productId,
+    this.orderId,
+    this.price,
+    this.productDetails,
+    this.variation,
+    this.discountOnProduct,
+    this.discountType,
+    this.quantity,
+    this.taxAmount,
+    this.addOnIds,
+    this.variant,
+    this.addOnQtys,
+    this.addOnTaxes,
+    this.addOnPrices,
+    this.addOnTaxAmount,
+    this.orderStatus,
+    this.productType,
+    this.kitchenNote,
+    this.isAddon,
+    this.printStatus,
+    this.heat,
+    this.toGo,
+    this.dontMake,
+    this.modifier,
+    this.rush,
+    this.isLiquor,
+    this.deletedAt,
+    this.serveFirst,
+  });
+
+  factory OrderProductDetailsModel.fromJson(Map<String, dynamic> json) =>
+      OrderProductDetailsModel(
+        id: json["id"],
+        productId: json["product_id"],
+        orderId: json["order_id"],
+        price: json["price"]?.toDouble(),
+        productDetails:
+            ProductDetailsModel.fromJson(jsonDecode(json['product_details'])),
+        variation: json["variation"],
+        discountOnProduct: json["discount_on_product"],
+        discountType: json["discount_type"],
+        quantity: json["quantity"],
+        taxAmount: json["tax_amount"]?.toDouble(),
+        addOnIds: json["add_on_ids"],
+        variant: json["variant"],
+        addOnQtys: json["add_on_qtys"],
+        addOnTaxes: json["add_on_taxes"],
+        addOnPrices: json["add_on_prices"],
+        addOnTaxAmount: json["add_on_tax_amount"],
+        orderStatus: json["order_status"],
+        productType: json["product_type"],
+        kitchenNote: json["kitchen_note"],
+        isAddon: json["is_addon"],
+        printStatus: json["print_status"],
+        heat: json["heat"],
+        toGo: json["to_go"],
+        dontMake: json["dont_make"],
+        modifier: json["modifier"],
+        rush: json["rush"],
+        isLiquor: json["is_liquor"],
+        deletedAt: json["deleted_at"],
+        serveFirst: json["serve_first"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "product_id": productId,
+        "order_id": orderId,
+        "price": price,
+        "product_details": productDetails,
+        "variation": variation,
+        "discount_on_product": discountOnProduct,
+        "discount_type": discountType,
+        "quantity": quantity,
+        "tax_amount": taxAmount,
+        "add_on_ids": addOnIds,
+        "variant": variant,
+        "add_on_qtys": addOnQtys,
+        "add_on_taxes": addOnTaxes,
+        "add_on_prices": addOnPrices,
+        "add_on_tax_amount": addOnTaxAmount,
+        "order_status": orderStatus,
+        "product_type": productType,
+        "kitchen_note": kitchenNote,
+        "is_addon": isAddon,
+        "print_status": printStatus,
+        "heat": heat,
+        "to_go": toGo,
+        "dont_make": dontMake,
+        "modifier": modifier,
+        "rush": rush,
+        "is_liquor": isLiquor,
+        "deleted_at": deletedAt,
+        "serve_first": serveFirst,
+      };
+}
+
+class ProductDetailsModel {
+  final dynamic id;
+  final dynamic name;
+  final dynamic description;
+  final dynamic image;
+  final dynamic price;
+  // final List<dynamic> variations;
+  // final List<dynamic> addOns;
+  final dynamic tax;
+  final dynamic availableTimeStarts;
+  final dynamic availableTimeEnds;
+  final dynamic status;
+  // final List<dynamic> attributes;
+  // final List<dynamic> categoryIds;
+  // final List<dynamic> choiceOptions;
+  final dynamic discount;
+  final dynamic discountType;
+  final dynamic taxType;
+  final dynamic setMenu;
+  final dynamic branchId;
+  final dynamic colors;
+  final dynamic popularityCount;
+  final dynamic productType;
+  final dynamic isLiquor;
+  // final List<dynamic> translations;
+
+  ProductDetailsModel({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.price,
+    // required this.variations,
+    // required this.addOns,
+    required this.tax,
+    required this.availableTimeStarts,
+    required this.availableTimeEnds,
+    required this.status,
+    // required this.attributes,
+    // required this.categoryIds,
+    // required this.choiceOptions,
+    required this.discount,
+    required this.discountType,
+    required this.taxType,
+    required this.setMenu,
+    required this.branchId,
+    required this.colors,
+    required this.popularityCount,
+    required this.productType,
+    required this.isLiquor,
+    // required this.translations,
+  });
+
+  factory ProductDetailsModel.fromJson(Map<String, dynamic> json) {
+    return ProductDetailsModel(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      image: json['image'],
+      price: json['price'].toDouble(),
+      // variations: jsonDecode(json['variations']),
+      // addOns: jsonDecode(json['add_ons']),
+      tax: json['tax'],
+      availableTimeStarts: json['available_time_starts'],
+      availableTimeEnds: json['available_time_ends'],
+      status: json['status'],
+      // attributes: jsonDecode(json['attributes']),
+      // categoryIds: jsonDecode(json['category_ids']),
+      // choiceOptions: jsonDecode(json['choice_options']),
+      discount: json['discount'],
+      discountType: json['discount_type'],
+      taxType: json['tax_type'],
+      setMenu: json['set_menu'],
+      branchId: json['branch_id'],
+      colors: json['colors'],
+      popularityCount: json['popularity_count'],
+      productType: json['product_type'],
+      isLiquor: json['is_liquor'],
+      // translations: json['translations'],
+    );
   }
 }

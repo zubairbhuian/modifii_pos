@@ -13,19 +13,20 @@ class AddToCartDialogOptions extends StatelessWidget {
   const AddToCartDialogOptions({super.key, required this.item});
   @override
   Widget build(BuildContext context) {
-    num price = item.price;
+    num price = item.price ?? 0;
 
     return GetBuilder<PosController>(builder: (c) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: 14),
           //item name & price
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               MyCustomText(
-                item.name,
+                item.name ?? '',
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
               ),
@@ -46,10 +47,10 @@ class AddToCartDialogOptions extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           MyCustomText(
-            item.description == '' ? 'N/A' : item.description,
+            item.description == '' ? 'N/A' : item.description ?? '',
             fontSize: 14,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 24),
           //variations
           ...List.generate(c.productVariations.length, (index) {
             var variation = c.productVariations[index];
@@ -57,7 +58,7 @@ class AddToCartDialogOptions extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MyCustomText(variation.name),
-                const SizedBox(height: 8),
+                const SizedBox(height: 14),
                 SizedBox(
                   // height: 100,
                   child: Row(
@@ -162,6 +163,7 @@ class AddToCartDialogOptions extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: PrimaryBtn(
                 onPressed: () {
+                  PosController.to.resetModifierSelections();
                   Cart order = Cart(
                     id: item.id.toString(),
                     name: item.name,
@@ -169,11 +171,13 @@ class AddToCartDialogOptions extends StatelessWidget {
                     type: item.productType,
                     price: price,
                     quantity: c.orderQuantity,
-                    isLiquor: item.isLiquor == 1 ? true : false,
-                    togo: c.isTogoSelected ? "TO GO" : null,
-                    dontMake: c.isDontMakeSelected ? "DON'T MAKE" : null,
-                    rush: c.isRushSelected ? "RUSH" : null,
-                    serveFirst: c.selectedOrderTypes2,
+                    isLiquor: int.parse(item.isLiquor.toString()),
+                    togo: '',
+                    dontMake: '',
+                    rush: '',
+                    heat: '',
+                    serveFirst: '',
+                    kitchenNote: '',
                   );
                   //** Add item **
                   c.onAddCartItem(order);
@@ -200,6 +204,7 @@ class AddToCartDialogOptions extends StatelessWidget {
       padding: const EdgeInsets.only(right: 14.0),
       child: PrimaryBtnWithChild(
         onPressed: onPressed,
+        height: 70,
         width: 125,
         isOutline: true,
         color: isSelected
@@ -208,13 +213,14 @@ class AddToCartDialogOptions extends StatelessWidget {
         borderColor:
             isSelected ? StaticColors.blueColor : StaticColors.greenColor,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MyCustomText(
               label,
-              fontSize: 14,
+              fontSize: 16,
               color: Colors.grey.shade400,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             MyCustomText(
               '\$$price',
               fontSize: 18,

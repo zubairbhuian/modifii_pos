@@ -3,23 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 
 class MyDropdownBtn extends StatelessWidget {
-  const MyDropdownBtn(
-      {super.key,
-      this.hintText = 'Select an option',
-      required this.data,
-      required this.selectedValue,
-      this.onChanged});
+  const MyDropdownBtn({
+    super.key,
+    this.hintText = 'Select an option',
+    required this.data,
+    required this.selectedValue,
+    this.onChanged,
+    this.menuItemPadding,
+  });
 
   final String hintText;
-  final List<DropdownMenuItem<String>> data;
-  final String? selectedValue;
-  final void Function(String?)? onChanged;
+  final List<DropdownMenuItem<dynamic>> data;
+  final dynamic selectedValue;
+  final void Function(dynamic)? onChanged;
+  final EdgeInsetsGeometry? menuItemPadding;
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return DropdownButtonHideUnderline(
-      child: DropdownButton2<String>(
+      child: DropdownButton2(
         hint: MyCustomText(
           hintText,
           fontWeight: FontWeight.w200,
@@ -55,6 +58,7 @@ class MyDropdownBtn extends StatelessWidget {
         dropdownStyleData: DropdownStyleData(
           maxHeight: 200,
           width: 300,
+          padding: EdgeInsets.zero,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0),
             color: theme.cardColor,
@@ -69,7 +73,8 @@ class MyDropdownBtn extends StatelessWidget {
         ),
         menuItemStyleData: MenuItemStyleData(
           height: 40,
-          padding: const EdgeInsets.only(left: 40, right: 14),
+          padding:
+              menuItemPadding ?? const EdgeInsets.only(left: 40, right: 14),
           overlayColor: MaterialStatePropertyAll(
             Theme.of(context).cardColor, //item selector color
           ),

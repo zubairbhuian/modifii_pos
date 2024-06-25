@@ -105,13 +105,38 @@ class PosController extends GetxController {
   //** find product categoryId**
   findProductsByCategoryId(String categoryId) {
     productList.assignAll(mainProductList
-        .where((product) => product.categoryIds
+        .where((product) => product.categoryIds!
             .expand((category) => [category.id])
             .contains(categoryId))
         .toList());
   }
 
   TextEditingController kitchenNoteTEC = TextEditingController();
+  void addKitchenNote() {
+    cartList.last.kitchenNote = kitchenNoteTEC.text.trim();
+    update();
+    cartListScrollToBottom();
+    kitchenNoteTEC.clear();
+  }
+
+  TextEditingController itemSearchTEC = TextEditingController();
+  void searchItemList(String? value) {
+    if (value != null || value != '') {
+      productList.value = mainProductList.where((item) {
+        return item.name.toLowerCase().contains(value ?? '');
+      }).toList();
+    }
+    update();
+  }
+
+  void clearSearchItem() {
+    itemSearchTEC.clear();
+    productList.value = mainProductList.where((item) {
+      return item.name.toLowerCase().contains('');
+    }).toList();
+    update();
+  }
+
   // List<String> orderTypes = ['TO GO', "DON'T MAKE", 'RUSH'];
   bool isTogoSelected = false;
   bool isDontMakeSelected = false;
@@ -123,42 +148,89 @@ class PosController extends GetxController {
   }) {
     if (isTogo) {
       isTogoSelected = !isTogoSelected;
+      if (isTogoSelected) {
+        cartList.last.togo = 'TO GO';
+      } else {
+        cartList.last.togo = '';
+      }
     }
     if (isDontMake) {
       isDontMakeSelected = !isDontMakeSelected;
+      if (isDontMakeSelected) {
+        cartList.last.dontMake = "DON'T MAKE";
+      } else {
+        cartList.last.dontMake = '';
+      }
     }
     if (isRush) {
       isRushSelected = !isRushSelected;
-    }
-    update();
-  }
-
-  List<String> orderTypes2 = ['APPETIZERS 1st', "ALL-TOGETHER"];
-  String? selectedOrderTypes2;
-  int? selectedOrderTypesIndex2;
-  void setSelectedOrderTypesIndex2(int index) {
-    if (selectedOrderTypesIndex2 == index) {
-      selectedOrderTypesIndex2 = null;
-      selectedOrderTypes2 = null;
-    } else {
-      selectedOrderTypesIndex2 = index;
-      if (index == 0) {
-        selectedOrderTypes2 = "APPETIZERS 1st";
+      if (isRushSelected) {
+        cartList.last.rush = 'RUSH';
       } else {
-        selectedOrderTypes2 = "ALL-TOGETHER";
+        cartList.last.rush = '';
       }
     }
+    cartListScrollToBottom();
     update();
   }
 
-  List<String> orderModifiers = ['MILD', "MEDIUM", 'HOT', 'EXTRA HOT'];
-  int? selectedOrderModifiersIndex;
-  void setSelectedOrderModifiersIndex(int index) {
-    if (selectedOrderModifiersIndex == index) {
-      selectedOrderModifiersIndex = null;
+  List<String> orderServeTypes = ['APPETIZERS 1st', "ALL-TOGETHER"];
+  int? selectedOrderServeTypesIndex;
+  void setSelectedOrderTypesIndex2(int index) {
+    if (selectedOrderServeTypesIndex == index) {
+      selectedOrderServeTypesIndex = null;
+      cartList.last.serveFirst = "";
     } else {
-      selectedOrderModifiersIndex = index;
+      selectedOrderServeTypesIndex = index;
+      if (index == 0) {
+        cartList.last.serveFirst = "APPETIZERS 1st";
+      } else {
+        cartList.last.serveFirst = "ALL-TOGETHER";
+      }
     }
+    cartListScrollToBottom();
+    update();
+  }
+
+  List<String> orderHeatModifiers = ['MILD', 'MEDIUM', 'HOT', 'EXTRA HOT'];
+  int? selectedOrderHeatModifiersIndex;
+  void setSelectedOrderModifiersIndex(int index) {
+    if (selectedOrderHeatModifiersIndex == index) {
+      selectedOrderHeatModifiersIndex = null;
+      cartList.last.heat = "";
+    } else {
+      selectedOrderHeatModifiersIndex = index;
+      switch (index) {
+        case 0:
+          cartList.last.heat = "MILD";
+          break;
+        case 1:
+          cartList.last.heat = "MEDIUM";
+          break;
+        case 2:
+          cartList.last.heat = "HOT";
+          break;
+        case 3:
+          cartList.last.heat = "EXTRA HOT";
+          break;
+        default:
+          cartList.last.heat = "";
+          break;
+      }
+    }
+    cartListScrollToBottom();
+    update();
+  }
+
+  void resetModifierSelections() {
+    orderQuantity = 1;
+    selectedProductVariationValue = null;
+    selectedOrderServeTypesIndex = null;
+    selectedOrderHeatModifiersIndex = null;
+    isTogoSelected = false;
+    isDontMakeSelected = false;
+    isRushSelected = false;
+    kitchenNoteTEC.clear();
     update();
   }
 
@@ -205,6 +277,15 @@ class PosController extends GetxController {
 
   List<Cart> cartList = <Cart>[];
   final ScrollController cartListScrollController = ScrollController();
+  void cartListScrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cartListScrollController.animateTo(
+        cartListScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
 
   //** Add cart item  **
   onAddCartItem(Cart item) {
@@ -228,38 +309,41 @@ class PosController extends GetxController {
   }
 
   void clearCartList() {
+    TablesController.to.clearSelections();
     cartList.clear();
     getTotalPrice();
-    update();
-  }
-
-  void clearHoleCart() {
-    cartList.clear();
-    getTotalPrice();
-    TablesController.to.selectedTableId = null;
-    TablesController.to.selectedBarId = null;
-    TablesController.to.update();
+    clearSearchItem();
     update();
   }
 
   RxDouble cartSubTotalPrice = 0.0.obs;
   RxDouble cartSubTotalLiquorPrice = 0.0.obs;
   RxDouble cartGSTAmount = 0.0.obs;
+  RxDouble cartGratuityAmount = 0.0.obs;
   RxDouble cartPSTAmount = 0.0.obs;
   RxDouble cartTotalAmount = 0.0.obs;
   void getTotalPrice() {
     cartSubTotalPrice.value = 0;
     cartSubTotalLiquorPrice.value = 0;
+    cartGratuityAmount.value = 0;
     for (var cart in cartList) {
       cartSubTotalPrice.value += (cart.price * cart.quantity);
     }
-    for (var cart in cartList.where((e) => e.isLiquor!).toList()) {
+    for (var cart in cartList.where((e) => e.isLiquor! == 1).toList()) {
       cartSubTotalLiquorPrice.value += (cart.price * cart.quantity);
     }
     cartGSTAmount.value = cartSubTotalPrice * 0.05;
     cartPSTAmount.value = cartSubTotalLiquorPrice * 0.10;
-    cartTotalAmount.value =
-        cartSubTotalPrice.value + cartGSTAmount.value + cartPSTAmount.value;
+    if (TablesController.to.selectedGuestNumbers != null) {
+      if (int.parse(TablesController.to.selectedGuestNumbers!) >= 6) {
+        cartGratuityAmount.value = cartSubTotalPrice * 0.18;
+      }
+    }
+
+    cartTotalAmount.value = cartSubTotalPrice.value +
+        cartGSTAmount.value +
+        cartPSTAmount.value +
+        cartGratuityAmount.value;
   }
 
   //** Remove cart item with index **
@@ -305,8 +389,9 @@ class PosController extends GetxController {
     }
     Map<String, dynamic> data = {
       "cart": cartItems,
-      "table_id": TablesController.to.selectedTableId,
-      "bar_id": TablesController.to.selectedBarId,
+      "table_id":
+          num.parse(TablesController.to.selectedTable?.id.toString() ?? ''),
+      "bar_id": num.parse(TablesController.to.selectedBar?.id.toString() ?? ''),
       "server_id": 1,
       "branch_id": 1,
       "number_of_people": TablesController.to.selectedGuestNumbers,

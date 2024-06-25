@@ -15,4 +15,6 @@ class URLS {
   static String hallList = '$baseURL/table/hall-area';
 
   static String ordersList = '$baseURL/table/order/list';
+  static String orderOfBookedTable(int tableId) =>
+      '$baseURL/table/$tableId/current-order';
 }

@@ -3,17 +3,17 @@ import 'dart:math';
 // import 'package:dio/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/modules/pos/controllers/orders_controller.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
 import 'package:flutter_base/app/modules/pos/models/order_model.dart';
 import 'package:flutter_base/app/modules/pos/models/order_place_model.dart';
 import 'package:flutter_base/app/utils/my_formatter.dart';
 import 'package:flutter_base/app/utils/urls.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:logger/logger.dart';
+import '../../../utils/static_colors.dart';
 import '../../../widgets/popup_dialogs.dart';
 import '../../../utils/logger.dart';
+import '../models/dine_in_order_model.dart';
 import '../models/table_model.dart';
 
 class TablesController extends GetxController {
@@ -97,21 +97,83 @@ class TablesController extends GetxController {
   }
 
   List<Map<String, String>> availableTablesIdNumber = [];
-  String? selectedTableId;
-  void updateSelectedTableId(String? value) {
-    selectedTableId = value;
+  TableModel? selectedTable;
+  OrderData? orderOfBookedTable;
+  void updateSelectedTable(TableModel value) async {
+    selectedTable = value;
+
+    if (value.status == 2) {
+      if (value.id != null) {
+        getOrderDetailsOfTable(value.id!);
+      }
+    }
     update();
   }
 
+  void getOrderDetailsOfTable(int tableId) async {
+    try {
+      var res = await Dio().get(URLS.orderOfBookedTable(tableId));
+      if (res.statusCode == 200) {
+        orderOfBookedTable = OrderData.fromJson(res.data['order']);
+        // kLogger.i(res.data);
+        if (orderOfBookedTable != null) {
+          setOrderCartData();
+        } else {
+          PopupDialog.showErrorMessage("Failed to get order details!");
+        }
+      }
+    } catch (e) {
+      kLogger.e('Error from %%%% get order of table %%%% => $e');
+    }
+  }
+
+  void setOrderCartData() {
+    PosController.to.cartList.clear();
+    double gst = orderOfBookedTable?.totalTaxAmount?.toDouble() ?? 0;
+    double pst = orderOfBookedTable?.pstAmount?.toDouble() ?? 0;
+    double gratuity = orderOfBookedTable?.gratuityAmount?.toDouble() ?? 0;
+    double total = orderOfBookedTable?.orderAmount?.toDouble() ?? 0;
+
+    PosController.to.cartGSTAmount.value = gst;
+    PosController.to.cartPSTAmount.value = pst;
+    PosController.to.cartGratuityAmount.value = gratuity;
+    PosController.to.cartTotalAmount.value = total;
+    PosController.to.cartSubTotalPrice.value = total - (gst + pst + gratuity);
+    selectedGuestNumbers = orderOfBookedTable?.numberOfPeople.toString();
+
+    if (orderOfBookedTable?.details != null) {
+      for (int i = 0; i < orderOfBookedTable!.details!.length; i++) {
+        var item = orderOfBookedTable?.details?[i];
+        PosController.to.cartList.add(Cart(
+          id: item?.productDetails?.id.toString() ?? '',
+          type: item?.productType.toString() ?? '',
+          name: item?.productDetails?.name.toString() ?? '',
+          price: item?.price ?? 0,
+          description: item?.productDetails?.description.toString() ?? '',
+          quantity: item?.quantity ?? 0,
+          serveFirst: item?.serveFirst ?? '',
+          togo: item?.toGo ?? '',
+          dontMake: item?.dontMake ?? '',
+          rush: item?.rush ?? '',
+          heat: item?.heat ?? '',
+          kitchenNote: item?.kitchenNote ?? '',
+          isLiquor: item?.isLiquor ?? 0,
+        ));
+      }
+    }
+    update();
+    PosController.to.update();
+  }
+
   List<Map<String, String>> availableBarsIdNumber = [];
-  String? selectedBarId;
-  void updateSelectedBarId(String? value) {
-    selectedBarId = value;
+  TableModel? selectedBar;
+  void updateSelectedBar(TableModel value) {
+    selectedBar = value;
     update();
   }
 
   bool isTableOrBarSelected() {
-    if (selectedBarId != null || selectedTableId != null) {
+    if (selectedBar != null || selectedTable != null) {
       return true;
     } else {
       return false;
@@ -131,7 +193,34 @@ class TablesController extends GetxController {
   String? selectedGuestNumbers;
   void updatedSelectedGuestNumbers(String? value) {
     selectedGuestNumbers = value;
+    PosController.to.getTotalPrice();
     update();
+  }
+
+  clearSelections() {
+    selectedTable = null;
+    selectedBar = null;
+    selectedGuestNumbers = null;
+    update();
+  }
+
+  Color getColor(int status) {
+    switch (status) {
+      case 1:
+        return OrderColors.available;
+      case 2:
+        return OrderColors.booked;
+      case 3:
+        return OrderColors.serving;
+      case 4:
+        return OrderColors.onlineBooking;
+      case 5:
+        return OrderColors.combined;
+      case 6:
+        return OrderColors.hold;
+      default:
+        return Colors.transparent;
+    }
   }
 
   //******* ORDER ITEMS RECIEPTS ******* */
@@ -326,7 +415,7 @@ class TablesController extends GetxController {
       description: product.productDetails?.description ?? "",
       quantity: product.quantity,
       variations: [],
-      isLiquor: product.isLiquor == 1 ? true : false,
+      isLiquor: product.isLiquor.toInt(),
     );
   }
 

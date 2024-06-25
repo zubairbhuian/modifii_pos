@@ -4,34 +4,45 @@ import 'package:flutter_base/app/widgets/custom_inkwell.dart';
 import '../../../widgets/my_custom_text.dart';
 
 class CartItem extends StatelessWidget {
+  const CartItem({
+    super.key,
+    required this.title,
+    required this.serveFirst,
+    required this.togo,
+    required this.dontMake,
+    required this.rush,
+    required this.heat,
+    required this.note,
+    required this.amount,
+    required this.quantity,
+    this.onRemove,
+    this.onDecrement,
+    this.onIncrement,
+  });
+
   final String title;
-  final String description;
+  final String serveFirst;
+  final String togo;
+  final String dontMake;
+  final String rush;
+  final String heat;
+  final String note;
   final num amount;
   final num quantity;
   final VoidCallback? onRemove;
   final VoidCallback? onDecrement;
   final VoidCallback? onIncrement;
-  const CartItem(
-      {super.key,
-      required this.title,
-      required this.description,
-      required this.amount,
-      required this.quantity,
-      this.onRemove,
-      this.onDecrement,
-      this.onIncrement});
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        clipBehavior: Clip.none,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
@@ -40,16 +51,15 @@ class CartItem extends StatelessWidget {
                   children: [
                     MyCustomText(
                       title,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.bold,
                       maxLines: 2,
                     ),
-                    // const SizedBox(height: 2),
-                    // MyCustomText(
-                    //   description,
-                    //   color: theme.hintColor,
-                    //   fontSize: 12,
-                    //   maxLines: 2,
-                    // )
+                    const SizedBox(height: 4),
+                    _modifiers(serveFirst),
+                    _modifiers(togo),
+                    _modifiers(dontMake),
+                    _modifiers(rush),
+                    _modifiers('Heat: $heat'),
                   ],
                 ),
               ),
@@ -112,7 +122,24 @@ class CartItem extends StatelessWidget {
               ),
             ],
           ),
+          _modifiers('note: $note', maxLines: 5, isItalic: true),
         ],
+      ),
+    );
+  }
+
+  Visibility _modifiers(String value,
+      {int maxLines = 2, bool isItalic = false}) {
+    return Visibility(
+      visible: value.contains(':') ? value.length > 6 : value != '',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8),
+        child: MyCustomText(
+          value.trim(),
+          fontSize: 14,
+          maxLines: maxLines,
+          fontStyle: isItalic ? FontStyle.italic : FontStyle.normal,
+        ),
       ),
     );
   }

@@ -14,6 +14,7 @@ import '../../../../../widgets/custom_dropdown.dart';
 import '../../../../../widgets/custom_loading.dart';
 import '../../../../../widgets/custom_textfield.dart';
 import '../../../../../widgets/my_custom_text.dart';
+import '../../../models/table_model.dart';
 import 'widgets/search_custom_item_row.dart';
 
 class PosPage extends GetView<PosController> {
@@ -55,84 +56,7 @@ class PosPage extends GetView<PosController> {
                           const SizedBox(width: 18),
                           Expanded(
                             flex: 1,
-                            child: SingleChildScrollView(
-                              child: GetBuilder<PosController>(builder: (c) {
-                                return Column(
-                                  children: [
-                                    ...List.generate(
-                                      c.orderTypes2.length,
-                                      (index) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4.0),
-                                        child: _popupPrimaryBtn(
-                                          onPressed: () {
-                                            c.setSelectedOrderTypesIndex2(
-                                                index);
-                                          },
-                                          text: c.orderTypes2[index],
-                                          isSelected:
-                                              c.selectedOrderTypesIndex2 ==
-                                                  index,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 18),
-                                    _popupPrimaryBtn(
-                                      onPressed: () {
-                                        c.toggleOrderTypeSelection(
-                                            isTogo: true);
-                                      },
-                                      text: 'TO GO',
-                                      isSelected: c.isTogoSelected,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    _popupPrimaryBtn(
-                                      onPressed: () {
-                                        c.toggleOrderTypeSelection(
-                                            isDontMake: true);
-                                      },
-                                      text: "DON'T MAKE",
-                                      isSelected: c.isDontMakeSelected,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    _popupPrimaryBtn(
-                                      onPressed: () {
-                                        c.toggleOrderTypeSelection(
-                                            isRush: true);
-                                      },
-                                      text: 'RUSH',
-                                      isSelected: c.isRushSelected,
-                                    ),
-                                    const SizedBox(height: 18),
-                                    ...List.generate(
-                                      c.orderModifiers.length,
-                                      (index) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4.0),
-                                        child: _popupPrimaryBtn(
-                                          onPressed: () {
-                                            c.setSelectedOrderModifiersIndex(
-                                                index);
-                                          },
-                                          text: c.orderModifiers[index],
-                                          isSelected:
-                                              c.selectedOrderModifiersIndex ==
-                                                  index,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 18),
-                                    _popupPrimaryBtn(
-                                      onPressed: () {
-                                        _kitchenNoteDialog(context);
-                                      },
-                                      text: 'KITCHEN NOTE',
-                                      isSelected: true,
-                                    ),
-                                  ],
-                                );
-                              }),
-                            ),
+                            child: _modifiersRow(context),
                           ),
                         ],
                       ),
@@ -149,6 +73,81 @@ class PosPage extends GetView<PosController> {
         // cart area
       ],
     );
+  }
+
+  GetBuilder<PosController> _modifiersRow(BuildContext context) {
+    return GetBuilder<PosController>(builder: (c) {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            ...List.generate(
+              c.orderServeTypes.length,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: _popupPrimaryBtn(
+                  onPressed: () {
+                    c.setSelectedOrderTypesIndex2(index);
+                  },
+                  text: c.orderServeTypes[index],
+                  isSelected: c.selectedOrderServeTypesIndex == index,
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            _popupPrimaryBtn(
+              onPressed: () {
+                c.toggleOrderTypeSelection(isTogo: true);
+              },
+              text: 'TO GO',
+              isSelected: c.isTogoSelected,
+            ),
+            const SizedBox(height: 8),
+            _popupPrimaryBtn(
+              onPressed: () {
+                c.toggleOrderTypeSelection(isDontMake: true);
+              },
+              text: "DON'T MAKE",
+              isSelected: c.isDontMakeSelected,
+            ),
+            const SizedBox(height: 8),
+            _popupPrimaryBtn(
+              onPressed: () {
+                c.toggleOrderTypeSelection(isRush: true);
+              },
+              text: 'RUSH',
+              isSelected: c.isRushSelected,
+            ),
+            Column(children: [
+              const SizedBox(height: 18),
+              ...List.generate(
+                c.orderHeatModifiers.length,
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: _popupPrimaryBtn(
+                    onPressed: () {
+                      c.setSelectedOrderModifiersIndex(index);
+                    },
+                    text: c.orderHeatModifiers[index],
+                    isSelected: c.selectedOrderHeatModifiersIndex == index,
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(height: 18),
+            _popupPrimaryBtn(
+                onPressed: () {
+                  _kitchenNoteDialog(context);
+                },
+                text: 'KITCHEN NOTE',
+                isSelected: c.cartList.isNotEmpty
+                    ? c.cartList.last.kitchenNote == ""
+                        ? false
+                        : true
+                    : false),
+          ],
+        ),
+      );
+    });
   }
 
   void _kitchenNoteDialog(BuildContext context) {
@@ -171,13 +170,16 @@ class PosPage extends GetView<PosController> {
             ),
             const SizedBox(height: 14),
             CustomTextField(
-              controller: PosController.to.kitchenNoteTEC,
+              controller: controller.kitchenNoteTEC,
               hintText: 'Kitchen Note',
               maxLines: 5,
             ),
             const SizedBox(height: 14),
             PrimaryBtn(
-              onPressed: Get.back,
+              onPressed: () {
+                controller.addKitchenNote();
+                Get.back();
+              },
               text: 'Submit',
               textColor: Colors.white,
             )
@@ -190,7 +192,7 @@ class PosPage extends GetView<PosController> {
   //** cart **
   Widget _cartArea(ThemeData theme) {
     return Container(
-      width: 400,
+      width: 375,
       decoration: BoxDecoration(
         color: theme.cardColor,
         // border: Border.all(color: Colors.white),
@@ -206,30 +208,70 @@ class PosPage extends GetView<PosController> {
                   child: GetBuilder<TablesController>(builder: (c) {
                     return MyDropdownBtn(
                       hintText: 'Select Table',
-                      data: c.availableTablesIdNumber
-                          .map((e) => DropdownMenuItem<String>(
-                                value: e.keys.first,
-                                child: MyCustomText(e.values.first),
-                              ))
-                          .toList(),
-                      selectedValue: c.selectedTableId,
-                      onChanged: c.updateSelectedTableId,
+                      data: c.tablesList.map((e) {
+                        return DropdownMenuItem<TableModel>(
+                          value: e,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Container(
+                                width: 300,
+                                height: 200,
+                                color: c.getColor(e.status ?? 0),
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 40.0),
+                                      child: MyCustomText(
+                                        'Table ${e.number}',
+                                        color: Colors.white,
+                                      ),
+                                    ))),
+                          ),
+                        );
+                      }).toList(),
+                      selectedValue: c.selectedTable,
+                      onChanged: (value) {
+                        TableModel table = value;
+                        c.updateSelectedTable(table);
+                      },
+                      menuItemPadding: EdgeInsets.zero,
                     );
                   }),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 2),
                 Expanded(
                   child: GetBuilder<TablesController>(builder: (c) {
                     return MyDropdownBtn(
                       hintText: 'Select Bar',
-                      data: c.availableBarsIdNumber
-                          .map((e) => DropdownMenuItem<String>(
-                                value: e.keys.first,
-                                child: MyCustomText(e.values.first),
-                              ))
-                          .toList(),
-                      selectedValue: c.selectedBarId,
-                      onChanged: c.updateSelectedBarId,
+                      data: c.barsList.map((e) {
+                        return DropdownMenuItem<TableModel>(
+                          value: e,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Container(
+                                width: 300,
+                                height: 200,
+                                color: c.getColor(e.status ?? 0),
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 40.0),
+                                      child: MyCustomText(
+                                        'Table ${e.number}',
+                                        color: Colors.white,
+                                      ),
+                                    ))),
+                          ),
+                        );
+                      }).toList(),
+                      selectedValue: c.selectedBar,
+                      onChanged: (value) {
+                        TableModel bar = value;
+                        c.updateSelectedBar(bar);
+                      },
+                      menuItemPadding: EdgeInsets.zero,
                     );
                   }),
                 ),
@@ -248,10 +290,13 @@ class PosPage extends GetView<PosController> {
                         ))
                     .toList(),
                 selectedValue: c.selectedGuestNumbers,
-                onChanged: c.updatedSelectedGuestNumbers,
+                onChanged: (value) {
+                  c.updatedSelectedGuestNumbers(value);
+                },
               );
             }),
           ),
+
           Expanded(
             child: GetBuilder<PosController>(
               builder: (c) => ListView.builder(
@@ -262,9 +307,14 @@ class PosPage extends GetView<PosController> {
                     var data = c.cartList[index];
                     return CartItem(
                       title: data.name ?? "",
-                      description: data.description ?? "",
                       amount: data.price * data.quantity,
                       quantity: data.quantity,
+                      serveFirst: data.serveFirst ?? '',
+                      togo: data.togo ?? '',
+                      dontMake: data.dontMake ?? '',
+                      rush: data.rush ?? '',
+                      heat: data.heat ?? '',
+                      note: data.kitchenNote ?? '',
                       onDecrement: () {
                         c.quantityUpdateWithCartListIndex(index,
                             isIncriment: false);
@@ -283,24 +333,43 @@ class PosPage extends GetView<PosController> {
           // amount
           const Divider(),
           Obx(
-            () => _row(
-              theme,
-              title: "Subtotal : ",
-              value: "\$${controller.cartSubTotalPrice.toStringAsFixed(2)}",
+            () => Visibility(
+              visible: controller.cartSubTotalPrice.value > 0,
+              child: _row(
+                theme,
+                title: "Subtotal : ",
+                value: "\$${controller.cartSubTotalPrice.toStringAsFixed(2)}",
+              ),
             ),
           ),
           Obx(
-            () => _row(
-              theme,
-              title: "GST 5% : ",
-              value: "\$${controller.cartGSTAmount.toStringAsFixed(2)}",
+            () => Visibility(
+              visible: controller.cartGSTAmount.value > 0,
+              child: _row(
+                theme,
+                title: "GST 5% : ",
+                value: "\$${controller.cartGSTAmount.toStringAsFixed(2)}",
+              ),
             ),
           ),
           Obx(
-            () => _row(
-              theme,
-              title: "PST 10% : ",
-              value: "\$${controller.cartPSTAmount.toStringAsFixed(2)}",
+            () => Visibility(
+              visible: controller.cartGratuityAmount.value > 0,
+              child: _row(
+                theme,
+                title: "Gratuity 18% : ",
+                value: "\$${controller.cartGratuityAmount.toStringAsFixed(2)}",
+              ),
+            ),
+          ),
+          Obx(
+            () => Visibility(
+              visible: controller.cartPSTAmount.value > 0,
+              child: _row(
+                theme,
+                title: "PST 10% : ",
+                value: "\$${controller.cartPSTAmount.toStringAsFixed(2)}",
+              ),
             ),
           ),
           const Divider(),

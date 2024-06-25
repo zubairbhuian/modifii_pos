@@ -21,17 +21,16 @@ class ProductBody extends GetView<PosController> {
   Widget _body(ThemeData theme, BuildContext context) {
     return SingleChildScrollView(child: Obx(() {
       return StaggeredGrid.count(
-        crossAxisCount: MediaQuery.sizeOf(context).shortestSide < 900 ? 3 : 4,
+        crossAxisCount: context.isPortrait ? 2 : 3,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
         children: List.generate(controller.productList.length, (index) {
           var item = controller.productList[index];
           return PrimaryBtn(
             onPressed: () {
-              controller.orderTotalPrice = item.price.toDouble();
-              controller.orderQuantity = 1;
-              controller.selectedProductVariationValue = null;
-              controller.checkHasVariations(item.variations);
+              controller.orderTotalPrice = item.price!.toDouble();
+              controller.resetModifierSelections();
+              controller.checkHasVariations(item.variations ?? []);
               if (controller.hasVariations) {
                 PopupDialog.customDialog(
                     child: AddToCartDialogOptions(item: item));
@@ -41,24 +40,26 @@ class ProductBody extends GetView<PosController> {
                   name: item.name,
                   description: item.description,
                   type: item.productType,
-                  price: item.price,
+                  price: item.price ?? 0,
                   quantity: PosController.to.orderQuantity,
-                  isLiquor: item.isLiquor == 1 ? true : false,
-                  togo: controller.isTogoSelected ? "TO GO" : '',
-                  dontMake: controller.isDontMakeSelected ? "DON'T MAKE" : '',
-                  rush: controller.isRushSelected ? "RUSH" : '',
-                  serveFirst: controller.selectedOrderTypes2,
-                  kitchenNote: controller.kitchenNoteTEC.text,
+                  isLiquor: int.parse(item.isLiquor.toString()),
+                  togo: '',
+                  dontMake: '',
+                  rush: '',
+                  heat: '',
+                  serveFirst: '',
+                  kitchenNote: '',
                 );
 
                 //** Add item **
                 PosController.to.onAddCartItem(order);
+                FocusScope.of(context).unfocus();
               }
             },
             isOutline: true,
-            text: item.name,
+            height: 78,
+            text: item.name!.toUpperCase(),
           );
-          // return Container();
         }),
       );
     }));

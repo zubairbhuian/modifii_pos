@@ -39,27 +39,27 @@ class AvailableTableOption extends StatelessWidget {
               PrimaryBtn(
                 onPressed: () {
                   //
-                  controller.selectedTableId = null;
-                  controller.selectedBarId = null;
-                  if (controller.barTableActiveIndex.value > 0) {
-                    controller.selectedBarId =
-                        controller.currentTableId.value.toString();
-                    controller.updateSelectedBarId;
-                  } else if (controller.dineInTableActiveIndex.value > 0) {
-                    Logger().e("di");
-                    controller.selectedTableId =
-                        controller.currentTableId.value.toString();
-                    controller.updateSelectedTableId;
-                  } else if (controller.halTableActiveIndex.value > 0) {
-                    Logger().e("hall");
+                  // controller.selectedTableId = null;
+                  // controller.selectedBarId = null;
+                  // if (controller.barTableActiveIndex.value > 0) {
+                  //   controller.selectedBarId =
+                  //       controller.currentTableId.value.toString();
+                  //   controller.updateSelectedBarId;
+                  // } else if (controller.dineInTableActiveIndex.value > 0) {
+                  //   Logger().e("di");
+                  //   controller.selectedTableId =
+                  //       controller.currentTableId.value.toString();
+                  //   controller.updateSelectedTableId;
+                  // } else if (controller.halTableActiveIndex.value > 0) {
+                  //   Logger().e("hall");
 
-                    // controller.selectedBarId =
-                    //     controller.currentTableId.value.toString();
-                    // controller.updateSelectedBarId;
-                    // controller.selectedTableId =
-                    //     controller.currentTableId.value.toString();
-                    // controller.updateSelectedTableId;
-                  }
+                  //   // controller.selectedBarId =
+                  //   //     controller.currentTableId.value.toString();
+                  //   // controller.updateSelectedBarId;
+                  //   // controller.selectedTableId =
+                  //   //     controller.currentTableId.value.toString();
+                  //   // controller.updateSelectedTableId;
+                  // }
 
                   PosController.to.onchangePage(0);
                 },
