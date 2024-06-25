@@ -353,9 +353,13 @@ class TablesController extends GetxController {
     "Cash & Card"
   ];
 
+  // Table pages
+   RxBool isShowTablePaymentbtn = false.obs;
+
   /// split order
   RxInt splitPaymentActiveIndex = (-1).obs;
   RxBool isShowsplitPaymentbtn = false.obs;
+ 
   splitPaymentShowHide() {}
 
   @override
