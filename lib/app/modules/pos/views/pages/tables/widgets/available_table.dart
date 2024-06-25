@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
+import 'package:logger/logger.dart';
 import '../../../../../../utils/static_colors.dart';
 import '../../../../../../widgets/custom_btn.dart';
 import '../../../../../../widgets/my_custom_text.dart';
@@ -23,16 +26,41 @@ class AvailableTableOption extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyCustomText(
-            'Table ${controller.selectedTableIndex.value + 1}',
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-          ),
+          Obx(() {
+            return MyCustomText(
+              'Table ${controller.currentTableNumber}',
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            );
+          }),
           const SizedBox(height: 18),
           Row(
             children: [
               PrimaryBtn(
                 onPressed: () {
+                  //
+                  controller.selectedTableId = null;
+                  controller.selectedBarId = null;
+                  if (controller.barTableActiveIndex.value > 0) {
+                    controller.selectedBarId =
+                        controller.currentTableId.value.toString();
+                    controller.updateSelectedBarId;
+                  } else if (controller.dineInTableActiveIndex.value > 0) {
+                    Logger().e("di");
+                    controller.selectedTableId =
+                        controller.currentTableId.value.toString();
+                    controller.updateSelectedTableId;
+                  } else if (controller.halTableActiveIndex.value > 0) {
+                    Logger().e("hall");
+
+                    // controller.selectedBarId =
+                    //     controller.currentTableId.value.toString();
+                    // controller.updateSelectedBarId;
+                    // controller.selectedTableId =
+                    //     controller.currentTableId.value.toString();
+                    // controller.updateSelectedTableId;
+                  }
+
                   PosController.to.onchangePage(0);
                 },
                 width: 150,
@@ -41,13 +69,32 @@ class AvailableTableOption extends StatelessWidget {
                 color: StaticColors.orangeColor,
               ),
               const SizedBox(width: 30),
-              PrimaryBtn(
-                onPressed: () {},
-                width: 150,
-                text: 'Hold Table',
-                textColor: Colors.white,
-                color: StaticColors.pinkColor,
-              ),
+              Obx(() {
+                return Visibility(
+                  visible:
+                      controller.currentTableStatus.value == 6 ? false : true,
+                  replacement: PrimaryBtn(
+                    onPressed: () {
+                      controller.onChangeTableStatus(
+                          tableId: controller.currentTableId.value, status: 1);
+                    },
+                    width: 150,
+                    text: 'Release Table',
+                    textColor: Colors.white,
+                    color: StaticColors.greenColor,
+                  ),
+                  child: PrimaryBtn(
+                    onPressed: () {
+                      controller.onChangeTableStatus(
+                          tableId: controller.currentTableId.value, status: 6);
+                    },
+                    width: 150,
+                    text: 'Hold Table',
+                    textColor: Colors.white,
+                    color: StaticColors.pinkColor,
+                  ),
+                );
+              }),
             ],
           )
         ],

@@ -233,6 +233,15 @@ class PosController extends GetxController {
     update();
   }
 
+  void clearHoleCart() {
+    cartList.clear();
+    getTotalPrice();
+    TablesController.to.selectedTableId = null;
+    TablesController.to.selectedBarId = null;
+    TablesController.to.update();
+    update();
+  }
+
   RxDouble cartSubTotalPrice = 0.0.obs;
   RxDouble cartSubTotalLiquorPrice = 0.0.obs;
   RxDouble cartGSTAmount = 0.0.obs;

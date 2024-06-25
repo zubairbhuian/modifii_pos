@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/utils/my_func.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:get/get.dart';
 import '../../../../../../utils/static_colors.dart';
@@ -29,29 +30,28 @@ class TableBody extends GetView<TablesController> {
                 crossAxisSpacing: 2,
                 mainAxisSpacing: 2,
               ),
-              itemCount: controller.barsList.length,
+              itemCount: controller.allBarsList.length,
               itemBuilder: (context, index) {
+                var table = controller.allBarsList[index];
                 return Obx(
                   () => Container(
                     padding: const EdgeInsets.all(4.0),
                     decoration: BoxDecoration(
-                      color: controller.selectedTableIndex.value == index
+                      color: controller.barTableActiveIndex.value == index
                           ? StaticColors.blueLightColor
                           : Colors.transparent,
                     ),
                     child: PrimaryBtnWithChild(
                       onPressed: () {
-                        controller.updateSelectedTableIndex(index);
+                        controller.onActiveTable(
+                            tableType: "Bar Area", index: index, table: table);
                       },
                       height: 75,
                       width: 75,
                       padding: const EdgeInsets.all(10.0),
-                      color: controller.barsList[index].status == 2
-                          ? StaticColors.yellowColor
-                          : StaticColors.greenColor,
+                      color: MyFunc.getTableColorWithStatus(table.status),
                       style: theme.textTheme.titleLarge
                           ?.copyWith(color: Colors.white),
-                      // text: controller.tablesList[index].tableNo,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -59,21 +59,21 @@ class TableBody extends GetView<TablesController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               MyCustomText(
-                                '${controller.barsList[index].number}',
+                                '${table.number}',
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
                               ),
                               MyCustomText(
-                                '${controller.barsList[index].capacity}',
+                                '${table.capacity}',
                                 fontSize: 10,
                                 color: Colors.white,
                               ),
                             ],
                           ),
                           Visibility(
-                            visible: controller.barsList[index].status == 2,
-                            child: MyCustomText(
+                            visible: table.status == 2,
+                            child: const MyCustomText(
                               'username',
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -81,8 +81,8 @@ class TableBody extends GetView<TablesController> {
                             ),
                           ),
                           Visibility(
-                            visible: controller.barsList[index].status == 2,
-                            child: MyCustomText(
+                            visible: table.status == 2,
+                            child: const MyCustomText(
                               '\$34.99',
                               fontSize: 12,
                               color: Colors.white,
@@ -109,70 +109,70 @@ class TableBody extends GetView<TablesController> {
               ),
               itemCount: controller.tablesList.length,
               itemBuilder: (context, index) {
-                return Container(
-                  padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    color: controller.selectedTableIndex.value == index
-                        ? StaticColors.blueLightColor
-                        : Colors.transparent,
-                  ),
-                  child: PrimaryBtnWithChild(
-                    onPressed: () {
-                      controller.updateSelectedTableIndex(index);
-                    },
-                    height: 75,
-                    width: 75,
-                    padding: const EdgeInsets.all(10.0),
-                    color: controller.tablesList[index].status == 2
-                        ? StaticColors.yellowColor
-                        : StaticColors.greenColor,
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(color: Colors.white),
-                    // text: controller.tablesList[index].tableNo,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MyCustomText(
-                              '${controller.tablesList[index].number}',
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                            MyCustomText(
-                              '${controller.tablesList[index].capacity}',
-                              fontSize: 10,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                        Visibility(
-                          visible:
-                              controller.tablesList[index].reservationType !=
-                                  null,
-                          child: const MyCustomText(
-                            'username',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Visibility(
-                          visible:
-                              controller.tablesList[index].reservationType !=
-                                  null,
-                          child: const MyCustomText(
-                            '\$34.99',
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                var table = controller.tablesList[index];
+                return Obx(() {
+                  return Container(
+                    padding: const EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: controller.dineInTableActiveIndex.value == index
+                          ? StaticColors.blueLightColor
+                          : Colors.transparent,
                     ),
-                  ),
-                );
+                    child: PrimaryBtnWithChild(
+                      onPressed: () {
+                        controller.onActiveTable(
+                            tableType: "Dine-In Area",
+                            index: index,
+                            table: table);
+                      },
+                      height: 75,
+                      width: 75,
+                      padding: const EdgeInsets.all(10.0),
+                      color: MyFunc.getTableColorWithStatus(table.status),
+                      style: theme.textTheme.titleLarge
+                          ?.copyWith(color: Colors.white),
+                      // text: controller.tablesList[index].tableNo,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MyCustomText(
+                                '${table.number}',
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                              MyCustomText(
+                                '${table.capacity}',
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          Visibility(
+                            visible: table.reservationType != null,
+                            child: const MyCustomText(
+                              'username',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Visibility(
+                            visible: table.reservationType != null,
+                            child: const MyCustomText(
+                              '\$34.99',
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
               },
             ),
           ),
@@ -189,24 +189,24 @@ class TableBody extends GetView<TablesController> {
               ),
               itemCount: controller.hallsList.length,
               itemBuilder: (context, index) {
+                var table = controller.hallsList[index];
                 return Obx(
                   () => Container(
                     padding: const EdgeInsets.all(4.0),
                     decoration: BoxDecoration(
-                      color: controller.selectedTableIndex.value == index
+                      color: controller.halTableActiveIndex.value == index
                           ? StaticColors.blueLightColor
                           : Colors.transparent,
                     ),
                     child: PrimaryBtnWithChild(
                       onPressed: () {
-                        controller.updateSelectedTableIndex(index);
+                        controller.onActiveTable(
+                            tableType: "Hall Area", index: index, table: table);
                       },
                       height: 75,
                       width: 75,
                       padding: const EdgeInsets.all(10.0),
-                      color: controller.hallsList[index].status == 2
-                          ? StaticColors.yellowColor
-                          : StaticColors.greenColor,
+                      color: MyFunc.getTableColorWithStatus(table.status),
                       style: theme.textTheme.titleLarge
                           ?.copyWith(color: Colors.white),
                       // text: controller.tablesList[index].tableNo,
@@ -217,13 +217,13 @@ class TableBody extends GetView<TablesController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               MyCustomText(
-                                '${controller.hallsList[index].number}',
+                                '${table.number}',
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
                               ),
                               MyCustomText(
-                                '${controller.hallsList[index].capacity}',
+                                '${table.capacity}',
                                 fontSize: 10,
                                 color: Colors.white,
                               ),

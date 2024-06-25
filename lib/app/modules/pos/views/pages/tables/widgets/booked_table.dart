@@ -1,11 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_base/app/modules/pos/views/pages/tables/widgets/split_order.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/tables/order_details.dart';
+import 'package:flutter_base/app/utils/my_func.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
+import 'package:flutter_base/app/widgets/custom_loading.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import '../../../../../../widgets/custom_alert_dialog.dart';
 import '../../../../controllers/tables_controller.dart';
 
@@ -21,35 +24,41 @@ class BookedTableOption extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     bool smallHeight = MediaQuery.sizeOf(context).height < 700;
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          //Top Row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _columnText('Order', '#10004A'),
-              _columnText('Server', 'User01'),
-              _columnText('Guests', '3'),
-              _columnText('Status', 'Confimed'),
-              _columnText('Customer', 'Walk-In\nCustomer'),
-            ],
-          ),
-          SizedBox(height: smallHeight ? 0 : 14),
-          //Buttons Row
-          GetBuilder<TablesController>(builder: (c) {
-            return Row(
+    return GetBuilder<TablesController>(builder: (c) {
+      if (c.currentOrderData == null) return const CustomLoading();
+      // is there is data
+      return Container(
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            //Top Row
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _columnText('Order', '${c.currentOrderData?.id}'),
+                _columnText('Server', '${c.currentOrderData?.serverName}'),
+                _columnText('Guests', '3'),
+                _columnText(
+                    'Status',
+                    MyFunc.getStatusWithStatusCode(
+                        c.currentOrderData?.server?.status)),
+                _columnText('Customer', 'Walk-In\nCustomer'),
+              ],
+            ),
+            SizedBox(height: smallHeight ? 0 : 14),
+            //Buttons Row
+            Row(
               children: [
                 Expanded(
                   child: PrimaryBtn(
                     onPressed: () {
-                      _bookedTableOptionsDialog(context, isGotoOrder: true);
+                      Get.to(() => const OrderDetails());
+                      // _bookedTableOptionsDialog(context, isGotoOrder: true);
                     },
                     color: StaticColors.greenColor,
                     textColor: Colors.white,
@@ -60,7 +69,28 @@ class BookedTableOption extends StatelessWidget {
                 Expanded(
                   child: PrimaryBtn(
                     onPressed: () {
-                      _bookedTableOptionsDialog(context, isAddItem: true);
+                      // controller.selectedTableId = null;
+                      // controller.selectedBarId = null;
+                      // if (controller.barTableActiveIndex.value > 0) {
+                      //   controller.selectedBarId =
+                      //       controller.currentTableId.value.toString();
+                      //   controller.updateSelectedBarId;
+                      // } else if (controller.dineInTableActiveIndex.value > 0) {
+                      //   Logger().e("di");
+                      //   controller.selectedTableId =
+                      //       controller.currentTableId.value.toString();
+                      //   controller.updateSelectedTableId;
+                      // } else if (controller.halTableActiveIndex.value > 0) {
+                      //   Logger().e("hall");
+
+                      //   // controller.selectedBarId =
+                      //   //     controller.currentTableId.value.toString();
+                      //   // controller.updateSelectedBarId;
+                      //   // controller.selectedTableId =
+                      //   //     controller.currentTableId.value.toString();
+                      //   // controller.updateSelectedTableId;
+                      // }
+                      controller.onAddIrem(c.currentOrderData?.details ?? []);
                     },
                     color: StaticColors.orangeColor,
                     textColor: Colors.white,
@@ -91,93 +121,102 @@ class BookedTableOption extends StatelessWidget {
                   ),
                 ),
               ],
-            );
-          }),
-          SizedBox(height: smallHeight ? 0 : 14),
-          const Divider(),
-          //Items List
-          const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(flex: 1, child: MyCustomText('SL.')),
-              Expanded(flex: 4, child: MyCustomText('Items')),
-              Expanded(flex: 1, child: MyCustomText('Qty')),
-              Expanded(flex: 1, child: MyCustomText('Price')),
-            ],
-          ),
-          const Divider(),
-          const SizedBox(height: 8),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: List.generate(
-                  8,
-                  (index) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: MyCustomText('${index + 1}'),
-                        ),
-                        const Expanded(
-                          flex: 4,
-                          child: Row(
-                            children: [
-                              AutoSizeText(
-                                'Chicken Tikka',
-                                maxFontSize: 16,
-                                minFontSize: 10,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
+            ),
+            SizedBox(height: smallHeight ? 0 : 14),
+            const Divider(),
+            //Items List
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 1, child: MyCustomText('SL.')),
+                Expanded(flex: 4, child: MyCustomText('Items')),
+                Expanded(flex: 1, child: MyCustomText('Qty')),
+                Expanded(flex: 1, child: MyCustomText('Price')),
+              ],
+            ),
+            const Divider(),
+            const SizedBox(height: 8),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: List.generate(
+                    c.currentOrderData?.details.length ?? 0,
+                    (index) {
+                      var data = c.currentOrderData?.details[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: MyCustomText('${index + 1}'),
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: Row(
+                                children: [
+                                  AutoSizeText(
+                                    data?.productDetails?.name ?? "",
+                                    maxFontSize: 16,
+                                    minFontSize: 10,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  // const AutoSizeText(
+                                  //   ' (Heat: Medium)',
+                                  //   maxFontSize: 14,
+                                  //   minFontSize: 10,
+                                  //   style: TextStyle(
+                                  //     fontWeight: FontWeight.w400,
+                                  //     fontStyle: FontStyle.italic,
+                                  //   ),
+                                  // ),
+                                ],
                               ),
-                              AutoSizeText(
-                                ' (Heat: Medium)',
-                                maxFontSize: 14,
-                                minFontSize: 10,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: MyCustomText("${data?.quantity}"),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: MyCustomText("${data?.price}"),
+                            ),
+                          ],
                         ),
-                        const Expanded(
-                          flex: 1,
-                          child: MyCustomText('1'),
-                        ),
-                        const Expanded(
-                          flex: 1,
-                          child: MyCustomText('\$ 16.99'),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
               ),
             ),
-          ),
-          //Amounts
-          const Divider(),
-          _row(theme, title: "Subtotal :", value: "\$00"),
-          _row(theme, title: "GST 5% :", value: "\$00"),
-          const Divider(),
-          _row(theme, title: "Total :", value: "\$00", fontSize: 20),
-          SizedBox(height: smallHeight ? 0 : 14),
-          PrimaryBtn(
-            onPressed: () {},
-            height: 48,
-            text: 'Pay',
-            width: double.infinity,
-            textColor: Colors.white,
-            color: StaticColors.greenColor,
-          ),
-        ],
-      ),
-    );
+            //Amounts
+            const Divider(),
+            _row(theme,
+                title: "Subtotal :",
+                value: "${c.currentOrderData?.addonSubTotal}"),
+            _row(theme,
+                title: "GST 5% :", value: "${c.currentOrderData?.addonGst}"),
+            const Divider(),
+            _row(theme,
+                title: "Total :",
+                value: "${c.currentOrderData?.addonSubTotal}",
+                fontSize: 20),
+            SizedBox(height: smallHeight ? 0 : 14),
+            PrimaryBtn(
+              onPressed: () {},
+              height: 48,
+              text: 'Pay',
+              width: double.infinity,
+              textColor: Colors.white,
+              color: StaticColors.greenColor,
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Expanded _columnText(String label, String value) {
@@ -240,7 +279,7 @@ void _bookedTableOptionsDialog(
           alignment: Alignment.topRight,
           clipBehavior: Clip.none,
           children: [
-            const SplitOrder(),
+            // const SplitOrder(),
             IconButton(
               onPressed: Get.back,
               icon: const Icon(

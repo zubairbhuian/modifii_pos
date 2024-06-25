@@ -58,6 +58,7 @@ class ProductBody extends GetView<PosController> {
             isOutline: true,
             text: item.name,
           );
+          // return Container();
         }),
       );
     }));

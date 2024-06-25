@@ -58,29 +58,22 @@ class AuthController extends GetxController {
   ];
 
   // **** Login *****
+
   void login() async {
-    if (password.value.length == passwordLength.value) {
-      Map<String, dynamic> data = {"auth_pin": password.value};
-      try {
-        kLogger.i('auth: $data');
-        PopupDialog.showLoadingDialog();
-        // var res = await BaseController.to.apiService
-        //     .makePostRequest("${URLS.baseURL}${URLS.login}", data);
-        var res = await Dio().post(URLS.login, data: data);
-        // kLogger.d(res.data);
-        // PopupDialog.closeLoadingDialog();
-        if (res.statusCode == 200 || res.statusCode == 201) {
-          Get.offAllNamed(Routes.CLOCK_IN);
-        } else {
-          PopupDialog.showErrorMessage("password is not valid");
-        }
-        kLogger.e(res.data);
-      } catch (e) {
-        kLogger.e('Error from %%%% login %%%% => $e');
-        PopupDialog.closeLoadingDialog();
+    Map<String, dynamic> data = {"auth_pin": password.value};
+    try {
+      kLogger.i('auth: $data');
+      PopupDialog.showLoadingDialog();
+      var res = await Dio().post(URLS.login, data: data);
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        Get.offAllNamed(Routes.CLOCK_IN);
+      } else {
+        PopupDialog.showErrorMessage("password is not valid");
       }
-    } else {
-      PopupDialog.showErrorMessage("The password should be 6 character");
+      kLogger.e(res.data);
+    } catch (e) {
+      kLogger.e('Error from %%%% login %%%% => $e');
+      PopupDialog.closeLoadingDialog();
     }
   }
 

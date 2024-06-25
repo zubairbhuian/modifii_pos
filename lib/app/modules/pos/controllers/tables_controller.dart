@@ -3,10 +3,15 @@ import 'dart:math';
 // import 'package:dio/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/modules/pos/controllers/orders_controller.dart';
+import 'package:flutter_base/app/modules/pos/controllers/pos_controller.dart';
+import 'package:flutter_base/app/modules/pos/models/order_model.dart';
+import 'package:flutter_base/app/modules/pos/models/order_place_model.dart';
 import 'package:flutter_base/app/utils/my_formatter.dart';
 import 'package:flutter_base/app/utils/urls.dart';
 import 'package:get/get.dart';
-
+import 'package:logger/logger.dart';
+import '../../../widgets/popup_dialogs.dart';
 import '../../../utils/logger.dart';
 import '../models/table_model.dart';
 
@@ -28,6 +33,7 @@ class TablesController extends GetxController {
   void getTables() async {
     try {
       var res = await Dio().get(URLS.tableList);
+      // Logger().e(res);
       if (res.statusCode == 200) {
         tablesList.assignAll(
           (res.data as List).map((e) => TableModel.fromJson(e)).toList(),
@@ -51,6 +57,24 @@ class TablesController extends GetxController {
         );
 
         availableBarsIdNumber = getAvailableList(barsList);
+      }
+    } catch (e) {
+      kLogger.e('Error from %%%% get bars %%%% => $e');
+    }
+  }
+
+  // get all bar list
+  RxList<TableModel> allBarsList = <TableModel>[].obs;
+
+  void getAllBars() async {
+    try {
+      var res = await Dio().get(URLS.allBarList);
+      if (res.statusCode == 200) {
+        allBarsList.assignAll(
+          (res.data as List).map((e) => TableModel.fromJson(e)).toList(),
+        );
+
+        // availableBarsIdNumber = getAvailableList(barsList);
       }
     } catch (e) {
       kLogger.e('Error from %%%% get bars %%%% => $e');
@@ -102,14 +126,14 @@ class TablesController extends GetxController {
     return values;
   }
 
-  List<String> guestNumbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
+  List<String> guestNumbers = List.generate(25, (index) => "${index + 1}");
   String? selectedGuestNumbers;
   void updatedSelectedGuestNumbers(String? value) {
     selectedGuestNumbers = value;
     update();
   }
 
-  //*******ORDER ITEMS RECIEPTS******* */
+  //******* ORDER ITEMS RECIEPTS ******* */
   //list of total receipts
   List<List<OrderItemModel>> orderReceiptsList = [];
   //initial receipt items
@@ -191,10 +215,148 @@ class TablesController extends GetxController {
     }
   }
 
+  // table active
+  RxInt dineInTableActiveIndex = (-1).obs;
+  RxInt barTableActiveIndex = (-1).obs;
+  RxInt halTableActiveIndex = (-1).obs;
+  // available table and booking table
+  RxInt currentTableNumber = (-1).obs;
+  RxInt currentTableId = (-1).obs;
+  RxInt currentTableStatus = (-1).obs;
+  String currentTableType = '';
+  onActiveTable({
+    required String tableType,
+    required int index,
+    required TableModel table,
+  }) {
+    currentTableType = tableType;
+    Logger().e(currentTableStatus);
+
+    if (tableType == "Bar Area") {
+      // for bar
+      dineInTableActiveIndex.value = -1;
+      barTableActiveIndex.value = index;
+      halTableActiveIndex.value = -1;
+      currentTableNumber.value = table.number ?? -1;
+      currentTableStatus.value = table.status ?? -1;
+      currentTableId.value = table.id ?? -1;
+    } else if (tableType == "Dine-In Area") {
+      // for Dine-in
+      dineInTableActiveIndex.value = index;
+      barTableActiveIndex.value = -1;
+      halTableActiveIndex.value = -1;
+      currentTableNumber.value = table.number ?? -1;
+      currentTableStatus.value = table.status ?? -1;
+      currentTableId.value = table.id ?? -1;
+    } else {
+      // for Hall
+      dineInTableActiveIndex.value = -1;
+      barTableActiveIndex.value = -1;
+      halTableActiveIndex.value = index;
+      currentTableNumber.value = table.number ?? -1;
+      currentTableStatus.value = table.status ?? -1;
+      currentTableId.value = table.id ?? -1;
+    }
+    //get current order
+    if (currentTableStatus.value == 2) {
+      getCurrentOrder(table.id ?? -1);
+    }
+  }
+
+  // On change table status
+  onChangeTableStatus({
+    required int tableId,
+    required int status,
+  }) async {
+    String url = "${URLS.baseURL}/table/$tableId/hold/$status";
+    String barUrl = "${URLS.baseURL}/bars/$tableId/hold/$status";
+    try {
+      PopupDialog.showLoadingDialog();
+      if (currentTableType == "Bar Area") {
+        var res = await Dio().get(barUrl);
+        if (res.statusCode == 200) {
+          // for bar
+          getAllBars();
+          currentTableStatus.value = status;
+        }
+      } else {
+        var res = await Dio().get(url);
+        if (res.statusCode == 200) {
+          Logger().e(url);
+          // for Dine-in
+          getTables();
+          // for Hall
+          getHalls();
+          currentTableStatus.value = status;
+        }
+      }
+      PopupDialog.closeLoadingDialog();
+    } catch (e) {
+      PopupDialog.closeLoadingDialog();
+      kLogger.e('Error from get all bar table %%%% get halls %%%% => $e');
+    }
+  }
+
+  // get current-order
+  OrderModel? currentOrderData;
+
+  getCurrentOrder(int tableNumber) async {
+    try {
+      currentOrderData = null;
+      update();
+      var res =
+          await Dio().get("${URLS.baseURL}/table/$tableNumber/current-order");
+      // Logger().e(res);
+      if (res.statusCode == 200) {
+        currentOrderData = OrderModel.fromJson(res.data["order"]);
+        update();
+      }
+    } catch (e) {
+      kLogger.e('Error from %%%% get tables %%%% => $e');
+    }
+  }
+
+  Cart productDetailsToCart(Detail product) {
+    return Cart(
+      id: product.id.toString(),
+      type: product.productType,
+      name: product.productDetails?.name ?? "",
+      price: product.price,
+      description: product.productDetails?.description ?? "",
+      quantity: product.quantity,
+      variations: [],
+      isLiquor: product.isLiquor == 1 ? true : false,
+    );
+  }
+
+  List<Cart> convertProductListToCartList(List<Detail> products) {
+    return products.map((product) => productDetailsToCart(product)).toList();
+  }
+
+  // onAddIrem
+  onAddIrem(List<Detail> item) {
+    PosController.to.cartList = convertProductListToCartList(item);
+    PosController.to.getTotalPrice();
+    PosController.to.update();
+    PosController.to.onchangePage(0);
+  }
+
+  RxInt paymentMathodActiveIndex = (-1).obs;
+  List<String> paymentMathod = [
+    "Visa",
+    "Master Card",
+    "Amex",
+    "Debit Card",
+    "Cash",
+    "Others",
+    "Cash & Card"
+  ];
+
   @override
   void onInit() {
     getTables();
     getBars();
+    getAllBars();
     getHalls();
     getOrderItems();
     super.onInit();

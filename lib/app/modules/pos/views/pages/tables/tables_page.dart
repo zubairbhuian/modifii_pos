@@ -24,18 +24,22 @@ class TablesPage extends GetView<TablesController> {
                 flex: 3,
                 child: TableBody(),
               ),
-              const SizedBox(width: 80),
+              const SizedBox(width: 30),
               Expanded(
-                flex: 2, child: AvailableTableOption(controller: controller),
-                // child: Obx(
-                //   () => Visibility(
-                //     visible: controller
-                //         .tablesList[controller.selectedTableIndex.value]
-                //         .isBooked,
-                //     replacement: AvailableTableOption(controller: controller),
-                //     child: BookedTableOption(controller: controller),
-                //   ),
-                // ),
+                flex: 2,
+                child: Obx(() {
+                  if (controller.currentTableNumber.value == -1) {
+                    return const SizedBox.shrink();
+                  }
+                  return Visibility(
+                    visible:
+                        controller.currentTableStatus.value == 2 ? true : false,
+                    // Available table
+                    replacement: AvailableTableOption(controller: controller),
+                    // Booked table
+                    child: BookedTableOption(controller: controller),
+                  );
+                }),
               ),
               // cart area
             ],

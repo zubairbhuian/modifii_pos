@@ -50,7 +50,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       // titleTextStyle: kTitleLarge.copyWith(color: const Color(0xff2F2F2F)),
       // appbar leading
       // appbar title
-      flexibleSpace: Container(
+      flexibleSpace: SizedBox(
         // decoration: BoxDecoration(
         //     border: Border(bottom: BorderSide(color: theme.dividerColor))),
         width: double.infinity,
@@ -91,19 +91,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (hasHomeButton)
                 CustomInkWell(
                   onTap: () {},
-                  child: const Icon(
-                    FontAwesomeIcons.house,
-                    size: 28,
+                  child: SvgPicture.asset(
+                    width: 200,
+                    'assets/images/splash/yogo_logo.svg',
+                    colorFilter: ColorFilter.mode(
+                      configController.isLightTheme
+                          ? Colors.black
+                          : Colors.white,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ).marginOnly(right: 20),
-              SvgPicture.asset(
-                width: 200,
-                'assets/images/splash/yogo_logo.svg',
-                colorFilter: ColorFilter.mode(
-                  configController.isLightTheme ? Colors.black : Colors.white,
-                  BlendMode.srcIn,
-                ),
-              ),
             ],
           ),
           Row(

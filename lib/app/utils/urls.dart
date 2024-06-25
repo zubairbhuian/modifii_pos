@@ -11,6 +11,7 @@ class URLS {
 
   static String tableList = '$baseURL/table/dine-in-area';
   static String barList = '$baseURL/bars/list';
+  static String allBarList = '$baseURL/bars/area';
   static String hallList = '$baseURL/table/hall-area';
 
   static String ordersList = '$baseURL/table/order/list';

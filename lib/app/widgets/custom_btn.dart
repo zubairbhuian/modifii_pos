@@ -2,6 +2,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/services/controller/base_controller.dart';
 import '../utils/static_colors.dart';
 
 class PrimaryBtn extends StatelessWidget {
@@ -40,19 +41,15 @@ class PrimaryBtn extends StatelessWidget {
     this.textMinSize = 14,
   });
 
-  void playTapSound() {
-    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return SizedBox(
       height: height ?? 48,
-      width: width ?? 120,
+      width: width,
       child: ElevatedButton(
         onPressed: () {
-          playTapSound();
+          BaseController.to.playTapSound();
           onPressed();
         },
         style: !isOutline

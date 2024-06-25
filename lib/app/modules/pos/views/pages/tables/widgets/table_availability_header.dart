@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../../utils/static_colors.dart';
+import 'package:flutter_base/app/utils/my_func.dart';
 import '../../../../../../widgets/my_custom_text.dart';
 
 class TableAvailabilityHeader extends StatelessWidget {
@@ -10,35 +9,35 @@ class TableAvailabilityHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        MyCustomText(
+        const MyCustomText(
           ' Table Availability',
           fontWeight: FontWeight.w500,
         ),
-        SizedBox(width: 10.0),
+        const SizedBox(width: 10.0),
         ColorTextRow(
-          color: StaticColors.greenColor,
+          color: MyFunc.getTableColorWithStatus(1),
           text: 'Available',
         ),
         ColorTextRow(
-          color: StaticColors.yellowColor,
+          color: MyFunc.getTableColorWithStatus(2),
           text: 'Walk-In Booking',
         ),
         ColorTextRow(
-          color: StaticColors.orangeColor,
+          color: MyFunc.getTableColorWithStatus(3),
           text: 'Cooking/Serving',
         ),
         ColorTextRow(
-          color: StaticColors.blueColor,
+          color: MyFunc.getTableColorWithStatus(4),
           text: 'Online Booking',
         ),
         ColorTextRow(
-          color: StaticColors.purpleColor,
+          color: MyFunc.getTableColorWithStatus(5),
           text: 'Combined Tables',
         ),
         ColorTextRow(
-          color: StaticColors.pinkColor,
+          color: MyFunc.getTableColorWithStatus(6),
           text: 'Hold Tables',
         ),
       ],

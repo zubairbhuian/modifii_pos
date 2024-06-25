@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/app/services/controller/base_controller.dart';
 
 class CustomInkWell extends StatelessWidget {
   const CustomInkWell({
@@ -11,30 +12,25 @@ class CustomInkWell extends StatelessWidget {
   });
 
   final Widget child;
-  final VoidCallback? onTap;
+  final Function()? onTap;
   final VoidCallback? onDoubleTap;
   final VoidCallback? onLongTap;
-
-  void playTapSound() {
-    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
-  }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return InkWell(
-      onTap: () {
-        playTapSound();
-        if (onTap != null) onTap!();
-      },
+      onTap: onTap == null
+          ? null
+          : () {
+              BaseController.to.playTapSound();
+              onTap!();
+            },
       onDoubleTap: onDoubleTap,
       onLongPress: onLongTap,
-      splashColor: theme.primaryColor.withOpacity(.1),
-      borderRadius: BorderRadius.circular(800),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: child,
-      ),
+      // splashColor: theme.primaryColor.withOpacity(.1),
+      // borderRadius: BorderRadius.circular(800),
+      child: child,
     );
   }
 }

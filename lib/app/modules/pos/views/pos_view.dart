@@ -13,7 +13,7 @@ class PosView extends GetView<PosController> {
   Widget build(BuildContext context) {
     // ThemeData theme = Theme.of(context);
     return Scaffold(
-      // appBar: const CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: PageView(

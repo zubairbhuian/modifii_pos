@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_base/app/utils/logger.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +23,9 @@ class BaseController extends GetxController {
   void logout() {
     Preferences.clear();
     // Get.offAllNamed(Routes.SIGN_IN);
+  }
+    void playTapSound() {
+    AudioPlayer().play(AssetSource('audio/tap_sound_1.mp3'));
   }
 
 
