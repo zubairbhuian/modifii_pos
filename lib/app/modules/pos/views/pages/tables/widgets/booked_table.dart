@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/order_details.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/tables/split_order.dart';
 import 'package:flutter_base/app/utils/my_func.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
@@ -112,8 +113,7 @@ class BookedTableOption extends StatelessWidget {
                 Expanded(
                   child: PrimaryBtn(
                     onPressed: () {
-                      // c.setSelectedBookedTableOption(index);
-                      _bookedTableOptionsDialog(context, isSplitOrder: true);
+                      Get.to(() => const SplitOrder());
                     },
                     color: StaticColors.purpleColor,
                     textColor: Colors.white,
