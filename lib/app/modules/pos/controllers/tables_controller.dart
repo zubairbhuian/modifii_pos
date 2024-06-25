@@ -10,6 +10,7 @@ import 'package:flutter_base/app/modules/pos/models/order_place_model.dart';
 import 'package:flutter_base/app/utils/my_formatter.dart';
 import 'package:flutter_base/app/utils/urls.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:logger/logger.dart';
 import '../../../widgets/popup_dialogs.dart';
 import '../../../utils/logger.dart';
@@ -351,6 +352,11 @@ class TablesController extends GetxController {
     "Others",
     "Cash & Card"
   ];
+
+  /// split order
+  RxInt splitPaymentActiveIndex = (-1).obs;
+  RxBool isShowsplitPaymentbtn = false.obs;
+  splitPaymentShowHide() {}
 
   @override
   void onInit() {
