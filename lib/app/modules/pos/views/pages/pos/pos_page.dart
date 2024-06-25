@@ -214,18 +214,14 @@ class PosPage extends GetView<PosController> {
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: Container(
-                                width: 300,
+                                width: 116,
                                 height: 200,
                                 color: c.getColor(e.status ?? 0),
                                 child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 40.0),
-                                      child: MyCustomText(
-                                        'Table ${e.number}',
-                                        color: Colors.white,
-                                      ),
+                                    alignment: Alignment.center,
+                                    child: MyCustomText(
+                                      'Table ${e.number}',
+                                      color: Colors.white,
                                     ))),
                           ),
                         );
@@ -236,10 +232,11 @@ class PosPage extends GetView<PosController> {
                         c.updateSelectedTable(table);
                       },
                       menuItemPadding: EdgeInsets.zero,
+                      dropdownStyleWidth: 220,
                     );
                   }),
                 ),
-                const SizedBox(width: 2),
+                const SizedBox(width: 8),
                 Expanded(
                   child: GetBuilder<TablesController>(builder: (c) {
                     return MyDropdownBtn(
@@ -250,18 +247,14 @@ class PosPage extends GetView<PosController> {
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: Container(
-                                width: 300,
+                                width: 116,
                                 height: 200,
                                 color: c.getColor(e.status ?? 0),
                                 child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 40.0),
-                                      child: MyCustomText(
-                                        'Table ${e.number}',
-                                        color: Colors.white,
-                                      ),
+                                    alignment: Alignment.center,
+                                    child: MyCustomText(
+                                      'Table ${e.number}',
+                                      color: Colors.white,
                                     ))),
                           ),
                         );
@@ -272,6 +265,7 @@ class PosPage extends GetView<PosController> {
                         c.updateSelectedBar(bar);
                       },
                       menuItemPadding: EdgeInsets.zero,
+                      dropdownStyleWidth: 220,
                     );
                   }),
                 ),

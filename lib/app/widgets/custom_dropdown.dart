@@ -10,6 +10,7 @@ class MyDropdownBtn extends StatelessWidget {
     required this.selectedValue,
     this.onChanged,
     this.menuItemPadding,
+    this.dropdownStyleWidth,
   });
 
   final String hintText;
@@ -17,6 +18,7 @@ class MyDropdownBtn extends StatelessWidget {
   final dynamic selectedValue;
   final void Function(dynamic)? onChanged;
   final EdgeInsetsGeometry? menuItemPadding;
+  final double? dropdownStyleWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class MyDropdownBtn extends StatelessWidget {
         //dropdown items style
         dropdownStyleData: DropdownStyleData(
           maxHeight: 200,
-          width: 300,
+          width: dropdownStyleWidth ?? 300,
           padding: EdgeInsets.zero,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0),
