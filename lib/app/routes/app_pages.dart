@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 
+import 'package:flutter_base/app/modules/drawer/add_category/bindings/add_category_binding.dart';
+import 'package:flutter_base/app/modules/drawer/add_category/views/add_category_view.dart';
+
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/clockIn/bindings/clock_in_binding.dart';
@@ -38,6 +41,11 @@ class AppPages {
       name: _Paths.CLOCK_IN,
       page: () => const ClockInView(),
       binding: ClockInBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_CATEGORY,
+      page: () => AddCategoryView(),
+      binding: AddCategoryBinding(),
     ),
   ];
 }

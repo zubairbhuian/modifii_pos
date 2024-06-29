@@ -81,10 +81,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Row(
             children: [
               if (isLeading)
+                // CustomInkWell(
+                //   onTap: () => Get.back(),
+                //   child: const Icon(
+                //     FontAwesomeIcons.arrowLeft,
+                //     size: 28,
+                //   ),
+                // ).marginOnly(right: 20),
                 CustomInkWell(
-                  onTap: () => Get.back(),
+                  onTap: Scaffold.of(context).openDrawer,
                   child: const Icon(
-                    FontAwesomeIcons.arrowLeft,
+                    FontAwesomeIcons.burger,
                     size: 28,
                   ),
                 ).marginOnly(right: 20),

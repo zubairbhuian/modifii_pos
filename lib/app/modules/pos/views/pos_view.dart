@@ -1,9 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/table_order/table_order_page.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/tables_page.dart';
 import 'package:flutter_base/app/widgets/appbar.dart';
 import 'package:get/get.dart';
+import '../../../widgets/app_drawer.dart';
 import '../controllers/pos_controller.dart';
 import 'pages/pos/pos_page.dart';
 
@@ -14,6 +14,7 @@ class PosView extends GetView<PosController> {
     // ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: PageView(
