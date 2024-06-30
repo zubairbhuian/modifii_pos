@@ -4,6 +4,8 @@ import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/clockIn/bindings/clock_in_binding.dart';
 import '../modules/clockIn/views/clock_in_view.dart';
+import '../modules/employee/bindings/employee_binding.dart';
+import '../modules/employee/views/employee_view.dart';
 import '../modules/entryPoint/bindings/entry_point_binding.dart';
 import '../modules/entryPoint/views/entry_point_view.dart';
 import '../modules/pos/bindings/pos_binding.dart';
@@ -38,6 +40,11 @@ class AppPages {
       name: _Paths.CLOCK_IN,
       page: () => const ClockInView(),
       binding: ClockInBinding(),
+    ),
+    GetPage(
+      name: _Paths.EMPLOYEE,
+      page: () => const EmployeeView(),
+      binding: EmployeeBinding(),
     ),
   ];
 }

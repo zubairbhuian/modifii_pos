@@ -2,23 +2,27 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/order_details.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/split_order.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/tables/widgets/table_dialog.dart';
 import 'package:flutter_base/app/utils/my_func.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
 import 'package:flutter_base/app/widgets/custom_loading.dart';
+import 'package:flutter_base/app/widgets/custom_textfield.dart';
 import 'package:flutter_base/app/widgets/my_custom_text.dart';
+import 'package:flutter_base/app/widgets/popup_dialogs.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../../../../../../widgets/custom_alert_dialog.dart';
 import '../../../../controllers/tables_controller.dart';
 
-class BookedTableOption extends StatelessWidget {
+class BookedTableOption extends GetView<TablesController> {
   const BookedTableOption({
     super.key,
     required this.controller,
   });
 
+  @override
   final TablesController controller;
 
   @override
@@ -120,26 +124,81 @@ class BookedTableOption extends StatelessWidget {
                     text: 'Split Order',
                   ),
                 ),
+                const SizedBox(width: 12),
+                PrimaryBtn(
+                  onPressed: () {
+                    controller.isShowTablePaymentbtn.value =
+                        !controller.isShowTablePaymentbtn.value;
+                  },
+                  height: 48,
+                  text: 'Pay',
+                  width: 70,
+                  textColor: Colors.white,
+                  color: StaticColors.greenColor,
+                ),
               ],
             ),
-            SizedBox(height: smallHeight ? 0 : 14),
-            const Divider(),
-            //Items List
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 1, child: MyCustomText('SL.')),
-                Expanded(flex: 4, child: MyCustomText('Items')),
-                Expanded(flex: 1, child: MyCustomText('Qty')),
-                Expanded(flex: 1, child: MyCustomText('Price')),
-              ],
-            ),
-            const Divider(),
-            const SizedBox(height: 8),
+
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(
+                child: Column(children: [
+                  // payment method
+                  const SizedBox(height: 16),
+                  Obx(() {
+                    if (controller.isShowTablePaymentbtn.value == true) {
+                      return Wrap(
+                          spacing: 8,
+                          runSpacing: 12,
+                          children: List.generate(
+                            controller.paymentMathod.length,
+                            (index) {
+                              var data = controller.paymentMathod[index];
+                              return Obx(() {
+                                return PrimaryBtn(
+                                  color: theme.scaffoldBackgroundColor,
+                                  onPressed: () {
+                                    controller.paymentMathodActiveIndex.value =
+                                        index;
+                                    // dialog
+                                    TableDialogs.makePayment();
+                                  },
+                                  text: data,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  side: BorderSide(
+                                    color: controller.paymentMathodActiveIndex
+                                                .value ==
+                                            index
+                                        ? theme.primaryColor
+                                        : theme.disabledColor,
+                                  ),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: theme.primaryColorDark),
+                                  borderColor: theme.hintColor,
+                                );
+                              });
+                            },
+                          ));
+                    }
+                    return const SizedBox();
+                  }),
+                  const SizedBox(height: 14),
+                  const Divider(),
+                  //Items List
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 1, child: MyCustomText('SL.')),
+                      Expanded(flex: 4, child: MyCustomText('Items')),
+                      Expanded(flex: 1, child: MyCustomText('Qty')),
+                      Expanded(flex: 1, child: MyCustomText('Price')),
+                    ],
+                  ),
+
+                  const Divider(),
+                  const SizedBox(height: 8),
+                  ...List.generate(
                     c.currentOrderData?.details.length ?? 0,
                     (index) {
                       var data = c.currentOrderData?.details[index];
@@ -189,29 +248,22 @@ class BookedTableOption extends StatelessWidget {
                       );
                     },
                   ),
-                ),
+                  //Amounts
+                  const Divider(),
+                  _row(theme,
+                      title: "Subtotal :",
+                      value: "${c.currentOrderData?.addonSubTotal}"),
+                  _row(theme,
+                      title: "GST 5% :",
+                      value: "${c.currentOrderData?.addonGst}"),
+                  const Divider(),
+                  _row(theme,
+                      title: "Total :",
+                      value: "${c.currentOrderData?.addonSubTotal}",
+                      fontSize: 20),
+                  SizedBox(height: smallHeight ? 0 : 14),
+                ]),
               ),
-            ),
-            //Amounts
-            const Divider(),
-            _row(theme,
-                title: "Subtotal :",
-                value: "${c.currentOrderData?.addonSubTotal}"),
-            _row(theme,
-                title: "GST 5% :", value: "${c.currentOrderData?.addonGst}"),
-            const Divider(),
-            _row(theme,
-                title: "Total :",
-                value: "${c.currentOrderData?.addonSubTotal}",
-                fontSize: 20),
-            SizedBox(height: smallHeight ? 0 : 14),
-            PrimaryBtn(
-              onPressed: () {},
-              height: 48,
-              text: 'Pay',
-              width: double.infinity,
-              textColor: Colors.white,
-              color: StaticColors.greenColor,
             ),
           ],
         ),

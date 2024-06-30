@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/tables/widgets/table_dialog.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/appbar.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
@@ -176,6 +177,7 @@ class SplitOrder extends GetView<TablesController> {
                                 onPressed: () {
                                   controller.paymentMathodActiveIndex.value =
                                       index;
+                                  TableDialogs.makePayment();
                                 },
                                 text: data,
                                 padding:
@@ -286,6 +288,7 @@ class SplitOrder extends GetView<TablesController> {
                                         onPressed: () {
                                           controller.paymentMathodActiveIndex
                                               .value = index;
+                                          TableDialogs.makePayment();
                                         },
                                         text: data,
                                         padding: const EdgeInsets.symmetric(

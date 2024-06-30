@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_base/app/modules/pos/controllers/orders_controller.dart';
 import 'package:flutter_base/app/modules/pos/controllers/tables_controller.dart';
 import 'package:flutter_base/app/modules/pos/views/pages/tables/widgets/order_setup.dart';
+import 'package:flutter_base/app/modules/pos/views/pages/tables/widgets/table_dialog.dart';
 import 'package:flutter_base/app/utils/static_colors.dart';
 import 'package:flutter_base/app/widgets/appbar.dart';
 import 'package:flutter_base/app/widgets/custom_btn.dart';
@@ -184,6 +186,7 @@ class OrderDetails extends GetView<TablesController> {
                           color: theme.scaffoldBackgroundColor,
                           onPressed: () {
                             controller.paymentMathodActiveIndex.value = index;
+                            TableDialogs.makePayment();
                           },
                           text: data,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -269,7 +272,9 @@ class OrderDetails extends GetView<TablesController> {
                   ),
                   Expanded(
                     child: PrimaryBtn(
-                      onPressed: () {},
+                      onPressed: () {
+                        OrdersController.to.printReceipt();
+                      },
                       // width: double.infinity,
                       text: 'Print Items for Kicken / Bar',
                       textColor: Colors.white,

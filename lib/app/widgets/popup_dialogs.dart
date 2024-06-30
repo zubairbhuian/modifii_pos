@@ -72,7 +72,7 @@ class PopupDialog {
     );
   }
 
-  static customDialog({required Widget child}) {
+  static customDialog({required Widget child, double? width}) {
     return showDialog<void>(
       // Context
       context: Get.context!,
@@ -80,7 +80,7 @@ class PopupDialog {
       builder: (BuildContext context) {
         return Center(
           child: SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.5,
+            width: width ?? MediaQuery.sizeOf(context).width * 0.5,
             child: Material(
               elevation: 2,
               // dialog color
